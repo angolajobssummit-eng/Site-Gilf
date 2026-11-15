@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oradores & Moderadores · GiLF Angola 2026</title>
+  <meta name="description" content="Conheça os oradores, keynotes e moderadores do GiLF Angola 2026 — Fórum Global de Investimento e Liderança.">
+  <meta property="og:title" content="Oradores & Moderadores · GiLF Angola 2026">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta name="theme-color" content="#16110a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="oradores">
+<main id="main">
+  <section class="phero" data-waves>
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Início</a> / Oradores</div>
+      <h1>Oradores &amp; Moderadores</h1>
+      <p>Líderes, investidores, especialistas e decisores que dão voz ao GiLF Angola 2026.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <input class="search rv" type="search" id="q" placeholder="Pesquisar por nome, cargo ou organização" aria-label="Pesquisar oradores">
+      <div class="filters rv" id="filters" role="group" aria-label="Filtrar por papel"></div>
+      <div class="speakers" id="grid"></div>
+      <p class="note center" id="soon">Os oradores e moderadores serão anunciados brevemente. Acompanhe esta página.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--white" id="candidatura">
+    <div class="wrap split split--top">
+      <div class="rv">
+        <div class="head head--left" style="margin-bottom:24px">
+          <span class="kicker">Call for speakers</span>
+          <h2>Candidate-se a orador ou moderador</h2>
+        </div>
+        <p class="lead">Tem experiência e uma visão a partilhar sobre investimento, liderança, economia ou inovação? Envie-nos a sua proposta.</p>
+        <p>A Comissão Organizadora analisa todas as candidaturas e contacta os perfis seleccionados para os painéis do Fórum.</p>
+        <div class="info" style="margin-top:26px">
+          <div><span class="ic" data-ic="mic"></span><span><small>O que enviar</small><b>Breve biografia, fotografia profissional e o tema proposto</b></span></div>
+        </div>
+      </div>
+      <form class="form rv" data-form="GiLF 2026 — Candidatura a orador" novalidate>
+        <div class="row">
+          <label class="field">Nome completo *<input name="nome" required autocomplete="name"></label>
+          <label class="field">E-mail *<input name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="row">
+          <label class="field">Cargo<input name="cargo" autocomplete="organization-title"></label>
+          <label class="field">Organização<input name="organizacao" autocomplete="organization"></label>
+        </div>
+        <div class="row">
+          <label class="field">Telefone / WhatsApp<input name="telefone" type="tel" autocomplete="tel"></label>
+          <label class="field">Pretende participar como
+            <select name="papel"><option>Orador(a)</option><option>Moderador(a)</option><option>Keynote</option></select>
+          </label>
+        </div>
+        <label class="field">Tema proposto<input name="tema"></label>
+        <label class="field">Breve biografia / LinkedIn<textarea name="bio" rows="4"></textarea></label>
+        <div class="form__btns">
+          <button class="btn btn--dark" type="submit" data-via="email">Enviar por e-mail</button>
+          <button class="btn btn--wa" type="submit" data-via="wa">Enviar por WhatsApp</button>
+        </div>
+        <p class="form__status" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="assets/dados.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+  (function () {
+    var grid = document.getElementById("grid"), q = document.getElementById("q"), fl = document.getElementById("filters");
+    var total = GILF_speakerCount();
+    var roles = [["todos", "Todos"], ["keynote", "Keynotes"], ["orador", "Oradores"], ["moderador", "Moderadores"], ["apresentador", "Apresentadores"], ["honra", "Convidados de Honra"]];
+    var cur = "todos";
+    fl.innerHTML = roles.filter(function (r) { return r[0] === "todos" || GILF_speakerCount(r[0]); })
+      .map(function (r) { var n = r[0] === "todos" ? total : GILF_speakerCount(r[0]); return '<button class="chip" aria-pressed="' + (r[0] === cur) + '" data-r="' + r[0] + '">' + r[1] + (n ? " <small>" + n + "</small>" : "") + "</button>"; }).join("");
+    if (!total) { fl.hidden = true; q.hidden = true; } else document.getElementById("soon").hidden = true;
+    function draw() { GILF_renderSpeakers(grid, { papel: cur, q: q.value.trim(), minCards: total ? 0 : 8 }); }
+    fl.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-r]"); if (!b) return;
+      cur = b.getAttribute("data-r");
+      [].forEach.call(fl.children, function (c) { c.setAttribute("aria-pressed", String(c === b)); });
+      draw();
+    });
+    q.addEventListener("input", draw);
+    draw();
+  })();
+</script>
+</body>
+</html>

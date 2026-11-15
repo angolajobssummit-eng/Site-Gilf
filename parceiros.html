@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parceiros & Patrocínio · GiLF Angola 2026</title>
+  <meta name="description" content="Parceiros, patrocinadores, apoio institucional e media partners do GiLF Angola 2026 e dos Prémios Líderes Angola. Saiba como patrocinar.">
+  <meta property="og:title" content="Parceiros & Patrocínio · GiLF Angola 2026">
+  <meta property="og:image" content="assets/img/cartaz-parceiros.jpg">
+  <meta name="theme-color" content="#16110a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="parceiros">
+<main id="main">
+  <section class="phero" data-waves>
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Início</a> / Parceiros</div>
+      <h1>Parceiros &amp; Patrocinadores</h1>
+      <p>As organizações que tornam possível o GiLF Angola 2026 e a Gala dos Prémios Líderes Angola.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap" id="groups"></div>
+  </section>
+
+  <section class="sec sec--white" id="patrocinio">
+    <div class="wrap">
+      <div class="head rv">
+        <span class="kicker">Patrocínio</span>
+        <h2>Associe a sua marca ao GiLF Angola</h2>
+        <p class="lead">Visibilidade junto de decisores, presença nos painéis e acesso privilegiado à Gala. Pacotes ajustáveis aos objectivos de cada organização.</p>
+      </div>
+      <div class="tiers">
+        <article class="tier rv"><h3>Media Partner</h3><div class="tier__sub">Cobertura e divulgação</div><ul><li>Logótipo nos materiais de comunicação</li><li>Acreditação da equipa</li><li>Acesso a entrevistas</li></ul><a class="btn btn--line btn--block" href="#proposta">Pedir proposta</a></article>
+        <article class="tier rv rv-d1"><h3>Parceiro</h3><div class="tier__sub">Parceria institucional ou técnica</div><ul><li>Logótipo no site e nos ecrãs</li><li>Participação técnica no Fórum</li><li>Convites para a Gala</li></ul><a class="btn btn--line btn--block" href="#proposta">Pedir proposta</a></article>
+        <article class="tier tier--feat rv rv-d2"><span class="tier__badge">Mais procurado</span><h3>Patrocinador</h3><div class="tier__sub">Visibilidade e voz</div><ul><li>Orador num painel do Fórum</li><li>Marca no palco, ecrãs e materiais</li><li>Mesa na Gala dos Prémios</li><li>Reuniões B2B organizadas</li></ul><a class="btn btn--gold btn--block" href="#proposta">Pedir proposta</a></article>
+        <article class="tier rv rv-d3"><h3>Patrocinador Principal</h3><div class="tier__sub">Máxima associação</div><ul><li>Naming de um painel ou categoria de prémio</li><li>Discurso na abertura ou na Gala</li><li>Visibilidade máxima em todos os canais</li><li>Mesa VIP</li></ul><a class="btn btn--line btn--block" href="#proposta">Pedir proposta</a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="proposta">
+    <div class="wrap split split--top">
+      <div class="rv">
+        <div class="head head--left" style="margin-bottom:24px">
+          <span class="kicker">Proposta de patrocínio</span>
+          <h2>Vamos construir a parceria certa</h2>
+        </div>
+        <p class="lead">Envie-nos os seus dados e a Comissão Organizadora remete a proposta de patrocínio com todas as contrapartidas de visibilidade.</p>
+        <div class="frame" style="margin-top:28px;max-width:420px"><img src="assets/img/cartaz-parceiros.jpg" alt="Cartaz de parceiros e patrocinadores do GiLF Angola 2026" width="1280" height="1600" loading="lazy"></div>
+      </div>
+      <form class="form rv" data-form="GiLF 2026 — Pedido de proposta de patrocínio" novalidate>
+        <div class="row">
+          <label class="field">Nome *<input name="nome" required autocomplete="name"></label>
+          <label class="field">E-mail *<input name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="row">
+          <label class="field">Empresa / Instituição *<input name="empresa" required autocomplete="organization"></label>
+          <label class="field">Cargo<input name="cargo" autocomplete="organization-title"></label>
+        </div>
+        <div class="row">
+          <label class="field">Telefone / WhatsApp<input name="telefone" type="tel" autocomplete="tel"></label>
+          <label class="field">Interesse
+            <select name="interesse"><option>Patrocinador Principal</option><option selected>Patrocinador</option><option>Parceiro</option><option>Media Partner</option><option>Apoio Institucional</option></select>
+          </label>
+        </div>
+        <label class="field">Mensagem<textarea name="mensagem" rows="3"></textarea></label>
+        <div class="form__btns">
+          <button class="btn btn--dark" type="submit" data-via="email">Enviar por e-mail</button>
+          <button class="btn btn--wa" type="submit" data-via="wa">Enviar por WhatsApp</button>
+        </div>
+        <p class="form__status" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="assets/dados.js"></script>
+<script src="assets/js/site.js"></script>
+<script>GILF_renderPartners(document.getElementById("groups"));</script>
+</body>
+</html>

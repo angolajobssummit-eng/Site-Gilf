@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Gestor de Conteúdos · GiLF Angola</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    body { background: #f3eee2; }
+    .abar { position: sticky; top: 0; z-index: 20; background: var(--ink); color: var(--gold-xl); }
+    .abar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 68px; flex-wrap: wrap; padding: 8px 0; }
+    .abar strong { font: 600 1.05rem var(--caps); letter-spacing: .12em; }
+    .abar .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .atabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 28px 0 22px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 18px; }
+    .help { background: #fff8e4; border: 1px solid #ecd9a3; border-radius: 14px; padding: 18px 22px; font-size: .92rem; }
+    .help ol { margin: 8px 0 0; padding-left: 20px; }
+    .list { display: grid; gap: 10px; }
+    .item { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .item--sess { grid-template-columns: 90px 1fr auto; }
+    .item .av { width: 56px; height: 56px; }
+    .item b { display: block; color: var(--ink); }
+    .item small { color: var(--muted); }
+    .ibtns { display: flex; gap: 6px; }
+    .ib { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 1rem; }
+    .ib:hover { border-color: var(--gold); }
+    .ib--del:hover { border-color: var(--red); color: var(--red); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; max-height: 240px; overflow: auto; padding: 10px; border: 1.5px solid var(--line); border-radius: 11px; background: var(--cream); }
+    .checks label { display: flex; gap: 8px; align-items: center; font-weight: 500; font-size: .9rem; }
+    .phbox { display: flex; gap: 16px; align-items: center; }
+    .phbox .av { width: 96px; height: 96px; font-size: 1.6rem; }
+    dialog { border: 0; border-radius: 20px; padding: 0; width: min(760px, calc(100% - 24px)); box-shadow: var(--shadow); }
+    dialog::backdrop { background: rgba(15, 11, 6, .6); }
+    dialog form { display: grid; gap: 14px; padding: 28px; }
+    dialog h3 { font: 600 1.7rem var(--display); margin: 0; }
+    .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+    textarea.code { font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace; min-height: 420px; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(120px); background: var(--ink); color: var(--gold-xl); padding: 12px 22px; border-radius: 999px; transition: transform .3s; z-index: 50; }
+    .toast.show { transform: translateX(-50%); }
+    .badge { display: inline-block; font: 700 .64rem var(--sans); letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: var(--cream-2); color: var(--gold-d); margin-left: 6px; vertical-align: middle; }
+    .dirty { color: #ffcf6b; font-size: .85rem; }
+    @media (max-width: 680px) { .grid2, .grid3 { grid-template-columns: 1fr; } .item { grid-template-columns: 44px 1fr; } .item .ibtns { grid-column: 1 / -1; } .item .av { width: 44px; height: 44px; } .item--sess { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="abar"><div class="wrap">
+    <strong>GiLF · Gestor de Conteúdos</strong>
+    <span class="dirty" id="dirty"></span>
+    <div class="btns">
+      <a class="btn btn--ghost btn--sm" href="index.html?preview=1" target="_blank">Pré-visualizar site</a>
+      <button class="btn btn--ghost btn--sm" id="btnPhotos">Descarregar fotos novas</button>
+      <button class="btn btn--gold btn--sm" id="btnExport">Descarregar dados.js</button>
+    </div>
+  </div></div>
+
+  <div class="wrap" style="padding-bottom:80px">
+    <div class="help" style="margin-top:24px">
+      <b>Como publicar alterações</b>
+      <ol>
+        <li>Adicione ou edite oradores, moderadores e sessões nesta página (as alterações ficam guardadas neste browser).</li>
+        <li>Clique em <b>Pré-visualizar site</b> para ver o resultado.</li>
+        <li>Clique em <b>Descarregar dados.js</b> e, se adicionou fotos, em <b>Descarregar fotos novas</b>.</li>
+        <li>No GitHub: envie o <code>dados.js</code> para a pasta <code>assets/</code> e as fotos para <code>assets/img/oradores/</code> (Add file → Upload files). O site actualiza automaticamente.</li>
+      </ol>
+    </div>
+
+    <div class="atabs" role="tablist">
+      <button class="chip" aria-pressed="true" data-v="oradores">Oradores &amp; Moderadores</button>
+      <button class="chip" aria-pressed="false" data-v="forum">Programa · Fórum</button>
+      <button class="chip" aria-pressed="false" data-v="gala">Programa · Gala</button>
+      <button class="chip" aria-pressed="false" data-v="evento">Evento</button>
+      <button class="chip" aria-pressed="false" data-v="json">Avançado (JSON)</button>
+    </div>
+
+    <section data-view="oradores">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><h3 style="margin:0">Oradores &amp; Moderadores <span class="badge" id="spCount">0</span></h3><small style="color:var(--muted)">Keynotes, oradores, moderadores, apresentadores e convidados de honra.</small></div>
+        <button class="btn btn--dark btn--sm" id="addSp">+ Adicionar pessoa</button>
+      </div>
+      <div class="list" id="spList"></div>
+    </section>
+
+    <section data-view="forum" hidden>
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><h3 style="margin:0">Programa do Fórum</h3><small style="color:var(--muted)">Atribua moderadores e oradores a cada sessão.</small></div>
+        <button class="btn btn--dark btn--sm" data-add-sess="forum">+ Adicionar sessão</button>
+      </div>
+      <div class="list" id="list-forum"></div>
+    </section>
+
+    <section data-view="gala" hidden>
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><h3 style="margin:0">Programa da Gala</h3><small style="color:var(--muted)">19h às 22h</small></div>
+        <button class="btn btn--dark btn--sm" data-add-sess="gala">+ Adicionar momento</button>
+      </div>
+      <div class="list" id="list-gala"></div>
+    </section>
+
+    <section data-view="evento" hidden>
+      <form class="card" id="evForm" style="display:grid;gap:14px">
+        <div class="grid2">
+          <label class="field">Nome<input name="nome"></label>
+          <label class="field">Nome completo<input name="nomeCompleto"></label>
+        </div>
+        <label class="field">Tema<input name="tema"></label>
+        <div class="grid3">
+          <label class="field">Local<input name="local"></label>
+          <label class="field">Cidade<input name="cidade"></label>
+          <label class="field">Morada<input name="morada"></label>
+        </div>
+        <div class="grid3">
+          <label class="field">Início (contagem decrescente)<input name="inicio" placeholder="2026-12-17T08:00:00+01:00"></label>
+          <label class="field">Horário Fórum<input name="horarioForum"></label>
+          <label class="field">Horário Gala<input name="horarioGala"></label>
+        </div>
+        <div class="grid3">
+          <label class="field">Telefone<input name="telefone"></label>
+          <label class="field">Telefone 2<input name="telefone2"></label>
+          <label class="field">WhatsApp (só números, com 244)<input name="whatsapp"></label>
+        </div>
+        <div class="grid2">
+          <label class="field">E-mail<input name="email"></label>
+          <label class="field">Website<input name="site"></label>
+        </div>
+        <div class="grid2">
+          <label class="field">Facebook (URL)<input name="redes.facebook"></label>
+          <label class="field">Instagram (URL)<input name="redes.instagram"></label>
+          <label class="field">LinkedIn (URL)<input name="redes.linkedin"></label>
+          <label class="field">YouTube (URL)<input name="redes.youtube"></label>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="provisorio"> Mostrar aviso “programa provisório”</label>
+      </form>
+    </section>
+
+    <section data-view="json" hidden>
+      <div class="card">
+        <p style="margin-top:0">Edição completa de todos os conteúdos (prémios, ingressos, parceiros…). Altere com cuidado e clique em <b>Aplicar</b>.</p>
+        <label class="field"><textarea class="code" id="json" spellcheck="false"></textarea></label>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn--dark btn--sm" id="applyJson">Aplicar</button>
+          <button class="btn btn--line btn--sm" id="resetAll">Descartar alterações locais</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <dialog id="dlgSp"><form method="dialog" id="spForm">
+    <h3 id="spTitle">Adicionar pessoa</h3>
+    <div class="phbox"><span class="av" id="spPrev"></span>
+      <div style="display:grid;gap:8px">
+        <label class="btn btn--line btn--sm" style="cursor:pointer">Escolher foto<input type="file" accept="image/*" id="spFile" hidden></label>
+        <small style="color:var(--muted)">Recortada automaticamente em 600×600.</small>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field">Nome *<input name="nome" required></label>
+      <label class="field">Papel
+        <select name="papel"><option value="orador">Orador(a)</option><option value="moderador">Moderador(a)</option><option value="keynote">Keynote</option><option value="apresentador">Apresentador(a)</option><option value="honra">Convidado de Honra</option></select>
+      </label>
+    </div>
+    <div class="grid3">
+      <label class="field">Cargo<input name="cargo"></label>
+      <label class="field">Organização<input name="organizacao"></label>
+      <label class="field">País<input name="pais"></label>
+    </div>
+    <label class="field">Biografia<textarea name="bio" rows="5"></textarea></label>
+    <div class="grid2">
+      <label class="field">LinkedIn (URL)<input name="linkedin" type="url"></label>
+      <label class="field">Ficheiro da foto<input name="foto" placeholder="assets/img/oradores/nome.jpg"></label>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" name="destaque"> Destacar na página inicial</label>
+    <div class="dlg-actions"><button class="btn btn--line btn--sm" value="cancel" formnovalidate>Cancelar</button><button class="btn btn--gold btn--sm" value="ok">Guardar</button></div>
+  </form></dialog>
+
+  <dialog id="dlgSs"><form method="dialog" id="ssForm">
+    <h3 id="ssTitle">Sessão</h3>
+    <div class="grid3">
+      <label class="field">Início<input name="hora" placeholder="09:00"></label>
+      <label class="field">Fim<input name="fim" placeholder="10:00"></label>
+      <label class="field">Tipo
+        <select name="tipo"><option value="sessao">Sessão</option><option value="keynote">Keynote</option><option value="painel">Painel</option><option value="pausa">Pausa</option><option value="networking">Networking</option><option value="gala">Gala</option></select>
+      </label>
+    </div>
+    <label class="field">Título *<input name="titulo" required></label>
+    <label class="field">Descrição<textarea name="descricao" rows="2"></textarea></label>
+    <div class="grid2">
+      <label class="field">Moderador(a)<select name="moderador" id="ssMod"></select></label>
+      <label class="field">Lugares “A anunciar” (enquanto faltam nomes)<input name="vagas" type="number" min="0"></label>
+    </div>
+    <div class="field">Oradores<div class="checks" id="ssSpk"></div></div>
+    <div class="dlg-actions"><button class="btn btn--line btn--sm" value="cancel" formnovalidate>Cancelar</button><button class="btn btn--gold btn--sm" value="ok">Guardar</button></div>
+  </form></dialog>
+
+  <div class="toast" id="toast"></div>
+
+<script src="assets/dados.js"></script>
+<script>
+(function () {
+  "use strict";
+  var KEY = "gilf-draft", PKEY = "gilf-photos";
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var orig = JSON.parse(JSON.stringify(window.GILF));
+  var D, photos = {};
+  try { var dr = localStorage.getItem(KEY); D = dr ? JSON.parse(dr) : null; photos = JSON.parse(localStorage.getItem(PKEY) || "{}"); } catch (e) {}
+  if (!D) D = JSON.parse(JSON.stringify(orig));
+  D.oradores = D.oradores || []; D.programa = D.programa || { forum: [], gala: [] };
+
+  function toast(t) { var el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove("show"); }, 2200); }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(D)); localStorage.setItem(PKEY, JSON.stringify(photos)); } catch (e) { toast("Aviso: não foi possível guardar no browser."); }
+    var changed = JSON.stringify(D) !== JSON.stringify(orig);
+    $("#dirty").textContent = changed ? "● Alterações por publicar" : "";
+  }
+  var slug = function (s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/^(dr|dra|eng|prof|sr|sra)\.?\s+/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "pessoa"; };
+  var initials = function (n) { return String(n).split(/\s+/).filter(Boolean).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase(); };
+  var ROLE = { keynote: "Keynote", orador: "Orador(a)", moderador: "Moderador(a)", apresentador: "Apresentador(a)", honra: "Convidado de Honra" };
+  var TAG = { sessao: "Sessão", keynote: "Keynote", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala" };
+  function av(o) { var src = photos[o.foto] || o.foto; return src ? '<img src="' + esc(src) + '" alt="">' : esc(initials(o.nome || "?")); }
+
+  /* tabs */
+  document.querySelectorAll("[data-v]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      document.querySelectorAll("[data-view]").forEach(function (s) { s.hidden = s.getAttribute("data-view") !== b.getAttribute("data-v"); });
+      if (b.getAttribute("data-v") === "json") $("#json").value = JSON.stringify(D, null, 2);
+    });
+  });
+
+  /* ---------- speakers ---------- */
+  function drawSp() {
+    $("#spCount").textContent = D.oradores.length;
+    $("#spList").innerHTML = D.oradores.length ? D.oradores.map(function (o, i) {
+      return '<div class="item"><span class="av">' + av(o) + "</span><div><b>" + esc(o.nome) + (o.destaque ? ' <span class="badge">Destaque</span>' : "") + "</b><small>" + esc(ROLE[o.papel] || o.papel) + " · " + esc([o.cargo, o.organizacao].filter(Boolean).join(", ")) + "</small></div>" +
+        '<div class="ibtns"><button class="ib" title="Subir" data-sp-up="' + i + '">↑</button><button class="ib" title="Descer" data-sp-down="' + i + '">↓</button><button class="ib" title="Editar" data-sp-edit="' + i + '">✎</button><button class="ib ib--del" title="Remover" data-sp-del="' + i + '">✕</button></div></div>';
+    }).join("") : '<div class="empty">Ainda não há oradores. Clique em “+ Adicionar pessoa”.</div>';
+  }
+  var dlgSp = $("#dlgSp"), spForm = $("#spForm"), editing = -1, newPhoto = null;
+  function openSp(i) {
+    editing = i; newPhoto = null;
+    var o = i > -1 ? D.oradores[i] : { papel: "orador" };
+    $("#spTitle").textContent = i > -1 ? "Editar pessoa" : "Adicionar pessoa";
+    ["nome", "cargo", "organizacao", "pais", "bio", "linkedin", "foto", "papel"].forEach(function (k) { spForm.elements[k].value = o[k] || (k === "papel" ? "orador" : ""); });
+    spForm.elements.destaque.checked = !!o.destaque;
+    $("#spPrev").innerHTML = av(o.nome ? o : { nome: "?" });
+    $("#spFile").value = "";
+    dlgSp.showModal();
+  }
+  $("#addSp").addEventListener("click", function () { openSp(-1); });
+  $("#spFile").addEventListener("change", function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var img = new Image(), url = URL.createObjectURL(f);
+    img.onload = function () {
+      var s = Math.min(img.width, img.height), c = document.createElement("canvas"); c.width = c.height = 600;
+      var sy = img.height > img.width ? Math.max(0, (img.height - s) * 0.2) : (img.height - s) / 2;
+      c.getContext("2d").drawImage(img, (img.width - s) / 2, sy, s, s, 0, 0, 600, 600);
+      newPhoto = c.toDataURL("image/jpeg", 0.86);
+      $("#spPrev").innerHTML = '<img src="' + newPhoto + '" alt="">';
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+  dlgSp.addEventListener("close", function () {
+    if (dlgSp.returnValue !== "ok") return;
+    var F = spForm.elements, prev = editing > -1 ? D.oradores[editing] : {};
+    var o = { id: prev.id || "", nome: F.nome.value.trim(), cargo: F.cargo.value.trim(), organizacao: F.organizacao.value.trim(), pais: F.pais.value.trim(), papel: F.papel.value, foto: F.foto.value.trim(), bio: F.bio.value.trim(), linkedin: F.linkedin.value.trim(), destaque: F.destaque.checked };
+    if (!o.nome) return;
+    if (!o.id) { var base = slug(o.nome), id = base, n = 2; while (D.oradores.some(function (x) { return x.id === id; })) id = base + "-" + n++; o.id = id; }
+    if (newPhoto) { o.foto = "assets/img/oradores/" + o.id + ".jpg"; photos[o.foto] = newPhoto; }
+    if (editing > -1) D.oradores[editing] = o; else D.oradores.push(o);
+    save(); drawSp(); drawSess("forum"); drawSess("gala"); toast("Guardado ✓");
+  });
+  spForm.addEventListener("submit", function (e) { if (e.submitter && e.submitter.value === "ok" && !spForm.checkValidity()) { e.preventDefault(); spForm.reportValidity(); } });
+  $("#spList").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var d = b.dataset, a = D.oradores;
+    if (d.spEdit) openSp(+d.spEdit);
+    if (d.spUp && +d.spUp > 0) { a.splice(+d.spUp - 1, 0, a.splice(+d.spUp, 1)[0]); }
+    if (d.spDown && +d.spDown < a.length - 1) { a.splice(+d.spDown + 1, 0, a.splice(+d.spDown, 1)[0]); }
+    if (d.spDel && confirm("Remover " + a[+d.spDel].nome + "?")) {
+      var id = a[+d.spDel].id; a.splice(+d.spDel, 1);
+      ["forum", "gala"].forEach(function (k) { (D.programa[k] || []).forEach(function (s) { if (s.moderador === id) s.moderador = ""; s.oradores = (s.oradores || []).filter(function (x) { return x !== id; }); }); });
+    }
+    save(); drawSp(); drawSess("forum"); drawSess("gala");
+  });
+
+  /* ---------- sessions ---------- */
+  var byId = function (id) { return D.oradores.filter(function (o) { return o.id === id; })[0]; };
+  function drawSess(k) {
+    var L = D.programa[k] = D.programa[k] || [];
+    document.getElementById("list-" + k).innerHTML = L.length ? L.map(function (s, i) {
+      var ppl = [];
+      if (s.moderador && byId(s.moderador)) ppl.push("Mod.: " + byId(s.moderador).nome);
+      (s.oradores || []).forEach(function (id) { var o = byId(id); if (o) ppl.push(o.nome); });
+      return '<div class="item item--sess"><div><b>' + esc(s.hora) + "</b><small>" + esc(s.fim ? "até " + s.fim : "") + "</small></div><div><b>" + esc(s.titulo) + ' <span class="badge">' + esc(TAG[s.tipo] || s.tipo) + "</span></b><small>" + esc(ppl.join(" · ") || (s.vagas ? s.vagas + " lugar(es) a anunciar" : "")) + "</small></div>" +
+        '<div class="ibtns"><button class="ib" data-k="' + k + '" data-up="' + i + '">↑</button><button class="ib" data-k="' + k + '" data-down="' + i + '">↓</button><button class="ib" data-k="' + k + '" data-edit="' + i + '">✎</button><button class="ib ib--del" data-k="' + k + '" data-del="' + i + '">✕</button></div></div>';
+    }).join("") : '<div class="empty">Sem sessões.</div>';
+  }
+  var dlgSs = $("#dlgSs"), ssForm = $("#ssForm"), sk = "forum", si = -1;
+  function openSs(k, i) {
+    sk = k; si = i;
+    var s = i > -1 ? D.programa[k][i] : { tipo: k === "gala" ? "gala" : "painel", vagas: 0, oradores: [] };
+    $("#ssTitle").textContent = i > -1 ? "Editar sessão" : "Nova sessão";
+    ["hora", "fim", "tipo", "titulo", "descricao"].forEach(function (f) { ssForm.elements[f].value = s[f] || ""; });
+    ssForm.elements.tipo.value = s.tipo || "sessao";
+    ssForm.elements.vagas.value = s.vagas || 0;
+    $("#ssMod").innerHTML = '<option value="">— Nenhum / a anunciar —</option>' + D.oradores.map(function (o) { return '<option value="' + esc(o.id) + '"' + (o.id === s.moderador ? " selected" : "") + ">" + esc(o.nome) + " (" + esc(ROLE[o.papel] || "") + ")</option>"; }).join("");
+    $("#ssSpk").innerHTML = D.oradores.length ? D.oradores.map(function (o) { return '<label><input type="checkbox" value="' + esc(o.id) + '"' + ((s.oradores || []).indexOf(o.id) > -1 ? " checked" : "") + "> " + esc(o.nome) + "</label>"; }).join("") : "<small>Adicione primeiro pessoas no separador Oradores.</small>";
+    dlgSs.showModal();
+  }
+  document.querySelectorAll("[data-add-sess]").forEach(function (b) { b.addEventListener("click", function () { openSs(b.getAttribute("data-add-sess"), -1); }); });
+  dlgSs.addEventListener("close", function () {
+    if (dlgSs.returnValue !== "ok") return;
+    var F = ssForm.elements;
+    var s = { hora: F.hora.value.trim(), fim: F.fim.value.trim(), tipo: F.tipo.value, titulo: F.titulo.value.trim(), descricao: F.descricao.value.trim(), moderador: F.moderador.value, oradores: [].map.call(document.querySelectorAll("#ssSpk input:checked"), function (c) { return c.value; }), vagas: Math.max(0, parseInt(F.vagas.value, 10) || 0) };
+    if (!s.titulo) return;
+    if (si > -1) D.programa[sk][si] = s; else D.programa[sk].push(s);
+    save(); drawSess(sk); toast("Guardado ✓");
+  });
+  ["forum", "gala"].forEach(function (k) {
+    document.getElementById("list-" + k).addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      var d = b.dataset, a = D.programa[d.k];
+      if (d.edit) return openSs(d.k, +d.edit);
+      if (d.up && +d.up > 0) a.splice(+d.up - 1, 0, a.splice(+d.up, 1)[0]);
+      if (d.down && +d.down < a.length - 1) a.splice(+d.down + 1, 0, a.splice(+d.down, 1)[0]);
+      if (d.del && confirm("Remover esta sessão?")) a.splice(+d.del, 1);
+      save(); drawSess(d.k);
+    });
+  });
+
+  /* ---------- event ---------- */
+  var ev = $("#evForm");
+  function drawEv() {
+    [].forEach.call(ev.elements, function (f) { if (!f.name) return; var p = f.name.split("."); var v = p.reduce(function (o, k) { return o ? o[k] : ""; }, D.evento); f.value = v || ""; });
+    $("#provisorio").checked = !!D.programa.provisorio;
+  }
+  ev.addEventListener("input", function (e) {
+    var f = e.target;
+    if (f.id === "provisorio") D.programa.provisorio = f.checked;
+    else if (f.name) { var p = f.name.split("."); if (p.length > 1) { D.evento[p[0]] = D.evento[p[0]] || {}; D.evento[p[0]][p[1]] = f.value; } else D.evento[f.name] = f.value; }
+    save();
+  });
+  $("#provisorio").addEventListener("change", function (e) { D.programa.provisorio = e.target.checked; save(); });
+
+  /* ---------- json ---------- */
+  $("#applyJson").addEventListener("click", function () {
+    try { D = JSON.parse($("#json").value); D.oradores = D.oradores || []; save(); drawAll(); toast("Aplicado ✓"); } catch (err) { alert("JSON inválido: " + err.message); }
+  });
+  $("#resetAll").addEventListener("click", function () {
+    if (!confirm("Descartar todas as alterações locais e voltar ao dados.js publicado?")) return;
+    D = JSON.parse(JSON.stringify(orig)); photos = {}; localStorage.removeItem(KEY); localStorage.removeItem(PKEY); drawAll(); $("#json").value = JSON.stringify(D, null, 2); save(); toast("Reposto");
+  });
+
+  /* ---------- export ---------- */
+  function download(name, href) { var a = document.createElement("a"); a.href = href; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+  $("#btnExport").addEventListener("click", function () {
+    var head = "/* GiLF ANGOLA 2026 — FICHEIRO DE CONTEÚDOS\n   Gerado pelo Gestor de Conteúdos (admin.html) em " + new Date().toLocaleString("pt-PT") + ".\n   Para editar: abra admin.html, faça as alterações e descarregue de novo este ficheiro. */\n";
+    var blob = new Blob([head + "window.GILF = " + JSON.stringify(D, null, 2) + ";\n"], { type: "text/javascript" });
+    download("dados.js", URL.createObjectURL(blob));
+    toast("dados.js descarregado — envie-o para a pasta assets/");
+  });
+  $("#btnPhotos").addEventListener("click", function () {
+    var used = D.oradores.map(function (o) { return o.foto; });
+    var keys = Object.keys(photos).filter(function (k) { return used.indexOf(k) > -1; });
+    if (!keys.length) return toast("Não há fotos novas.");
+    keys.forEach(function (k, i) { setTimeout(function () { download(k.split("/").pop(), photos[k]); }, i * 400); });
+    toast(keys.length + " foto(s) — envie para assets/img/oradores/");
+  });
+
+  function drawAll() { drawSp(); drawSess("forum"); drawSess("gala"); drawEv(); }
+  drawAll(); save();
+})();
+</script>
+</body>
+</html>
