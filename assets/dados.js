@@ -96,7 +96,7 @@ window.GILF = {
       "cargo": "PCA",
       "organizacao": "Unitel",
       "papel": "keynote",
-      "tema": "",
+      "tema": "Conectividade que transforma: o digital como motor do investimento, da inclusão e da projecção de Angola no mundo.",
       "pais": "Angola",
       "foto": "assets/img/pessoas/agnaldo-jaime.jpg"
     },
@@ -751,8 +751,8 @@ window.GILF = {
         "fim": "09:12",
         "tipo": "keynote",
         "numero": "",
-        "titulo": "Keynote Unitel",
-        "subtitulo": "Tema a confirmar",
+        "titulo": "Conectividade que transforma",
+        "subtitulo": "O digital como motor do investimento, da inclusão e da projecção de Angola no mundo",
         "descricao": "",
         "moderador": "",
         "oradores": [
