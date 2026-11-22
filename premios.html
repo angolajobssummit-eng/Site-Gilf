@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gala Prémios Líderes Angola 2026 · Programa e Distinguidos</title>
-  <meta name="description" content="Gala de Premiação Prémios Líderes Angola 2026 — “Uma noite entre Líderes”. Programa, apresentação e todos os distinguidos: 70 personalidades, 30 instituições, 10 oradores, 2 distinções especiais e 2 homenagens póstumas. 17 de Dezembro, Hotel EPIC SANA, Luanda.">
+  <meta name="description" content="Gala de Premiação Prémios Líderes Angola 2026 — “Uma noite entre Líderes”. Programa, mestres de cerimónia e todos os distinguidos: 70 personalidades, 30 instituições, 10 oradores, 2 distinções especiais e 2 homenagens póstumas. 17 de Dezembro, Hotel EPIC SANA, Luanda.">
   <meta property="og:title" content="Gala Prémios Líderes Angola 2026 · Programa e Distinguidos">
-  <meta property="og:description" content="Gala de Premiação Prémios Líderes Angola 2026 — “Uma noite entre Líderes”. Programa, apresentação e todos os distinguidos: 70 personalidades, 30 instituições, 10 oradores, 2 distinções especiais e 2 homenagens póstumas. 17 de Dezembro, Hotel EPIC SANA, Luanda.">
+  <meta property="og:description" content="Gala de Premiação Prémios Líderes Angola 2026 — “Uma noite entre Líderes”. Programa, mestres de cerimónia e todos os distinguidos: 70 personalidades, 30 instituições, 10 oradores, 2 distinções especiais e 2 homenagens póstumas. 17 de Dezembro, Hotel EPIC SANA, Luanda.">
   <meta property="og:image" content="assets/img/cartaz-gala.jpg">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
@@ -14,7 +14,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body data-page="premios">
@@ -29,6 +29,7 @@
           <div class="fact" data-ic="cal"><span><small>Data</small><span data-bind="evento.dataTexto">17 de Dezembro de 2026</span></span></div>
           <div class="fact" data-ic="clock"><span><small>Horário</small><span data-bind="evento.horarioGala">19h00 – 23h00</span></span></div>
           <div class="fact" data-ic="pin"><span><small>Local</small><span data-bind="evento.local">Hotel EPIC SANA</span></span></div>
+          <div class="fact" data-ic="mic"><span><small>Mestres de Cerimónia</small><span id="mcHero">Lu Matamba</span></span></div>
         </div>
         <div class="actions rv d3">
           <a class="btn btn--gold" href="bilhetes.html?ingresso=Gala%20%26%20Jantar#reserva">Reservar lugar na Gala</a>
@@ -47,7 +48,7 @@
         <div class="head head--l"><span class="kicker">Programa da Gala</span><h2>Uma noite entre Líderes.</h2></div>
         <p class="lead">Recepção, três actos de entrega de prémios, homenagens póstumas, a distinção aos oradores do GiLF, jantar de gala e três momentos musicais ao vivo.</p>
         <div class="gala-info" style="grid-template-columns:1fr">
-          <div class="gi"><small>Apresentação</small><b id="apres"></b></div>
+          <div class="gi"><small>Mestres de Cerimónia</small><b id="apres"></b></div>
           <div class="gi"><small>Música ao vivo</small><b>Três momentos musicais</b><span id="musica"></span></div>
           <div class="gi"><small>Comissão Organizadora</small><div id="comissao"></div></div>
         </div>
@@ -81,7 +82,9 @@
   var GA = D.gala || {};
   if (GA.titulo) $("galaTitle").textContent = GA.titulo;
   var ap = (GA.apresentadores || []).filter(function (x) { return x !== null; });
-  $("apres").innerHTML = ap.map(function (n) { return n ? esc(n) : '<span style="color:var(--muted);font-style:italic">co-apresentador(a) a anunciar</span>'; }).join(" &amp; ");
+  var apn = ap.filter(Boolean);
+  $("apres").innerHTML = apn.map(esc).join(' <span style="color:var(--gold)">&amp;</span> ') + (apn.length < 2 ? '<span class="mc-tba">&amp; co-mestre de cerimónia a anunciar</span>' : "");
+  $("mcHero").textContent = ap.filter(Boolean).join(" & ") + (ap.filter(Boolean).length < 2 ? " & a anunciar" : "");
   $("musica").textContent = GA.musica || "";
   $("comissao").innerHTML = (GA.comissao || []).map(function (c) { return "<b>" + esc(c.nome) + "</b><span>" + esc(c.organizacao) + "</span>"; }).join('<div style="height:10px"></div>');
   G.stats($("awardStats"), (D.numeros || {}).premios);

@@ -239,7 +239,7 @@
   G.categories = G.awards;
   G.honorees = function () {
     var seen = {}, out = [];
-    CATS.forEach(function (c) { (c.distinguidos || []).forEach(function (n) { var p = byName[norm(n)]; if (p && p.foto && !seen[p.id]) { seen[p.id] = 1; out.push([p, c]); } }); });
+    CATS.forEach(function (c) { if (c.tipo === "instituicao") return; (c.distinguidos || []).forEach(function (n) { var p = byName[norm(n)]; if (p && p.foto && !seen[p.id]) { seen[p.id] = 1; out.push([p, c]); } }); });
     return out;
   };
   G.nominees = function (el, limit) {

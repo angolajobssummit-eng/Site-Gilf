@@ -389,7 +389,7 @@
       if (c.vagas > n) out.push(["warn", "“" + c.titulo + "”: " + (c.vagas - n) + " distinção(ões) por indicar.", "premios"]);
       if (!actoIds[c.acto]) out.push(["err", "A categoria “" + c.titulo + "” não está atribuída a nenhum acto da Gala (não aparece no site).", "premios"]);
     });
-    if (!(d.gala || {}).apresentadores || (d.gala.apresentadores || []).filter(Boolean).length < 2) out.push(["warn", "Falta indicar o(a) segundo(a) apresentador(a) da Gala.", "gala"]);
+    if (!(d.gala || {}).apresentadores || (d.gala.apresentadores || []).filter(Boolean).length < 2) out.push(["warn", "Falta indicar o(a) segundo(a) mestre de cerimónia da Gala.", "gala"]);
     people().forEach(function (p) {
       if (!p.foto) out.push(["warn", p.nome + " não tem fotografia.", "pessoas"]);
       if (p.papel && !used[p.id]) out.push(["warn", p.nome + " (" + ROLE[p.papel] + ") não está em nenhuma sessão do programa.", "programa"]);
@@ -433,7 +433,7 @@
       { k: "tema", l: "Tema / lema" },
       { row: [{ k: "dataTexto", l: "Data (texto)", req: true, ph: "17 de Dezembro de 2026" }, { k: "inicio", l: "Início (contagem decrescente)", req: true, hint: "Formato: 2026-12-17T08:30:00+01:00" }] },
       { row: [{ k: "horarioForum", l: "Horário do Fórum" }, { k: "horarioGala", l: "Horário da Gala" }, { k: "participantes", l: "Participantes esperados" }] },
-      { k: "mestres", l: "Mestres de cerimónia", ph: "Karina & Julião Correia" },
+      { k: "mestres", l: "Mestres de cerimónia do Fórum", ph: "Karina & Julião Correia", hint: "Os da Gala editam-se em Gala." },
       { row: [{ k: "local", l: "Local", req: true }, { k: "cidade", l: "Cidade" }, { k: "morada", l: "Morada" }] },
       { row: [{ k: "telefone", l: "Telefone principal", req: true }, { k: "telefone2", l: "Telefone 2" }, { k: "whatsapp", l: "WhatsApp", hint: "Só números, com 244" }] },
       { row: [{ k: "email", l: "E-mail", t: "email", req: true }, { k: "site", l: "Website" }] },
@@ -635,7 +635,7 @@
     var c = card(v, "Gala de Premiação", "Página Gala & Prémios. O programa hora-a-hora da Gala edita-se em Programa → Gala.");
     var f = document.createElement("div"); c.appendChild(f);
     inlineForm(f, [{ k: "titulo", l: "Título da noite", ph: "Uma noite entre Líderes." },
-      { k: "apresentadores", l: "Apresentadores (um por linha)", t: "lines", rows: 2, hint: "Se só houver um nome, o site mostra “co-apresentador(a) a anunciar”." },
+      { k: "apresentadores", l: "Mestres de cerimónia da Gala (um por linha)", t: "lines", rows: 2, hint: "Se só houver um nome, o site mostra “co-mestre de cerimónia a anunciar”." },
       { k: "musica", l: "Música ao vivo", t: "textarea", rows: 2 }], GA, function () { if ((GA.apresentadores || []).length < 2) GA.apresentadores = (GA.apresentadores || []).concat([""]); });
     var c2 = card(v, "Comissão Organizadora", "", [["Novo membro", function () { e2.add(); }]]);
     var e2 = listEditor(c2, {
