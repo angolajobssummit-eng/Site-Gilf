@@ -81,6 +81,18 @@
       });
     });
   }
+  /* Portuguese, actionable explanation of any GitHub/network error */
+  function why(err) {
+    var st = err && err.status, m = String((err && err.message) || "");
+    if (!st && /fetch|network|load failed|NetworkError/i.test(m + " " + (err && err.name)))
+      return "Sem ligação ao GitHub. Se abriu o admin a partir do link do Claude (claude.ai/artifact), aí não funciona: abra o endereço do Vercel terminado em /admin/ (ex.: https://site-gilf.vercel.app/admin/). Verifique também a internet.";
+    if (st === 401) return "Chave inválida ou expirada. Confirme que copiou a chave completa (começa por github_pat_ ou ghp_) ou crie uma nova.";
+    if (st === 403 && /rate limit/i.test(m)) return "Demasiados pedidos ao GitHub. Aguarde alguns minutos e tente de novo.";
+    if (st === 403) return "A chave não tem permissão de escrita. No GitHub, edite a chave e em Permissions → Repository permissions → Contents escolha “Read and write”.";
+    if (st === 404) return "A chave não tem acesso ao repositório site-gilf, ou o nome do repositório/branch está errado. No GitHub, edite a chave e em Repository access escolha “site-gilf”.";
+    if (st === 409 || st === 422) return "O site mudou entretanto. Recarregue a página e tente de novo.";
+    return m || "Erro desconhecido.";
+  }
   var b64dec = function (s) { var bin = atob(s.replace(/\s/g, "")); var u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); };
   function parseDados(text) {
     var m = /^window\.GILF\s*=\s*/m.exec(text);
@@ -112,18 +124,18 @@
   }
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var token = $("#tok").value.trim(), repo = $("#repo").value.trim().replace(/^https:\/\/github.com\//, "").replace(/\.git$/, ""), branch = $("#branch").value.trim();
+    var token = $("#tok").value.trim().replace(/^(bearer|token)\s+/i, "").replace(/^["']|["']$/g, "").replace(/\s+/g, ""), repo = $("#repo").value.trim().replace(/^https:\/\/github.com\//, "").replace(/\.git$/, ""), branch = $("#branch").value.trim();
     if (!token) return;
     S.auth = { token: token, repo: repo, branch: branch }; S.offline = false;
     $("#loginErr").textContent = ""; busy("A verificar acesso…");
     Promise.all([gh("/user"), gh(repoPath())]).then(function (r) {
       S.user = r[0];
-      if (r[1].permissions && !r[1].permissions.push) throw new Error("Esta chave não tem permissão de escrita no repositório.");
+      if (r[1].permissions && !r[1].permissions.push) throw new Error("noPush");
       (($("#remember").checked) ? localStorage : sessionStorage).setItem(K.auth, JSON.stringify(S.auth));
       busy("A carregar conteúdos…");
-      return loadRemote();
+      return loadRemote().catch(function (e) { if (e.status === 404) e.message = "branch"; throw e; });
     }).then(function (res) { busy(); start(res.data, res.sha); toast("Bem-vindo, " + (S.user.name || S.user.login) + "!"); })
-      .catch(function (err) { busy(); S.auth = null; $("#loginErr").textContent = err.status === 401 ? "Chave inválida ou expirada." : err.status === 404 ? "Repositório ou branch não encontrado (ou sem acesso)." : err.message; });
+      .catch(function (err) { busy(); S.auth = null; $("#loginErr").textContent = err.message === "noPush" ? "Esta chave só tem permissão de leitura. No GitHub, edite a chave e em Contents escolha “Read and write”." : why(err); });
   });
   $("#offline").addEventListener("click", function () {
     S.offline = true; S.user = null;
@@ -135,6 +147,13 @@
     localStorage.removeItem(K.auth); sessionStorage.removeItem(K.auth); location.hash = ""; location.reload();
   });
   window.addEventListener("beforeunload", function (e) { if (S.data && isDirty()) { e.preventDefault(); e.returnValue = ""; } });
+  (function probe() {
+    var host = location.hostname;
+    var sandbox = /claude\.ai|claudeusercontent|anthropic/i.test(host + " " + document.referrer) || location.protocol === "file:";
+    var warn = function (txt) { var b = document.createElement("div"); b.className = "banner banner--warn"; b.style.cssText = "margin:0 0 16px;font-size:13px"; b.innerHTML = txt; $("#loginForm").insertBefore(b, $("#loginForm h1")); };
+    if (sandbox) return warn("<b>Esta é só uma pré-visualização.</b> Para editar e publicar, abra o admin no endereço do Vercel: <b>https://&lt;o-seu-projecto&gt;.vercel.app/admin/</b>");
+    fetch("https://api.github.com/zen", { cache: "no-store" }).catch(function () { warn("<b>Sem ligação ao GitHub a partir desta página.</b> Abra o admin no endereço do Vercel (…vercel.app/admin/) e verifique a internet."); });
+  })();
   (function auto() {
     var a = lsGet(K.auth); if (!a || !a.token) return;
     $("#tok").value = a.token; $("#repo").value = a.repo; $("#branch").value = a.branch;
@@ -265,7 +284,7 @@
             var path = (f.dir || "assets/img/pessoas/") + base + "-" + stamp() + (isLogo ? ".png" : ".jpg");
             S.files[path] = data; cur = path; show();
             prev.dispatchEvent(new Event("change", { bubbles: true }));
-          }).catch(function (err) { toast(err.message, true); });
+          }).catch(function (err) { toast(err.status ? why(err) : err.message, true); });
         });
         $("button", wrap).addEventListener("click", function () { cur = ""; show(); prev.dispatchEvent(new Event("change", { bubbles: true })); });
         show();
@@ -816,7 +835,7 @@
       if (isDirty() && !confirm("Isto substitui as alterações por publicar. Continuar?")) return;
       busy("A carregar versão…");
       loadRemote(b.getAttribute("data-sha")).then(function (r) { busy(); S.data = r.data; save(); toast("Versão carregada. Reveja e clique em Publicar para a restaurar."); go("painel"); })
-        .catch(function (err) { busy(); toast(err.message, true); });
+        .catch(function (err) { busy(); toast(why(err), true); });
     });
   };
 
@@ -892,7 +911,7 @@
       go(S.view);
     }).catch(function (err) {
       busy(); if (err.message === "cancel") return;
-      toast("Não foi possível publicar: " + (err.status === 401 ? "sessão expirada — entre de novo." : err.status === 409 || err.status === 422 ? "o site mudou entretanto; tente de novo." : err.message), true);
+      toast("Não foi possível publicar. " + why(err), true);
     });
   }
   /* published images keep showing locally until GitHub Pages serves them */

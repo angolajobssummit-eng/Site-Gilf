@@ -94,7 +94,7 @@
     (E.telefone2 ? '<li><a href="tel:' + esc(E.telefone2.replace(/\s/g, "")) + '">' + esc(E.telefone2) + "</a></li>" : "") +
     '<li><a href="mailto:' + esc(E.email) + '">' + esc(E.email) + '</a></li><li><a href="' + waLink + '" target="_blank" rel="noopener">WhatsApp</a></li></ul>' +
     '<div class="footer__org"><span><img src="assets/img/logos/luadeira.png" alt="Lua-Deira Digital Angola" loading="lazy"></span><span><img src="assets/img/logos/jldi.png" alt="JLDI" loading="lazy"></span></div></div></div>' +
-    '<div class="footer__bar"><span>© 2026 GiLF Angola · Organização: Luadeira Digital Angola &amp; JLDI</span><span>' + esc(E.site) + "</span></div></div></footer>" +
+    '<div class="footer__bar"><span>© 2026 GiLF Angola · Organização: Luadeira Digital Angola &amp; JLDI · <a href="admin/" rel="nofollow" style="color:inherit;opacity:.6">Área reservada</a></span><span>' + esc(E.site) + "</span></div></div></footer>" +
     '<a class="wa-float" href="' + waLink + '" target="_blank" rel="noopener" aria-label="Falar connosco no WhatsApp">' + WA + "</a>" +
     '<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mName"><div class="modal__box"><button class="modal__close" aria-label="Fechar">×</button><div class="modal__ph" id="mPh"></div><div class="modal__body" id="mBody"></div></div></div>';
   document.body.insertAdjacentHTML("beforeend", foot);
