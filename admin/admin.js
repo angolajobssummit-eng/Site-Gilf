@@ -347,12 +347,12 @@
       ((d.programa || {})[k] || []).forEach(function (s) {
         if (s.moderador) { used[s.moderador] = 1; if (!ids[s.moderador]) out.push(["err", "Sessão “" + s.titulo + "” tem um moderador que já não existe.", "programa"]); }
         (s.oradores || []).forEach(function (id) { used[id] = 1; if (!ids[id]) out.push(["err", "Sessão “" + s.titulo + "” refere uma pessoa removida.", "programa"]); });
-        if (s.tipo === "painel" && !s.moderador) out.push(["warn", "O painel “" + s.titulo + "” não tem moderador.", "programa"]);
+        if (s.tipo === "painel" && !s.moderador) out.push(["warn", "O painel “" + s.titulo + "” ainda não tem moderador (aparece “A anunciar”).", "programa"]);
       });
     });
     ((d.premios || {}).categorias || []).forEach(function (c) {
       (c.nomeados || []).forEach(function (id) { used[id] = 1; if (!ids[id]) out.push(["err", "A categoria “" + c.titulo + "” refere um nomeado removido.", "premios"]); });
-      if (!(c.nomeados || []).length) out.push(["warn", "A categoria “" + c.titulo + "” não tem nomeados.", "premios"]);
+      if (!(c.nomeados || []).length && !c.vagas) out.push(["warn", "A categoria “" + c.titulo + "” não tem nomeados.", "premios"]);
       if (c.vencedor && (c.nomeados || []).indexOf(c.vencedor) < 0) out.push(["err", "O vencedor de “" + c.titulo + "” não está entre os nomeados.", "premios"]);
     });
     people().forEach(function (p) {
@@ -405,13 +405,23 @@
     ], e);
     var c2 = card(v, "Redes sociais", "Ícones no rodapé. Deixe vazio para esconder.");
     var f2 = document.createElement("div"); c2.appendChild(f2);
+    var N = D().numeros || (D().numeros = { forum: [], premios: [] });
+    [["forum", "Números do Fórum", "Faixa de números na página inicial e no programa (ex.: 7 Painéis, 28 Oradores)."], ["premios", "Números dos Prémios", "Faixa de números nas secções dos prémios (ex.: 70 Figuras, 30 Instituições)."]].forEach(function (x) {
+      var cn = card(v, x[1], x[2], [["Novo número", function () { en.add(); }]]);
+      var en = listEditor(cn, {
+        arr: function () { return N[x[0]] || (N[x[0]] = []); }, title: function (n) { return n.valor + " " + n.rotulo; },
+        row: function (n) { return { thumb: '<span class="thumb" style="font-family:Inter;font-weight:700;font-size:.95rem">' + esc(n.valor) + "</span>", title: n.rotulo }; },
+        fields: [{ row: [{ k: "valor", l: "Número", req: true }, { k: "rotulo", l: "Descrição", req: true }] }],
+        make: function () { return { valor: "", rotulo: "" }; }, add: "Novo número"
+      });
+    });
     inlineForm(f2, [{ row: [{ k: "facebook", l: "Facebook (URL)" }, { k: "instagram", l: "Instagram (URL)" }] }, { row: [{ k: "linkedin", l: "LinkedIn (URL)" }, { k: "youtube", l: "YouTube (URL)" }] }, { k: "tiktok", l: "TikTok (URL)" }], e.redes);
   };
 
   var personOpts = function () { return [["", "— Nenhum / a anunciar —"]].concat(people().map(function (p) { return [p.id, p.nome + (p.cargo ? " · " + p.cargo : "")]; })); };
   var sessionFields = [
-    { row: [{ k: "tipo", l: "Tipo", t: "select", opts: [["keynote", "Keynote / Guest"], ["painel", "Painel"], ["sessao", "Sessão"], ["networking", "Networking"], ["pausa", "Pausa"], ["gala", "Gala"]] }, { k: "numero", l: "Nº do painel", ph: "ex.: 4" }, { k: "hora", l: "Início", ph: "09:00", hint: "Vazio = mostra a ordem" }] },
-    { row: [{ k: "fim", l: "Fim", ph: "10:00" }, { k: "vagas", l: "Lugares “A anunciar”", t: "number", hint: "Mostra cartões vazios até haver nomes" }] },
+    { row: [{ k: "tipo", l: "Tipo", t: "select", opts: [["keynote", "Keynote Speaker"], ["guest", "Guest Speaker"], ["painel", "Painel"], ["sessao", "Sessão"], ["networking", "Networking"], ["pausa", "Pausa"], ["gala", "Gala"]] }, { k: "numero", l: "Nº do painel", ph: "ex.: 4" }, { k: "hora", l: "Início", ph: "09:00", hint: "Vazio = mostra a ordem" }] },
+    { row: [{ k: "fim", l: "Fim", ph: "10:00" }, { k: "vagas", l: "Nº total de oradores previstos", t: "number", hint: "Os lugares sem nome aparecem como “A anunciar”" }] },
     { k: "titulo", l: "Título", req: true },
     { k: "subtitulo", l: "Subtítulo / tema do painel" },
     { k: "descricao", l: "Descrição", t: "textarea", rows: 3 },
@@ -428,7 +438,7 @@
     seg.innerHTML = '<div class="seg"><button data-k="forum">Fórum (' + (pr.forum || []).length + ')</button><button data-k="gala">Gala (' + (pr.gala || []).length + ")</button></div>";
     c.appendChild(seg);
     $$("button", seg).forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-k") === S.prog); b.addEventListener("click", function () { S.prog = b.getAttribute("data-k"); go("programa"); }); });
-    var TAG = { keynote: "Keynote", painel: "Painel", sessao: "Sessão", networking: "Networking", pausa: "Pausa", gala: "Gala" };
+    var TAG = { keynote: "Keynote", guest: "Guest Speaker", painel: "Painel", sessao: "Sessão", networking: "Networking", pausa: "Pausa", gala: "Gala" };
     var ed = listEditor(c, {
       arr: function () { return pr[S.prog] || (pr[S.prog] = []); },
       title: function (s) { return s.titulo; },
@@ -503,19 +513,30 @@
     var c0 = card(v, "Definições dos prémios");
     var f0 = document.createElement("div"); c0.appendChild(f0);
     inlineForm(f0, [{ k: "nota", l: "Nota sobre a escolha dos vencedores" }, { k: "revelarVencedores", l: "Revelar vencedores no site (activar só depois da Gala)", t: "check" }], P);
+    var cg = card(v, "Grupos de distinções", "Ex.: Figuras nacionais (70), Instituições (30), Homenagens a título póstumo (2), Oradores premiados (10).", [["Novo grupo", function () { eg.add(); }]]);
+    var eg = listEditor(cg, {
+      arr: function () { return P.grupos || (P.grupos = []); }, title: function (g) { return g.titulo; },
+      row: function (g) { var n = (P.categorias || []).filter(function (c) { return c.grupo === g.id; }).length; return { thumb: '<span class="thumb" style="font-family:Inter;font-weight:700">' + esc(g.total || "—") + "</span>", title: g.titulo, sub: n + " categoria(s)" }; },
+      fields: [{ row: [{ k: "titulo", l: "Nome do grupo", req: true }, { k: "total", l: "Total de distinções", t: "number" }] }],
+      before: function (r, old) { if (!old) r.id = slug(r.titulo) + "-" + stamp(); return r; },
+      make: function () { return { id: "", titulo: "", total: 0 }; }, add: "Novo grupo"
+    });
     var c = card(v, "Categorias e nomeados", "Os nomeados vêm da lista de pessoas. Para um nome novo, adicione-o primeiro em “Oradores & Pessoas”.", [["Nova categoria", function () { ed.add(); }]]);
     var ed = listEditor(c, {
       arr: function () { return P.categorias || (P.categorias = []); },
       title: function (x) { return x.titulo; },
       row: function (x) {
         var ns = (x.nomeados || []).map(person).filter(Boolean), win = person(x.vencedor);
-        return { thumb: ns[0] ? thumbP(ns[0]) : '<span class="thumb">★</span>', title: x.titulo, pills: '<span class="pill">' + ns.length + " nomeado(s)</span>" + (win ? '<span class="pill pill--new">Vencedor: ' + esc(win.nome) + "</span>" : ""), sub: ns.map(function (p) { return p.nome; }).join(", ") };
+        var gr = (P.grupos || []).filter(function (g) { return g.id === x.grupo; })[0];
+        return { thumb: ns[0] ? thumbP(ns[0]) : '<span class="thumb">★</span>', title: x.titulo, pills: (gr ? '<span class="pill pill--dark">' + esc(gr.titulo) + "</span>" : "") + '<span class="pill">' + ns.length + (x.vagas ? " / " + x.vagas : "") + " nomeado(s)</span>" + (win ? '<span class="pill pill--new">Vencedor: ' + esc(win.nome) + "</span>" : ""), sub: ns.map(function (p) { return p.nome; }).join(", ") };
       },
       fields: function (x) {
-        return [{ k: "titulo", l: "Nome da categoria", req: true, ph: "Líder Jovem do Ano 2026" }, { k: "nomeados", l: "Nomeados", t: "people" },
+        return [{ k: "titulo", l: "Nome da categoria", req: true, ph: "Líder Jovem do Ano 2026" },
+          { row: [{ k: "grupo", l: "Grupo", t: "select", opts: function () { return [["", "— Sem grupo —"]].concat((P.grupos || []).map(function (g) { return [g.id, g.titulo]; })); } }, { k: "vagas", l: "Nº total de distinções nesta categoria", t: "number", hint: "Os lugares sem nome aparecem como “a anunciar”" }] },
+          { k: "nomeados", l: "Nomeados", t: "people" },
           { k: "vencedor", l: "Vencedor (só aparece no site se “Revelar vencedores” estiver activo)", t: "select", opts: function () { return [["", "— Por anunciar —"]].concat((x.nomeados || []).map(function (id) { var p = person(id); return [id, p ? p.nome : id]; })); }, hint: "Guarde primeiro os nomeados para os ver nesta lista." }];
       },
-      make: function () { return { id: "c-" + stamp(), titulo: "", nomeados: [], vencedor: "" }; },
+      make: function () { return { id: "c-" + stamp(), grupo: ((P.grupos || [])[0] || {}).id || "", titulo: "", nomeados: [], vencedor: "", vagas: 0 }; },
       add: "Nova categoria"
     });
   };

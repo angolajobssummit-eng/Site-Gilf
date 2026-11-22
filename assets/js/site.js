@@ -174,33 +174,52 @@
   G.who = function (p, label) {
     return '<button class="who" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span><b>" + esc(p.nome) + "</b><small>" + esc(label || pos(p)) + "</small></span></button>";
   };
+  var TBA_FACE = '<div class="face face--tba"><span class="mono">?</span><b>A anunciar</b><small>Orador(a)</small></div>';
   G.panel = function (s, i) {
     var mod = byId[s.moderador];
     var spk = (s.oradores || []).map(function (id) { return byId[id]; }).filter(Boolean);
-    return '<article class="panel rv"><div><span class="panel__n">' + (s.numero ? "Painel " + esc(s.numero) : "Painel") + "</span><h3>" + esc(s.titulo) + "</h3>" + (s.subtitulo ? "<p>" + esc(s.subtitulo) + "</p>" : "") +
-      (mod ? '<div class="panel__mod">' + G.who(mod, "Moderador(a)") + "</div>" : "") + '</div><div class="faces">' +
-      spk.map(function (p) { return '<button class="face" type="button" data-p="' + esc(p.id) + '">' + photo(p) + "<b>" + esc(p.nome) + "</b><small>" + esc(p.cargo || p.organizacao) + "</small></button>"; }).join("") + "</div></article>";
+    var faces = spk.map(function (p) { return '<button class="face" type="button" data-p="' + esc(p.id) + '">' + photo(p) + "<b>" + esc(p.nome) + "</b><small>" + esc(p.cargo || p.organizacao) + "</small></button>"; }).join("");
+    for (var v = spk.length; v < (s.vagas || 0); v++) faces += TBA_FACE;
+    return '<article class="panel rv' + (!mod && !spk.length ? " panel--tba" : "") + '"><div><span class="panel__n">' + (s.numero ? "Painel " + esc(s.numero) : "Painel") + "</span><h3>" + esc(s.titulo) + "</h3>" + (s.subtitulo ? "<p>" + esc(s.subtitulo) + "</p>" : "") +
+      '<div class="panel__mod">' + (mod ? G.who(mod, "Moderador(a)") : '<span class="who"><span class="av">?</span><span><b>A anunciar</b><small>Moderador(a)</small></span></span>') + "</div>" +
+      '</div><div class="faces">' + faces + "</div></article>";
   };
-  var TAG = { sessao: "Sessão", keynote: "Keynote", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala" };
+  var TAG = { sessao: "Sessão", keynote: "Keynote Speaker", guest: "Guest Speaker", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala" };
   G.agenda = function (el, key) {
     var list = (D.programa || {})[key] || [];
     el.innerHTML = list.map(function (s, i) {
       var mod = byId[s.moderador], spk = (s.oradores || []).map(function (id) { return byId[id]; }).filter(Boolean);
-      var talks = (mod ? '<button class="talk talk--mod" type="button" data-p="' + esc(mod.id) + '"><span class="av">' + photo(mod) + "</span><span><b>" + esc(mod.nome) + "</b><small>Moderação" + (mod.cargo ? " · " + esc(mod.cargo) : "") + "</small></span></button>" : "") +
+      var tbaRole = s.tipo === "keynote" ? "Keynote Speaker" : s.tipo === "guest" ? "Guest Speaker" : "Orador(a)";
+      var talks = (mod ? '<button class="talk talk--mod" type="button" data-p="' + esc(mod.id) + '"><span class="av">' + photo(mod) + "</span><span><b>" + esc(mod.nome) + "</b><small>Moderação" + (mod.cargo ? " · " + esc(mod.cargo) : "") + "</small></span></button>" :
+          s.tipo === "painel" ? '<div class="talk talk--tba talk--mod"><span class="av">?</span><span><b>A anunciar</b><small>Moderação</small></span></div>' : "") +
         spk.map(function (p) { return '<button class="talk" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span><b>" + esc(p.nome) + "</b><small>" + esc(pos(p)) + "</small>" + (p.tema && s.tipo === "painel" ? "<em>" + esc(p.tema) + "</em>" : "") + "</span></button>"; }).join("");
-      for (var v = spk.length; v < (s.vagas || 0); v++) talks += '<div class="talk talk--tba"><span class="av">?</span><span><b>A anunciar</b><small>Orador(a)</small></span></div>';
+      for (var v = spk.length; v < (s.vagas || 0); v++) talks += '<div class="talk talk--tba"><span class="av">?</span><span><b>A anunciar</b><small>' + tbaRole + "</small></span></div>";
       var time = s.hora ? esc(s.hora) + (s.fim ? "<small>até " + esc(s.fim) + "</small>" : "") : '<span class="seq">' + (i + 1 < 10 ? "0" : "") + (i + 1) + "</span>";
-      return '<li class="slot rv"><div class="slot__time">' + time + '</div><div><span class="tag tag--' + esc(s.tipo) + '">' + esc(s.tipo === "painel" && s.numero ? "Painel " + s.numero : s.tipo === "keynote" && spk[0] && ROLE[spk[0].papel] ? ROLE[spk[0].papel] : TAG[s.tipo] || s.tipo) + "</span><h3>" + esc(s.titulo) + "</h3>" +
+      return '<li class="slot rv"><div class="slot__time">' + time + '</div><div><span class="tag tag--' + esc(s.tipo) + '">' + esc(s.tipo === "painel" && s.numero ? "Painel " + s.numero : TAG[s.tipo] || s.tipo) + "</span><h3>" + esc(s.titulo) + "</h3>" +
         (s.subtitulo ? '<p class="sub">' + esc(s.subtitulo) + "</p>" : "") + (s.descricao ? '<p class="sub">' + esc(s.descricao) + "</p>" : "") + (talks ? '<div class="talks">' + talks + "</div>" : "") + "</div></li>";
     }).join("");
     observe(el);
   };
+  G.stats = function (el, list, cls) {
+    list = list || [];
+    el.style.gridTemplateColumns = "repeat(" + list.length + ", 1fr)";
+    el.innerHTML = list.map(function (n) { return '<div class="stat' + (cls ? " " + cls : "") + '"><b>' + esc(n.valor) + "</b><span>" + esc(n.rotulo) + "</span></div>"; }).join("");
+  };
   G.categories = function (el) {
     var reveal = D.premios && D.premios.revelarVencedores;
-    el.innerHTML = CATS.map(function (c) {
+    var groups = (D.premios && D.premios.grupos) || [{ id: "", titulo: "", total: 0 }];
+    var catHtml = function (c) {
+      var noms = (c.nomeados || []).filter(function (id) { return byId[id]; });
+      var rest = Math.max(0, (c.vagas || 0) - noms.length);
       return '<div class="cat rv"><div class="cat__t"><small>Categoria</small>' + esc(c.titulo) + '</div><div class="noms">' +
-        (c.nomeados || []).map(function (id) { var p = byId[id]; if (!p) return "";
-          return '<button class="nom' + (reveal && c.vencedor === id ? " nom--win" : "") + '" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span><b>" + esc(p.nome) + "</b><small>" + esc(pos(p) || "Nomeado(a)") + "</small></span></button>"; }).join("") + "</div></div>";
+        noms.map(function (id) { var p = byId[id];
+          return '<button class="nom' + (reveal && c.vencedor === id ? " nom--win" : "") + '" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span><b>" + esc(p.nome) + "</b><small>" + esc(pos(p) || "Nomeado(a)") + "</small></span></button>"; }).join("") +
+        (rest ? '<div class="nom nom--tba"><span class="av">' + rest + "</span><span><b>" + (noms.length ? "+ " : "") + rest + " a anunciar</b><small>Revelação brevemente</small></span></div>" : "") + "</div></div>";
+    };
+    el.innerHTML = groups.map(function (g) {
+      var cs = CATS.filter(function (c) { return (c.grupo || "") === g.id || (!g.id); });
+      if (!cs.length) return "";
+      return (g.titulo ? '<div class="cgroup rv"><span class="cgroup__n">' + esc(g.total || "") + "</span><h3>" + esc(g.titulo) + "</h3></div>" : "") + cs.map(catHtml).join("");
     }).join("");
     observe(el);
   };

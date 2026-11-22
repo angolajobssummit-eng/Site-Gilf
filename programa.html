@@ -31,6 +31,8 @@
     </div>
   </section>
 
+  <div class="stats" id="stats"></div>
+
   <section class="sec">
     <div class="wrap">
       <div class="tabs-wrap" data-tabs>
@@ -59,6 +61,7 @@
 <script>
 (function () {
   var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  G.stats($("stats"), (D.numeros || {}).forum);
   G.agenda($("agF"), "forum");
   G.agenda($("agG"), "gala");
   var pr = D.programa || {};

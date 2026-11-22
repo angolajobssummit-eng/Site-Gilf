@@ -44,12 +44,7 @@
     </div>
   </section>
 
-  <div class="stats">
-    <div class="stat"><b id="sSpk">—</b><span>Oradores e moderadores</span></div>
-    <div class="stat"><b id="sPan">—</b><span>Painéis temáticos</span></div>
-    <div class="stat"><b id="sNom">—</b><span>Nomeados aos Prémios</span></div>
-    <div class="stat"><b id="sPax" data-bind="evento.participantes">450</b><span>Participantes esperados</span></div>
-  </div>
+  <div class="stats" id="stats"></div>
 
   <section class="sec sec--paper">
     <div class="wrap split">
@@ -78,7 +73,7 @@
   <section class="sec">
     <div class="wrap">
       <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Keynotes</span><h2>Quem abre a conversa</h2></div>
+        <div class="head head--l rv"><span class="kicker">Keynote &amp; Guest Speakers</span><h2>Quem abre a conversa</h2></div>
         <a class="arrow-link rv" href="oradores.html">Todos os oradores <span data-ic="arrow"></span></a>
       </div>
       <div class="keynotes" id="keynotes"></div>
@@ -88,7 +83,7 @@
   <section class="sec dark dots">
     <div class="wrap" style="position:relative">
       <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Painéis</span><h2>Debates com quem decide</h2></div>
+        <div class="head head--l rv"><span class="kicker">Painéis temáticos</span><h2>Debates com quem decide</h2><p id="panNote"></p></div>
         <a class="arrow-link rv" href="programa.html" style="color:var(--gold-xl)">Programa completo <span data-ic="arrow"></span></a>
       </div>
       <div class="panels" id="panels"></div>
@@ -101,6 +96,7 @@
         <div class="head head--l rv"><span class="kicker">Prémios Líderes Angola 2026</span><h2>Os nomeados</h2><p>Os vencedores são escolhidos por um júri independente e revelados na Gala.</p></div>
         <a class="btn btn--ghost rv" href="premios.html">Ver todas as categorias</a>
       </div>
+      <div class="stats stats--dark rv" id="awardStats" style="margin-bottom:34px"></div>
       <div class="nomgrid" id="nominees"></div>
     </div>
   </section>
@@ -145,14 +141,18 @@
   document.getElementById("heroPortraits").innerHTML = hp.map(function (p, i) {
     return '<button class="portrait rv d' + (i + 1) + (i === 0 ? " portrait--tall" : "") + '" type="button" data-p="' + esc(p.id) + '">' + G.photo(p) + '<figcaption><span class="badge">' + esc(G.ROLE[p.papel]) + "</span><b>" + esc(p.nome) + "</b><span>" + esc(G.pos(p)) + "</span></figcaption></button>";
   }).join("");
-  document.getElementById("keynotes").innerHTML = keys.map(G.keynote).join("");
+  var tbaKn = function (role) { return '<div class="kn rv" style="cursor:default"><div class="kn__ph"><span class="badge">' + role + '</span><span class="mono" style="position:absolute;inset:0;font-size:4rem">?</span></div><div class="kn__b"><h3>A anunciar</h3><span class="pos">Brevemente</span></div></div>'; };
+  var kHtml = keys.map(G.keynote).join("");
+  (D.programa.forum || []).forEach(function (s) { if ((s.tipo === "guest" || s.tipo === "keynote") && !(s.oradores || []).length) kHtml += tbaKn(s.tipo === "guest" ? "Guest Speaker" : "Keynote Speaker"); });
+  document.getElementById("keynotes").innerHTML = kHtml;
   var panels = (D.programa.forum || []).filter(function (s) { return s.tipo === "painel"; });
-  document.getElementById("panels").innerHTML = panels.map(G.panel).join("");
+  var shown = panels.filter(function (s) { return s.moderador || (s.oradores || []).length; });
+  document.getElementById("panels").innerHTML = shown.map(G.panel).join("");
+  document.getElementById("panNote").textContent = shown.length < panels.length ? (panels.length - shown.length) + " painéis com moderadores e oradores a anunciar brevemente." : "";
   G.nominees(document.getElementById("nominees"), 10);
   G.marquee(document.getElementById("marquee"));
-  document.getElementById("sSpk").textContent = G.speakers().length;
-  document.getElementById("sPan").textContent = panels.length;
-  document.getElementById("sNom").textContent = G.nomineeCount();
+  G.stats(document.getElementById("stats"), (D.numeros || {}).forum);
+  G.stats(document.getElementById("awardStats"), (D.numeros || {}).premios);
   var O = D.organizacao || {};
   if (O.foto) document.getElementById("fPhoto").src = O.foto;
   document.getElementById("fName").textContent = O.nome || "";
