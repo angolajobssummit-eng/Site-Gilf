@@ -4,10 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Oradores & Moderadores · GiLF Angola 2026</title>
-  <meta name="description" content="Conheça os oradores, keynotes e moderadores do GiLF Angola 2026 — Fórum Global de Investimento e Liderança.">
+  <meta name="description" content="Keynotes, oradores e moderadores do GiLF Angola 2026 — Fórum Global de Investimento e Liderança, 17 de Dezembro, Hotel EPIC SANA, Luanda.">
   <meta property="og:title" content="Oradores & Moderadores · GiLF Angola 2026">
+  <meta property="og:description" content="Keynotes, oradores e moderadores do GiLF Angola 2026 — Fórum Global de Investimento e Liderança, 17 de Dezembro, Hotel EPIC SANA, Luanda.">
   <meta property="og:image" content="assets/img/og.jpg">
-  <meta name="theme-color" content="#16110a">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#15100a">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,53 +19,41 @@
 </head>
 <body data-page="oradores">
 <main id="main">
-  <section class="phero" data-waves>
+  <section class="phero dark dots" data-waves>
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Início</a> / Oradores</div>
       <h1>Oradores &amp; Moderadores</h1>
-      <p>Líderes, investidores, especialistas e decisores que dão voz ao GiLF Angola 2026.</p>
+      <p>Ministros, gestores, empresários, consultores e líderes da sociedade civil que sobem ao palco do GiLF Angola 2026.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="wrap">
-      <input class="search rv" type="search" id="q" placeholder="Pesquisar por nome, cargo ou organização" aria-label="Pesquisar oradores">
+      <input class="search rv" type="search" id="q" placeholder="Pesquisar por nome, cargo, organização ou tema" aria-label="Pesquisar oradores">
       <div class="filters rv" id="filters" role="group" aria-label="Filtrar por papel"></div>
-      <div class="speakers" id="grid"></div>
-      <p class="note center" id="soon">Os oradores e moderadores serão anunciados brevemente. Acompanhe esta página.</p>
+      <div class="people" id="grid"></div>
     </div>
   </section>
 
-  <section class="sec sec--white" id="candidatura">
+  <section class="sec sec--paper" id="candidatura">
     <div class="wrap split split--top">
       <div class="rv">
-        <div class="head head--left" style="margin-bottom:24px">
-          <span class="kicker">Call for speakers</span>
-          <h2>Candidate-se a orador ou moderador</h2>
-        </div>
-        <p class="lead">Tem experiência e uma visão a partilhar sobre investimento, liderança, economia ou inovação? Envie-nos a sua proposta.</p>
-        <p>A Comissão Organizadora analisa todas as candidaturas e contacta os perfis seleccionados para os painéis do Fórum.</p>
-        <div class="info" style="margin-top:26px">
-          <div><span class="ic" data-ic="mic"></span><span><small>O que enviar</small><b>Breve biografia, fotografia profissional e o tema proposto</b></span></div>
+        <div class="head head--l"><span class="kicker">Imprensa e convidados</span><h2>Quer entrevistar um orador?</h2></div>
+        <p class="lead">A Comissão Organizadora coordena pedidos de entrevista, perfis e materiais de imprensa sobre os oradores do GiLF Angola 2026.</p>
+        <div class="info" style="margin-top:24px">
+          <a id="waLink" href="#" target="_blank" rel="noopener"><span class="ic" data-ic="chat"></span><span><small>WhatsApp</small><b data-bind="evento.telefone">+244 922 812 224</b></span></a>
         </div>
       </div>
-      <form class="form rv" data-form="GiLF 2026 — Candidatura a orador" novalidate>
-        <div class="row">
-          <label class="field">Nome completo *<input name="nome" required autocomplete="name"></label>
+      <form class="form rv" data-form="GiLF 2026 — Pedido sobre oradores" novalidate>
+        <div class="form__row">
+          <label class="field">Nome *<input name="nome" required autocomplete="name"></label>
           <label class="field">E-mail *<input name="email" type="email" required autocomplete="email"></label>
         </div>
-        <div class="row">
-          <label class="field">Cargo<input name="cargo" autocomplete="organization-title"></label>
-          <label class="field">Organização<input name="organizacao" autocomplete="organization"></label>
+        <div class="form__row">
+          <label class="field">Órgão / Empresa<input name="org" autocomplete="organization"></label>
+          <label class="field">Orador(a)<select name="orador" id="spkSel"></select></label>
         </div>
-        <div class="row">
-          <label class="field">Telefone / WhatsApp<input name="telefone" type="tel" autocomplete="tel"></label>
-          <label class="field">Pretende participar como
-            <select name="papel"><option>Orador(a)</option><option>Moderador(a)</option><option>Keynote</option></select>
-          </label>
-        </div>
-        <label class="field">Tema proposto<input name="tema"></label>
-        <label class="field">Breve biografia / LinkedIn<textarea name="bio" rows="4"></textarea></label>
+        <label class="field">Pedido *<textarea name="pedido" rows="4" required></textarea></label>
         <div class="form__btns">
           <button class="btn btn--dark" type="submit" data-via="email">Enviar por e-mail</button>
           <button class="btn btn--wa" type="submit" data-via="wa">Enviar por WhatsApp</button>
@@ -75,24 +66,34 @@
 <script src="assets/dados.js"></script>
 <script src="assets/js/site.js"></script>
 <script>
-  (function () {
-    var grid = document.getElementById("grid"), q = document.getElementById("q"), fl = document.getElementById("filters");
-    var total = GILF_speakerCount();
-    var roles = [["todos", "Todos"], ["keynote", "Keynotes"], ["orador", "Oradores"], ["moderador", "Moderadores"], ["apresentador", "Apresentadores"], ["honra", "Convidados de Honra"]];
-    var cur = "todos";
-    fl.innerHTML = roles.filter(function (r) { return r[0] === "todos" || GILF_speakerCount(r[0]); })
-      .map(function (r) { var n = r[0] === "todos" ? total : GILF_speakerCount(r[0]); return '<button class="chip" aria-pressed="' + (r[0] === cur) + '" data-r="' + r[0] + '">' + r[1] + (n ? " <small>" + n + "</small>" : "") + "</button>"; }).join("");
-    if (!total) { fl.hidden = true; q.hidden = true; } else document.getElementById("soon").hidden = true;
-    function draw() { GILF_renderSpeakers(grid, { papel: cur, q: q.value.trim(), minCards: total ? 0 : 8 }); }
-    fl.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-r]"); if (!b) return;
-      cur = b.getAttribute("data-r");
-      [].forEach.call(fl.children, function (c) { c.setAttribute("aria-pressed", String(c === b)); });
-      draw();
+(function () {
+  var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  var all = G.speakers(), q = $("q"), fl = $("filters"), grid = $("grid"), cur = "todos";
+  var roles = [["todos", "Todos"], ["keynote", "Keynote"], ["guest", "Guest Speaker"], ["moderador", "Moderadores"], ["orador", "Oradores"]];
+  var count = function (r) { return r === "todos" ? all.length : all.filter(function (p) { return p.papel === r; }).length; };
+  fl.innerHTML = roles.filter(function (r) { return count(r[0]); }).map(function (r) {
+    return '<button class="chip" aria-pressed="' + (r[0] === cur) + '" data-r="' + r[0] + '">' + r[1] + " <small>" + count(r[0]) + "</small></button>";
+  }).join("");
+  function draw() {
+    var t = q.value.trim().toLowerCase();
+    var list = all.filter(function (p) {
+      return (cur === "todos" || p.papel === cur) && (!t || [p.nome, p.cargo, p.organizacao, p.tema].join(" ").toLowerCase().indexOf(t) > -1);
     });
-    q.addEventListener("input", draw);
+    grid.innerHTML = list.length ? list.map(G.card).join("") : '<div class="empty">Nenhum resultado.</div>';
+    G.observe(grid);
+  }
+  fl.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-r]"); if (!b) return;
+    cur = b.getAttribute("data-r");
+    [].forEach.call(fl.children, function (c) { c.setAttribute("aria-pressed", String(c === b)); });
     draw();
-  })();
+  });
+  q.addEventListener("input", draw);
+  draw();
+  $("spkSel").innerHTML = "<option>Geral</option>" + all.map(function (p) { return "<option>" + esc(p.nome) + "</option>"; }).join("");
+  $("waLink").href = G.wa;
+  G.ready();
+})();
 </script>
 </body>
 </html>

@@ -3,35 +3,34 @@
 **Fórum Global de Investimento e Liderança** + **Gala de Premiação Prémios Líderes Angola 2026**
 17 de Dezembro de 2026 · Hotel EPIC SANA, Luanda · www.gilf-angola.com
 
-Site estático (HTML/CSS/JS, sem servidor nem base de dados). Pode ser alojado no GitHub Pages, Netlify ou em qualquer alojamento web.
+Site estático (HTML/CSS/JS, sem servidor) com **área administrativa** que publica directamente no repositório.
 
 ## Páginas
-| Ficheiro | Conteúdo |
+| Página | Conteúdo |
 |---|---|
-| `index.html` | Início: destaque, contagem decrescente, temas, oradores, programa, Gala, parceiros |
-| `forum.html` | Fórum e programa completo (manhã + Gala), com moderadores e oradores por sessão |
-| `oradores.html` | Oradores e moderadores (filtros, pesquisa, perfil) + candidatura a orador |
-| `gala.html` | Gala Prémios Líderes Angola: programa 19h–22h, categorias, nomeações |
-| `parceiros.html` | Logótipos por grupo + pacotes de patrocínio + pedido de proposta |
-| `inscricao.html` | Ingressos e formulário de reserva + mapa |
-| `contacto.html` | Contactos, sala de imprensa (cartazes para download), FAQ |
-| `admin.html` | **Gestor de Conteúdos** (não indexado pelos motores de busca) |
+| `index.html` | Início: keynotes, painéis, nomeados, organização, parceiros, contagem decrescente |
+| `programa.html` | Programa do Fórum e da Gala, com moderadores, oradores e temas |
+| `oradores.html` | Oradores e moderadores (filtros, pesquisa, perfis) |
+| `premios.html` | Prémios Líderes Angola: categorias e nomeados |
+| `parceiros.html` | Logótipos por grupo + pacotes de patrocínio + pedido de dossiê |
+| `bilhetes.html` | Tipos de bilhete + reserva por WhatsApp/e-mail + mapa |
+| `sobre.html` | O fórum, o fundador, percurso e iniciativas |
+| `contacto.html` | Contactos, sala de imprensa e perguntas frequentes |
+| `admin/` | **Área administrativa** (não indexada) |
 
-## Adicionar oradores, moderadores e sessões
-1. Abra `admin.html` no site (ex.: www.gilf-angola.com/admin.html).
-2. Adicione pessoas (com foto — recortada automaticamente) e atribua-as às sessões do programa.
-3. **Pré-visualizar site** mostra o resultado antes de publicar.
-4. **Descarregar dados.js** (+ **Descarregar fotos novas**).
-5. No GitHub: envie `dados.js` para `assets/` e as fotos para `assets/img/oradores/`.
+## Área administrativa (`/admin/`)
+- **Entrar** com uma chave de acesso GitHub (fine-grained token, só para este repositório, permissão *Contents: Read and write*). As instruções estão no ecrã de login.
+- Gerir: evento, programa (sessões, moderadores, oradores), oradores e pessoas (com fotografia), prémios (categorias, nomeados, vencedores), parceiros (logótipos), bilhetes, patrocínio, organização e FAQ.
+- **Pré-visualizar** antes de publicar · **Publicar** cria um único commit (`assets/dados.js` + imagens novas) · **Histórico de versões** permite restaurar versões anteriores.
+- Painel com verificação automática de conteúdos (referências partidas, pessoas sem foto, painéis sem moderador…).
+- Rascunhos guardados automaticamente no browser.
 
-Todo o conteúdo editável (evento, oradores, programa, prémios, ingressos, parceiros) está em `assets/dados.js`.
-
-## Formulários
-Inscrição, nomeações, candidaturas, patrocínio e contacto abrem uma mensagem pronta no e-mail
-ou no WhatsApp da organização (+244 922 812 224) — não é preciso servidor.
+## Publicação (GitHub Pages)
+Settings → Pages → *Deploy from a branch* → branch `claude/gilf-angola-dubai-site-wo7caz`, pasta `/ (root)`.
+Depois de cada publicação no admin, o site actualiza em poucos minutos.
 
 ## Estrutura
-- `assets/css/site.css` — design
-- `assets/js/site.js` — cabeçalho/rodapé, oradores, programa, parceiros, formulários
-- `assets/img/logos/` — logótipos (extraídos dos cartazes oficiais)
-- `assets/img/oradores/` — fotos dos oradores
+- `assets/dados.js` — todo o conteúdo (gerido pelo admin)
+- `assets/css/site.css`, `assets/js/site.js` — site público
+- `admin/` — área administrativa
+- `assets/img/pessoas/`, `assets/img/logos/` — fotografias e logótipos

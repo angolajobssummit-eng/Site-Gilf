@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prémios Líderes Angola 2026 · Nomeados · GiLF Angola</title>
+  <meta name="description" content="Gala de Premiação e Jantar Prémios Líderes Angola 2026 — categorias e nomeados. 17 de Dezembro, Hotel EPIC SANA, Luanda, a partir das 19h00.">
+  <meta property="og:title" content="Prémios Líderes Angola 2026 · Nomeados · GiLF Angola">
+  <meta property="og:description" content="Gala de Premiação e Jantar Prémios Líderes Angola 2026 — categorias e nomeados. 17 de Dezembro, Hotel EPIC SANA, Luanda, a partir das 19h00.">
+  <meta property="og:image" content="assets/img/cartaz-gala.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#15100a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="premios">
+<main id="main">
+  <section class="hero dark dots" data-waves>
+    <div class="wrap hero__grid">
+      <div>
+        <div class="crumbs rv"><a href="index.html">Início</a> / Prémios</div>
+        <img class="rv d1" src="assets/img/logos/premios-lideres.png" alt="Gala de Premiação Prémios Líderes Angola 2026" width="699" height="383" style="width:min(560px,100%);margin:26px 0 20px">
+        <p class="hero__theme rv d2">Gala de Premiação e Jantar</p>
+        <div class="facts rv d2">
+          <div class="fact" data-ic="cal"><span><small>Data</small><span data-bind="evento.dataTexto">17 de Dezembro de 2026</span></span></div>
+          <div class="fact" data-ic="clock"><span><small>Horário</small><span data-bind="evento.horarioGala">19h00 – 23h00</span></span></div>
+          <div class="fact" data-ic="pin"><span><small>Local</small><span data-bind="evento.local">Hotel EPIC SANA</span></span></div>
+        </div>
+        <div class="actions rv d3">
+          <a class="btn btn--gold" href="bilhetes.html?ingresso=Gala%20%26%20Jantar#reserva">Reservar lugar na Gala</a>
+          <a class="btn btn--ghost" href="#categorias">Ver nomeados</a>
+        </div>
+      </div>
+      <div class="rv d2"><img src="assets/img/cartaz-gala.jpg" alt="Cartaz oficial da Gala Prémios Líderes Angola 2026" width="1092" height="1440" style="border-radius:18px;box-shadow:0 40px 70px -40px #000;transform:rotate(-1.5deg)"></div>
+    </div>
+  </section>
+
+  <section class="sec dark" id="categorias" style="background:#120d07">
+    <div class="wrap" style="position:relative">
+      <div class="head rv"><span class="kicker">Edição 2026</span><h2>Categorias e nomeados</h2><p id="nota"></p></div>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section class="sec sec--paper">
+    <div class="wrap split">
+      <div class="rv">
+        <div class="head head--l"><span class="kicker">O prémio</span><h2>Reconhecer quem faz Angola avançar</h2></div>
+        <p class="lead">Os Prémios Líderes Angola distinguem personalidades, empresas e instituições que se destacam pela visão, pelo impacto e pela contribuição para o desenvolvimento do país e para a sua projecção internacional.</p>
+        <p>A cerimónia encerra o dia do GiLF Angola com a Gala de Premiação e Jantar, no Hotel EPIC SANA, reunindo a liderança empresarial, institucional e política de Angola.</p>
+      </div>
+      <div class="rv d1"><ol class="agenda" id="agG"></ol></div>
+    </div>
+  </section>
+</main>
+<script src="assets/dados.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  G.categories($("cats"));
+  G.agenda($("agG"), "gala");
+  $("nota").textContent = (D.premios && D.premios.nota) || "";
+  G.ready();
+})();
+</script>
+</body>
+</html>
