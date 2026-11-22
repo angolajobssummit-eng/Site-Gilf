@@ -878,6 +878,34 @@ window.GILF = {
       {
         "titulo": "Prémios Nacionalista e Humanismo",
         "texto": "Valorizam a história, a cidadania e os valores nacionais."
+      },
+      {
+        "titulo": "Escola Nacional de Nómadas Digitais",
+        "texto": "Salas de educação digital para formar jovens em competências digitais, em Angola e em África."
+      },
+      {
+        "titulo": "Imersão David Moma",
+        "texto": "Experiência de imersão em liderança e desenvolvimento pessoal conduzida por David Moma."
+      },
+      {
+        "titulo": "Annual Summit Angola",
+        "texto": "Conferência nacional e multidisciplinar da Luadeira Digital Angola, que reúne decisores públicos, empresários, académicos e jovens. A 3.ª edição (2025) teve como tema “Feitos em Angola”."
+      },
+      {
+        "titulo": "Conferência Nacional de Processo, Desenvolvimento e Inovação",
+        "texto": "Conferência dedicada aos processos, ao desenvolvimento e à inovação, com uma edição centrada na agricultura."
+      },
+      {
+        "titulo": "Fórum Cultural Angola–Mundo",
+        "texto": "Promove a cultura angolana e o diálogo cultural entre Angola e o mundo."
+      },
+      {
+        "titulo": "Fórum Internacional de Negócios e Cooperação com as Embaixadas",
+        "texto": "Aproxima empresas e instituições angolanas das embaixadas acreditadas no país, para promover investimento, cooperação e parcerias."
+      },
+      {
+        "titulo": "Sopa Solidária com David Moma",
+        "texto": "Ruas alimentadas, comunidades levantadas."
       }
     ]
   },

@@ -616,7 +616,7 @@
       row: function (x) { return { thumb: '<span class="thumb" style="font-family:Inter;font-size:.7rem;font-weight:700">' + esc(x.ano) + "</span>", title: x.ano, sub: x.texto }; },
       fields: [{ k: "ano", l: "Ano / data", req: true }, { k: "texto", l: "Texto", t: "textarea", rows: 2 }], make: function () { return { ano: "", texto: "" }; }, add: "Novo marco"
     });
-    var c2 = card(v, "Iniciativas", "", [["Nova iniciativa", function () { e2.add(); }]]);
+    var c2 = card(v, "Projectos e iniciativas", "Aparecem na página Sobre.", [["Novo projecto", function () { e2.add(); }]]);
     var e2 = listEditor(c2, {
       arr: function () { return O.iniciativas || (O.iniciativas = []); }, title: function (x) { return x.titulo; },
       row: function (x) { return { thumb: '<span class="thumb">✦</span>', title: x.titulo, sub: x.texto }; },
