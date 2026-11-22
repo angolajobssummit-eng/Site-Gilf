@@ -398,6 +398,7 @@
       { k: "tema", l: "Tema / lema" },
       { row: [{ k: "dataTexto", l: "Data (texto)", req: true, ph: "17 de Dezembro de 2026" }, { k: "inicio", l: "Início (contagem decrescente)", req: true, hint: "Formato: 2026-12-17T08:30:00+01:00" }] },
       { row: [{ k: "horarioForum", l: "Horário do Fórum" }, { k: "horarioGala", l: "Horário da Gala" }, { k: "participantes", l: "Participantes esperados" }] },
+      { k: "mestres", l: "Mestres de cerimónia", ph: "Karina & Julião Correia" },
       { row: [{ k: "local", l: "Local", req: true }, { k: "cidade", l: "Cidade" }, { k: "morada", l: "Morada" }] },
       { row: [{ k: "telefone", l: "Telefone principal", req: true }, { k: "telefone2", l: "Telefone 2" }, { k: "whatsapp", l: "WhatsApp", hint: "Só números, com 244" }] },
       { row: [{ k: "email", l: "E-mail", t: "email", req: true }, { k: "site", l: "Website" }] },

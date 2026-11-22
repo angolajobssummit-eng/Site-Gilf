@@ -27,6 +27,7 @@
       <div class="phero__meta">
         <span class="fact" data-ic="cal"><span data-bind="evento.dataTexto">17 de Dezembro de 2026</span></span>
         <span class="fact" data-ic="pin"><span data-bind="evento.local">Hotel EPIC SANA</span></span>
+        <span class="fact" data-ic="mic" id="mcs"><span>Mestres de cerimónia: <span data-bind="evento.mestres"></span></span></span>
       </div>
     </div>
   </section>
@@ -62,6 +63,7 @@
 (function () {
   var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
   G.stats($("stats"), (D.numeros || {}).forum);
+  if (!D.evento.mestres) $("mcs").hidden = true;
   G.agenda($("agF"), "forum");
   G.agenda($("agG"), "gala");
   var pr = D.programa || {};

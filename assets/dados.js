@@ -13,7 +13,7 @@ window.GILF = {
     "local": "Hotel EPIC SANA",
     "cidade": "Luanda, Angola",
     "morada": "Rua da Missão, Luanda",
-    "horarioForum": "08h30 – 15h30",
+    "horarioForum": "08h30 – 15h20",
     "horarioGala": "19h00 – 23h00",
     "participantes": "450",
     "telefone": "+244 922 812 224",
@@ -28,7 +28,8 @@ window.GILF = {
       "linkedin": "",
       "youtube": "",
       "tiktok": ""
-    }
+    },
+    "mestres": "Karina & Julião Correia"
   },
   "numeros": {
     "forum": [
@@ -87,17 +88,17 @@ window.GILF = {
       "destaque": true
     },
     {
-      "id": "ivanilson-machado",
-      "nome": "Ivanilson Machado",
-      "cargo": "CEO",
-      "organizacao": "Pumangol",
-      "pais": "Angola",
-      "papel": "keynote",
-      "foto": "assets/img/pessoas/ivanilson-machado.jpg",
-      "tema": "Liderança empresarial e investimento para uma Angola competitiva.",
+      "id": "agnaldo-jaime",
       "bio": "",
       "linkedin": "",
-      "destaque": true
+      "destaque": true,
+      "nome": "Agnaldo Jaime",
+      "cargo": "PCA",
+      "organizacao": "Unitel",
+      "papel": "keynote",
+      "tema": "",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/agnaldo-jaime.jpg"
     },
     {
       "id": "nadia-evora",
@@ -112,6 +113,32 @@ window.GILF = {
       "bio": "",
       "linkedin": "",
       "destaque": true
+    },
+    {
+      "id": "mailand-nguto",
+      "bio": "",
+      "linkedin": "",
+      "destaque": true,
+      "nome": "Mailand Nguto",
+      "cargo": "Empresária, Fundadora e Filantropa",
+      "organizacao": "",
+      "papel": "guest",
+      "tema": "Liderança com propósito: empreendedorismo, filantropia e impacto social como pilares do desenvolvimento sustentável.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/mailand-nguto.jpg"
+    },
+    {
+      "id": "jaime-beirao",
+      "bio": "",
+      "linkedin": "",
+      "destaque": true,
+      "nome": "Jaime Beirão",
+      "cargo": "Orador",
+      "organizacao": "",
+      "papel": "guest",
+      "tema": "Posicionamento estratégico: diferenciar-se e gerar valor.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/jaime-beirao.jpg"
     },
     {
       "id": "bruno-arroba",
@@ -208,7 +235,7 @@ window.GILF = {
       "id": "filipe-maximiano",
       "nome": "Filipe Maximiano",
       "cargo": "Fundador",
-      "organizacao": "ExpoLife",
+      "organizacao": "ExpoLife (Brasil)",
       "pais": "Brasil",
       "papel": "orador",
       "foto": "assets/img/pessoas/filipe-maximiano.jpg",
@@ -411,16 +438,302 @@ window.GILF = {
       "bio": "",
       "linkedin": "",
       "destaque": false
+    },
+    {
+      "id": "armando-paciencia",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Armando Paciência",
+      "cargo": "Especialista em Relações Institucionais e Governamentais",
+      "organizacao": "",
+      "papel": "moderador",
+      "tema": "",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/armando-paciencia.jpg"
+    },
+    {
+      "id": "braulio-augusto",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Bráulio Augusto",
+      "cargo": "PCA",
+      "organizacao": "INAPEM",
+      "papel": "orador",
+      "tema": "Micro, Small and Medium Enterprises as a Driver of Africa's Economic Diversification.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/braulio-augusto.jpg"
+    },
+    {
+      "id": "donald-kongwa",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Donald Somanda Kongwa",
+      "cargo": "Associate Director & Credit Analyst (Standard Chartered Bank UAE) · Vice Chairman – Tanzania Diaspora Community, UAE",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Mobilising Diaspora Capital: Banking, Credit and Cross-Border Investment for Africa's Growth.",
+      "pais": "Emirados Árabes Unidos",
+      "foto": "assets/img/pessoas/donald-kongwa.jpg"
+    },
+    {
+      "id": "maurilio-mateus",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Maurílio Carbonel Mateus",
+      "cargo": "General Manager Business, Strategy & Marketing",
+      "organizacao": "Bosch Angola",
+      "papel": "orador",
+      "tema": "Investment and Economic Development in Africa.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/maurilio-mateus.jpg"
+    },
+    {
+      "id": "ernesto-januario",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Ernesto Januário",
+      "cargo": "Empresário, Fundador",
+      "organizacao": "Grupo EJ",
+      "papel": "orador",
+      "tema": "Turismo, mobilidade e investimento privado: novas oportunidades para conectar Angola ao mundo.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/ernesto-januario.jpg"
+    },
+    {
+      "id": "catarina-antonio",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Catarina António",
+      "cargo": "Empresária · Directora-Geral do Aeroporto do Soyo",
+      "organizacao": "",
+      "papel": "moderador",
+      "tema": "",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/catarina-antonio.jpg"
+    },
+    {
+      "id": "adilson-paulo",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Adilson Paulo",
+      "cargo": "Executive Director",
+      "organizacao": "SGS Angola",
+      "papel": "orador",
+      "tema": "Leadership and People in Times of Innovation (AI), Transformation and Transition.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/adilson-paulo.jpg"
+    },
+    {
+      "id": "zacarias-samba",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Zacarias Samba",
+      "cargo": "Gestor de Formação Profissional",
+      "organizacao": "Sociedade Mineira de Catoca",
+      "papel": "orador",
+      "tema": "Liderança adaptativa e criativa.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/zacarias-samba.jpg"
+    },
+    {
+      "id": "carlos-queta",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Carlos Jorge Queta",
+      "cargo": "Doutor · Director Adjunto",
+      "organizacao": "Academia Diplomática Venâncio de Moura",
+      "papel": "orador",
+      "tema": "Diplomacia e liderança global: o papel de Angola na construção de novas pontes com o mundo.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/carlos-queta.jpg"
+    },
+    {
+      "id": "lourenco-kwenda",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Lourenço Pinto Francisco Kwenda",
+      "cargo": "Académico e Investigador · Gestão, Estratégia e Segurança Pública",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Liderança empresarial e capital humano: estratégias para organizações de alto desempenho.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/lourenco-kwenda.jpg"
+    },
+    {
+      "id": "genual-sampaio",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Genual Sampaio",
+      "cargo": "Especialista em Comunicação, Oratória e Liderança",
+      "organizacao": "",
+      "papel": "moderador",
+      "tema": "",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/genual-sampaio.jpg"
+    },
+    {
+      "id": "edgar-leandro",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Edgar Leandro",
+      "cargo": "Marketing, Comunicação Estratégica e Desenvolvimento de Negócios",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Marketing com propósito e comunicação estratégica na construção da marca do líder moderno.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/edgar-leandro.jpg"
+    },
+    {
+      "id": "geraldo-dala",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Geraldo Dala",
+      "cargo": "Gestão, Finanças e Liderança",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Liderança financeira sustentável: como a gestão estratégica impulsiona negócios transformadores.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/geraldo-dala.jpg"
+    },
+    {
+      "id": "sarchel-necesio",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Sarchel Nécesio",
+      "cargo": "PCA · “Rei do Digital em Angola”",
+      "organizacao": "Grupo Platina Line",
+      "papel": "orador",
+      "tema": "O poder do digital: media, inovação e novas oportunidades de liderança na economia moderna.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/sarchel-necesio.jpg"
+    },
+    {
+      "id": "nuno-baio",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Nuno Baio",
+      "cargo": "Empreendedorismo e Gestão de Negócios",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Empreendedorismo com impacto: formando a nova geração de líderes e negócios inovadores.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/nuno-baio.jpg"
+    },
+    {
+      "id": "joaquim-francisco",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Joaquim Francisco",
+      "cargo": "CEO",
+      "organizacao": "Skynet Angola",
+      "papel": "moderador",
+      "tema": "",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/joaquim-francisco.jpg"
+    },
+    {
+      "id": "armando-gomes",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Armando Gomes",
+      "cargo": "Consultor de Vendas",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Vendas com propósito: como estratégias comerciais robustas impulsionam o desenvolvimento sustentável em África.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/armando-gomes.jpg"
+    },
+    {
+      "id": "benito-lukeba",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Bénito Lukeba",
+      "cargo": "Director Regional",
+      "organizacao": "Orange Money (Europa)",
+      "papel": "orador",
+      "tema": "Globalização e evolução das fintech e AI.",
+      "pais": "Europa",
+      "foto": "assets/img/pessoas/benito-lukeba.jpg"
+    },
+    {
+      "id": "mecktilder-mm",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Mecktilder M.M.",
+      "cargo": "Especialista em Recursos Naturais e Desenvolvimento",
+      "organizacao": "",
+      "papel": "orador",
+      "tema": "Governance of Mineral Resources in Africa: From Extraction to Sustainable and Inclusive Prosperity.",
+      "pais": "Tanzânia",
+      "foto": "assets/img/pessoas/mecktilder-mm.jpg"
+    },
+    {
+      "id": "nazario-vilhena",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Nazário Vilhena",
+      "cargo": "Deputado",
+      "organizacao": "Assembleia Nacional",
+      "papel": "orador",
+      "tema": "África, Angola e o mundo: parcerias para o futuro — liderança, cooperação e desenvolvimento sustentável.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/nazario-vilhena.jpg"
     }
   ],
   "programa": {
-    "provisorio": true,
-    "nota": "Programa em actualização: os temas, moderadores e oradores dos painéis 1, 2, 3 e 5 e dois Guest Speakers serão anunciados brevemente.",
+    "provisorio": false,
+    "nota": "Programa oficial. Mestres de cerimónia: Karina & Julião Correia.",
     "forum": [
       {
+        "id": "abertura",
+        "hora": "08:30",
+        "fim": "08:35",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Discurso de Abertura",
+        "subtitulo": "Entidade a confirmar",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "organizacao",
+        "hora": "08:35",
+        "fim": "08:42",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Palavra da Organização",
+        "subtitulo": "Luadeira Digital Angola & JLDI",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
         "id": "keynote-marcio",
-        "hora": "",
-        "fim": "",
+        "hora": "08:42",
+        "fim": "08:57",
         "tipo": "keynote",
         "numero": "",
         "titulo": "Angola e Emirados Árabes Unidos",
@@ -430,140 +743,29 @@ window.GILF = {
         "oradores": [
           "marcio-daniel"
         ],
-        "vagas": 1
+        "vagas": 0
       },
       {
-        "id": "keynote-ivanilson",
-        "hora": "",
-        "fim": "",
+        "id": "keynote-agnaldo",
+        "hora": "08:57",
+        "fim": "09:12",
         "tipo": "keynote",
         "numero": "",
-        "titulo": "Liderança empresarial e investimento",
-        "subtitulo": "Para uma Angola competitiva",
+        "titulo": "Keynote Unitel",
+        "subtitulo": "Tema a confirmar",
         "descricao": "",
         "moderador": "",
         "oradores": [
-          "ivanilson-machado"
+          "agnaldo-jaime"
         ],
-        "vagas": 1
-      },
-      {
-        "id": "guest-nadia",
-        "hora": "",
-        "fim": "",
-        "tipo": "guest",
-        "numero": "",
-        "titulo": "Capital humano e formação profissional",
-        "subtitulo": "O motor da competitividade e sustentabilidade dos grandes projectos",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [
-          "nadia-evora"
-        ],
-        "vagas": 1
-      },
-      {
-        "id": "guest-2",
-        "hora": "",
-        "fim": "",
-        "tipo": "guest",
-        "numero": "",
-        "titulo": "Guest Speaker",
-        "subtitulo": "Nome e tema a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 1
-      },
-      {
-        "id": "guest-3",
-        "hora": "",
-        "fim": "",
-        "tipo": "guest",
-        "numero": "",
-        "titulo": "Guest Speaker",
-        "subtitulo": "Nome e tema a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 1
+        "vagas": 0
       },
       {
         "id": "painel-1",
-        "hora": "",
-        "fim": "",
+        "hora": "09:12",
+        "fim": "09:52",
         "tipo": "painel",
         "numero": "1",
-        "titulo": "Painel 1",
-        "subtitulo": "Tema, moderador e oradores a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 4
-      },
-      {
-        "id": "painel-2",
-        "hora": "",
-        "fim": "",
-        "tipo": "painel",
-        "numero": "2",
-        "titulo": "Painel 2",
-        "subtitulo": "Tema, moderador e oradores a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 4
-      },
-      {
-        "id": "painel-3",
-        "hora": "",
-        "fim": "",
-        "tipo": "painel",
-        "numero": "3",
-        "titulo": "Painel 3",
-        "subtitulo": "Tema, moderador e oradores a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 4
-      },
-      {
-        "id": "painel-4",
-        "hora": "",
-        "fim": "",
-        "tipo": "painel",
-        "numero": "4",
-        "titulo": "Liderança à Luz de Cristo",
-        "subtitulo": "Serviço, ética e transformação social",
-        "descricao": "",
-        "moderador": "ayrton-da-costa",
-        "oradores": [
-          "joao-bartolomeu",
-          "filipe-maximiano",
-          "josafath-mussaba",
-          "miguel-simao"
-        ],
-        "vagas": 4
-      },
-      {
-        "id": "painel-5",
-        "hora": "",
-        "fim": "",
-        "tipo": "painel",
-        "numero": "5",
-        "titulo": "Painel 5",
-        "subtitulo": "Tema, moderador e oradores a anunciar",
-        "descricao": "",
-        "moderador": "",
-        "oradores": [],
-        "vagas": 4
-      },
-      {
-        "id": "painel-6",
-        "hora": "",
-        "fim": "",
-        "tipo": "painel",
-        "numero": "6",
         "titulo": "Liderança Empresarial e o Futuro de Angola",
         "subtitulo": "Visão, inovação, investimento e internacionalização para construir empresas capazes de competir no mundo",
         "descricao": "",
@@ -577,11 +779,119 @@ window.GILF = {
         "vagas": 4
       },
       {
-        "id": "painel-7",
-        "hora": "",
-        "fim": "",
+        "id": "painel-2",
+        "hora": "09:52",
+        "fim": "10:32",
         "tipo": "painel",
-        "numero": "7",
+        "numero": "2",
+        "titulo": "Investimento, Financiamento e Diversificação Económica de África",
+        "subtitulo": "Estratégias, capital e parcerias para um continente mais competitivo e inclusivo",
+        "descricao": "",
+        "moderador": "armando-paciencia",
+        "oradores": [
+          "braulio-augusto",
+          "donald-kongwa",
+          "maurilio-mateus",
+          "ernesto-januario"
+        ],
+        "vagas": 4
+      },
+      {
+        "id": "painel-3",
+        "hora": "10:32",
+        "fim": "11:12",
+        "tipo": "painel",
+        "numero": "3",
+        "titulo": "Liderança e Capital Humano na Era da Transformação",
+        "subtitulo": "Pessoas, talento e inovação como motores de organizações mais competitivas e de uma Angola mais resiliente",
+        "descricao": "",
+        "moderador": "catarina-antonio",
+        "oradores": [
+          "adilson-paulo",
+          "zacarias-samba",
+          "carlos-queta",
+          "lourenco-kwenda"
+        ],
+        "vagas": 4
+      },
+      {
+        "id": "painel-4",
+        "hora": "11:27",
+        "fim": "12:07",
+        "tipo": "painel",
+        "numero": "4",
+        "titulo": "Liderança que Transforma",
+        "subtitulo": "Influência, inovação e propósito na construção de uma nova geração de líderes",
+        "descricao": "",
+        "moderador": "genual-sampaio",
+        "oradores": [
+          "edgar-leandro",
+          "geraldo-dala",
+          "sarchel-necesio",
+          "nuno-baio"
+        ],
+        "vagas": 4
+      },
+      {
+        "id": "guest-nadia",
+        "hora": "12:07",
+        "fim": "12:19",
+        "tipo": "guest",
+        "numero": "",
+        "titulo": "Capital humano e formação profissional",
+        "subtitulo": "O motor da competitividade e sustentabilidade dos grandes projectos",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [
+          "nadia-evora"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "musica",
+        "hora": "12:19",
+        "fim": "12:27",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Momento Musical",
+        "subtitulo": "Artista a confirmar",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "encerramento-1",
+        "hora": "12:27",
+        "fim": "12:30",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Encerramento da 1.ª Parte",
+        "subtitulo": "Mestres de Cerimónia",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "almoco",
+        "hora": "12:30",
+        "fim": "13:30",
+        "tipo": "networking",
+        "numero": "",
+        "titulo": "Intervalo · Almoço & Networking",
+        "subtitulo": "",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "painel-5",
+        "hora": "13:30",
+        "fim": "14:00",
+        "tipo": "painel",
+        "numero": "5",
         "titulo": "Comunicação, Networking & Posicionamento Estratégico",
         "subtitulo": "Marcas de autoridade e conexões globais",
         "descricao": "",
@@ -593,6 +903,85 @@ window.GILF = {
           "joao-braga"
         ],
         "vagas": 4
+      },
+      {
+        "id": "painel-6",
+        "hora": "14:00",
+        "fim": "14:30",
+        "tipo": "painel",
+        "numero": "6",
+        "titulo": "África no Mundo: Governação, Cooperação e Desenvolvimento Sustentável",
+        "subtitulo": "Instituições fortes, recursos responsáveis e parcerias para um futuro melhor em África",
+        "descricao": "",
+        "moderador": "joaquim-francisco",
+        "oradores": [
+          "armando-gomes",
+          "benito-lukeba",
+          "mecktilder-mm",
+          "nazario-vilhena"
+        ],
+        "vagas": 4
+      },
+      {
+        "id": "guest-mailand",
+        "hora": "14:30",
+        "fim": "14:40",
+        "tipo": "guest",
+        "numero": "",
+        "titulo": "Liderança com Propósito",
+        "subtitulo": "Empreendedorismo, filantropia e impacto social como pilares do desenvolvimento sustentável",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [
+          "mailand-nguto"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "guest-jaime",
+        "hora": "14:40",
+        "fim": "14:50",
+        "tipo": "guest",
+        "numero": "",
+        "titulo": "Posicionamento estratégico",
+        "subtitulo": "Diferenciar-se e gerar valor",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [
+          "jaime-beirao"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "painel-7",
+        "hora": "14:50",
+        "fim": "15:20",
+        "tipo": "painel",
+        "numero": "7",
+        "titulo": "Liderança à Luz de Cristo",
+        "subtitulo": "Serviço, ética e transformação social",
+        "descricao": "",
+        "moderador": "ayrton-da-costa",
+        "oradores": [
+          "joao-bartolomeu",
+          "filipe-maximiano",
+          "josafath-mussaba",
+          "miguel-simao"
+        ],
+        "vagas": 4
+      },
+      {
+        "id": "encerramento",
+        "hora": "15:20",
+        "fim": "",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Encerramento do Fórum & Fotografia Oficial",
+        "subtitulo": "",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
       }
     ],
     "gala": [
@@ -662,6 +1051,7 @@ window.GILF = {
         "id": "ceos-pcas",
         "titulo": "Líderes CEOs / PCAs do Ano 2026",
         "nomeados": [
+          "agnaldo-jaime",
           "wiliam-oliveira"
         ],
         "vencedor": "",
@@ -741,7 +1131,7 @@ window.GILF = {
     "tipos": [
       {
         "nome": "Fórum",
-        "subtitulo": "08h30 – 15h30",
+        "subtitulo": "08h30 – 15h20",
         "preco": "",
         "itens": [
           "Keynotes e painéis do Fórum",
@@ -912,7 +1302,7 @@ window.GILF = {
   "faq": [
     {
       "p": "Quando e onde se realiza o GiLF Angola 2026?",
-      "r": "A 17 de Dezembro de 2026, no Hotel EPIC SANA, em Luanda. O Fórum decorre das 08h30 às 15h30 e a Gala de Premiação e Jantar a partir das 19h00."
+      "r": "A 17 de Dezembro de 2026, no Hotel EPIC SANA, em Luanda. O Fórum decorre das 08h30 às 15h20 e a Gala de Premiação e Jantar a partir das 19h00."
     },
     {
       "p": "Como compro o meu bilhete?",
