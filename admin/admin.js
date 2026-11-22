@@ -11,6 +11,7 @@
   var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   var slug = function (s) { return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/^(dr|dra|eng|prof|sr|sra|sensei)\.?\s+/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48) || "item"; };
   var stamp = function () { return Date.now().toString(36).slice(-5); };
+  var nrm = function (s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/^(s\.?\s?e\.?|dr|dra|eng|prof|sr|sra|sensei)\.?\s+/, "").replace(/[^a-z0-9]+/g, " ").trim(); };
   var initials = function (n) { return String(n || "?").split(/\s+/).filter(Boolean).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase(); };
   var K = { auth: "gilf-admin-auth", draft: "gilf-admin-draft", files: "gilf-admin-files" };
   var ICONS = {
@@ -24,6 +25,10 @@
     patrocinio: '<path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
     organizacao: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>',
     faq: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17h.01"/>',
+    gala: '<path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8-4.2-4.1 5.9-.9z"/>',
+    edicoes: '<path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4zM8 4v16M12 9h5M12 13h5"/>',
+    noticias: '<path d="M4 5h13v14a1 1 0 0 0 2 0V8h1M4 5v13a1 1 0 0 0 1 1h14M8 9h5M8 13h5M8 16h3"/>',
+    clube: '<circle cx="12" cy="7" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1M17.5 3.5 20 2M6.5 3.5 4 2"/>',
     historico: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/>',
     definicoes: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
     edit: '<path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/>', del: '<path d="M4 7h16M10 11v6M14 11v6M5 7l1 13h12l1-13M9 7V4h6v3"/>',
@@ -138,14 +143,16 @@
 
   /* ======================= navigation ======================= */
   var VIEWS = [
-    ["painel", "Painel"], ["sep", "Conteúdos"], ["evento", "Evento"], ["programa", "Programa"], ["pessoas", "Oradores & Pessoas"], ["premios", "Prémios & Nomeados"],
-    ["parceiros", "Parceiros"], ["bilhetes", "Bilhetes"], ["patrocinio", "Patrocínio"], ["organizacao", "Organização"], ["faq", "Perguntas frequentes"],
+    ["painel", "Painel"], ["sep", "Conteúdos"], ["evento", "Evento"], ["programa", "Programa"], ["pessoas", "Oradores & Pessoas"],
+    ["sep", "Gala & Prémios"], ["premios", "Prémios & Distinguidos"], ["gala", "Gala"], ["edicoes", "Edições & Líderes"],
+    ["sep", "Comunidade"], ["noticias", "Notícias"], ["clube", "Clube de Líderes"],
+    ["sep", "Mais"], ["parceiros", "Parceiros"], ["bilhetes", "Bilhetes"], ["patrocinio", "Patrocínio"], ["organizacao", "Organização"], ["faq", "Perguntas frequentes"],
     ["sep", "Sistema"], ["historico", "Histórico de versões"], ["definicoes", "Definições"]
   ];
   function buildNav() {
     $("#nav").innerHTML = VIEWS.map(function (v) {
       if (v[0] === "sep") return '<div class="side__sep">' + v[1] + "</div>";
-      var c = v[0] === "pessoas" ? people().length : v[0] === "parceiros" ? (D().parceiros || []).reduce(function (n, g) { return n + (g.itens || []).length; }, 0) : "";
+      var c = v[0] === "pessoas" ? people().length : v[0] === "premios" ? honCount() : v[0] === "noticias" ? (D().noticias || []).length : v[0] === "edicoes" ? (D().edicoes || []).length + 1 : v[0] === "parceiros" ? (D().parceiros || []).reduce(function (n, g) { return n + (g.itens || []).length; }, 0) : "";
       return '<button class="nav' + (S.view === v[0] ? " on" : "") + '" data-go="' + v[0] + '">' + ic(v[0]) + "<span>" + v[1] + "</span>" + (c !== "" ? '<span class="count">' + c + "</span>" : "") + "</button>";
     }).join("");
     $("#who").innerHTML = S.user ? '<img src="' + esc(S.user.avatar_url) + '" alt=""><span><b style="color:#fff">' + esc(S.user.name || S.user.login) + '</b><br><span class="small">@' + esc(S.user.login) + "</span></span>" : '<span class="small">Modo local (sem publicação)</span>';
@@ -170,7 +177,12 @@
       var im = new Image(), url = URL.createObjectURL(file);
       im.onload = function () {
         var c = document.createElement("canvas"), x = c.getContext("2d");
-        if (mode === "photo") {
+        if (mode === "wide") {
+          var kw = Math.min(1, 1600 / im.width);
+          c.width = Math.round(im.width * kw); c.height = Math.round(im.height * kw);
+          x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL("image/jpeg", .85));
+        } else if (mode === "photo") {
           var s = Math.min(im.width, im.height), sx = (im.width - s) / 2, sy = im.height > im.width ? (im.height - s) * .18 : (im.height - s) / 2;
           c.width = c.height = Math.min(640, s); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
           x.drawImage(im, sx, sy, s, s, 0, 0, c.width, c.width);
@@ -244,11 +256,11 @@
         getters.push(function (ob) { ob[f.k] = sel.slice(); });
       } else if (f.t === "image" || f.t === "logo") {
         var cur = v || "", isLogo = f.t === "logo";
-        wrap.innerHTML = '<div class="imgf' + (isLogo ? " imgf--logo" : "") + '"><div class="prev"></div><div class="acts"><b class="small">' + esc(f.l) + '</b><label class="btn btn--sm" style="cursor:pointer">Carregar imagem<input type="file" accept="image/*" hidden></label><button type="button" class="btn btn--sm btn--danger">Remover</button><span class="hint small muted">' + (isLogo ? "PNG com fundo transparente, de preferência." : "Recortada automaticamente em quadrado.") + "</span></div></div>";
+        wrap.innerHTML = '<div class="imgf' + (isLogo ? " imgf--logo" : "") + '"><div class="prev"></div><div class="acts"><b class="small">' + esc(f.l) + '</b><label class="btn btn--sm" style="cursor:pointer">Carregar imagem<input type="file" accept="image/*" hidden></label><button type="button" class="btn btn--sm btn--danger">Remover</button><span class="hint small muted">' + (isLogo ? "PNG com fundo transparente, de preferência." : f.mode === "wide" ? "Mantém o formato original (máx. 1600 px)." : "Recortada automaticamente em quadrado.") + "</span></div></div>";
         var prev = $(".prev", wrap), show = function () { prev.innerHTML = cur ? '<img src="' + esc(img(cur)) + '" alt="">' : (isLogo ? "Sem logótipo" : "Sem foto"); };
         $("input", wrap).addEventListener("change", function (e) {
           var file = e.target.files[0]; if (!file) return;
-          processImage(file, isLogo ? "logo" : "photo").then(function (data) {
+          processImage(file, f.mode || (isLogo ? "logo" : "photo")).then(function (data) {
             var base = f.name ? slug(f.name()) : "img";
             var path = (f.dir || "assets/img/pessoas/") + base + "-" + stamp() + (isLogo ? ".png" : ".jpg");
             S.files[path] = data; cur = path; show();
@@ -350,15 +362,19 @@
         if (s.tipo === "painel" && !s.moderador) out.push(["warn", "O painel “" + s.titulo + "” ainda não tem moderador (aparece “A anunciar”).", "programa"]);
       });
     });
+    var actoIds = {}; ((d.premios || {}).actos || []).forEach(function (a) { actoIds[a.id] = 1; });
     ((d.premios || {}).categorias || []).forEach(function (c) {
-      (c.nomeados || []).forEach(function (id) { used[id] = 1; if (!ids[id]) out.push(["err", "A categoria “" + c.titulo + "” refere um nomeado removido.", "premios"]); });
-      if (!(c.nomeados || []).length && !c.vagas) out.push(["warn", "A categoria “" + c.titulo + "” não tem nomeados.", "premios"]);
-      if (c.vencedor && (c.nomeados || []).indexOf(c.vencedor) < 0) out.push(["err", "O vencedor de “" + c.titulo + "” não está entre os nomeados.", "premios"]);
+      var n = (c.distinguidos || []).length;
+      (c.distinguidos || []).forEach(function (nm) { var p = personByName(nm); if (p) used[p.id] = 1; });
+      if (!n && !c.vagas) out.push(["warn", "A categoria “" + c.titulo + "” não tem distinguidos.", "premios"]);
+      if (c.vagas > n) out.push(["warn", "“" + c.titulo + "”: " + (c.vagas - n) + " distinção(ões) por indicar.", "premios"]);
+      if (!actoIds[c.acto]) out.push(["err", "A categoria “" + c.titulo + "” não está atribuída a nenhum acto da Gala (não aparece no site).", "premios"]);
     });
+    if (!(d.gala || {}).apresentadores || (d.gala.apresentadores || []).filter(Boolean).length < 2) out.push(["warn", "Falta indicar o(a) segundo(a) apresentador(a) da Gala.", "gala"]);
     people().forEach(function (p) {
       if (!p.foto) out.push(["warn", p.nome + " não tem fotografia.", "pessoas"]);
       if (p.papel && !used[p.id]) out.push(["warn", p.nome + " (" + ROLE[p.papel] + ") não está em nenhuma sessão do programa.", "programa"]);
-      if (!p.papel && !used[p.id]) out.push(["warn", p.nome + " não tem papel nem nomeação — não aparece no site.", "pessoas"]);
+      if (!p.papel && !used[p.id]) out.push(["warn", p.nome + " não tem papel nem distinção — o perfil não aparece no site.", "pessoas"]);
     });
     (d.parceiros || []).forEach(function (g) { (g.itens || []).forEach(function (i) { if (!i.logo) out.push(["err", "O parceiro “" + i.nome + "” não tem logótipo.", "parceiros"]); }); });
     var e = d.evento || {};
@@ -373,17 +389,17 @@
   R.painel = function (v) {
     var d = D(), e = d.evento || {}, days = Math.max(0, Math.ceil((new Date(e.inicio) - new Date()) / 864e5));
     var spk = people().filter(function (p) { return p.papel; }).length;
-    var noms = {}; ((d.premios || {}).categorias || []).forEach(function (c) { (c.nomeados || []).forEach(function (id) { noms[id] = 1; }); });
+
     var parts = (d.parceiros || []).reduce(function (n, g) { return n + (g.grupo === "Organização" ? 0 : (g.itens || []).length); }, 0);
     v.insertAdjacentHTML("beforeend", (S.offline ? '<div class="banner banner--warn"><b>Modo local.</b> As alterações não são publicadas automaticamente: use “Exportar dados.js” e envie o ficheiro para o repositório.</div>' : "") +
-      '<div class="kpis"><div class="kpi kpi--hero"><b>' + (isNaN(days) ? "—" : days) + "</b><span>dias até " + esc(e.dataTexto || "o evento") + '</span></div><div class="kpi"><b>' + spk + '</b><span>oradores e moderadores</span></div><div class="kpi"><b>' + Object.keys(noms).length + '</b><span>nomeados</span></div><div class="kpi"><b>' + parts + "</b><span>patrocinadores e parceiros</span></div></div>");
+      '<div class="kpis"><div class="kpi kpi--hero"><b>' + (isNaN(days) ? "—" : days) + "</b><span>dias até " + esc(e.dataTexto || "o evento") + '</span></div><div class="kpi"><b>' + spk + '</b><span>oradores e moderadores</span></div><div class="kpi"><b>' + honCount() + '</b><span>distinguidos na Gala</span></div><div class="kpi"><b>' + parts + "</b><span>patrocinadores e parceiros</span></div></div>");
     var two = document.createElement("div"); two.className = "two"; v.appendChild(two);
     var h = health(), c1 = card(two, "Saúde dos conteúdos", h.length ? h.length + " ponto(s) a rever" : "Tudo em ordem");
     var errs = h.filter(function (x) { return x[0] === "err"; }).length;
     c1.insertAdjacentHTML("beforeend", '<ul class="checks">' + (h.length ? h.slice(0, 14).map(function (x) { return '<li><span class="dot dot--' + x[0] + '"></span><span>' + esc(x[1]) + ' <a data-go="' + x[2] + '">Corrigir →</a></span></li>'; }).join("") + (h.length > 14 ? '<li class="muted">… e mais ' + (h.length - 14) + "</li>" : "") : '<li><span class="dot dot--ok"></span>Sem problemas detectados.</li>') + "</ul>" +
       (errs ? '<p class="small" style="color:var(--red);margin:10px 0 0">Há ' + errs + " erro(s) que devem ser corrigidos antes de publicar.</p>" : ""));
     var c2 = card(two, "Acções rápidas");
-    c2.insertAdjacentHTML("beforeend", '<div class="rows">' + [["pessoas", "Adicionar orador ou moderador"], ["programa", "Editar painéis e sessões"], ["premios", "Gerir nomeados e vencedores"], ["parceiros", "Adicionar patrocinador"], ["evento", "Aviso no topo do site"]].map(function (a) {
+    c2.insertAdjacentHTML("beforeend", '<div class="rows">' + [["pessoas", "Adicionar orador ou moderador"], ["programa", "Editar painéis e sessões"], ["premios", "Gerir distinguidos da Gala"], ["noticias", "Publicar uma notícia"], ["edicoes", "Preparar a próxima edição"], ["parceiros", "Adicionar patrocinador"], ["evento", "Aviso no topo do site"]].map(function (a) {
       return '<button class="row" style="grid-template-columns:1fr auto;text-align:left;cursor:pointer" data-go="' + a[0] + '"><span class="row__main"><b>' + a[1] + "</b></span><span>→</span></button>";
     }).join("") + "</div>" + (isDirty() ? '<div class="banner banner--info" style="margin:14px 0 0">Tem alterações por publicar. Reveja com <b>Pré-visualizar</b> e depois clique em <b>Publicar</b>.</div>' : ""));
   };
@@ -411,7 +427,7 @@
       var cn = card(v, x[1], x[2], [["Novo número", function () { en.add(); }]]);
       var en = listEditor(cn, {
         arr: function () { return N[x[0]] || (N[x[0]] = []); }, title: function (n) { return n.valor + " " + n.rotulo; },
-        row: function (n) { return { thumb: '<span class="thumb" style="font-family:Inter;font-weight:700;font-size:.95rem">' + esc(n.valor) + "</span>", title: n.rotulo }; },
+        row: function (n) { return { thumb: '<span class="thumb" style="font-weight:700;font-size:.95rem">' + esc(n.valor) + "</span>", title: n.rotulo }; },
         fields: [{ row: [{ k: "valor", l: "Número", req: true }, { k: "rotulo", l: "Descrição", req: true }] }],
         make: function () { return { valor: "", rotulo: "" }; }, add: "Novo número"
       });
@@ -421,7 +437,7 @@
 
   var personOpts = function () { return [["", "— Nenhum / a anunciar —"]].concat(people().map(function (p) { return [p.id, p.nome + (p.cargo ? " · " + p.cargo : "")]; })); };
   var sessionFields = [
-    { row: [{ k: "tipo", l: "Tipo", t: "select", opts: [["keynote", "Keynote Speaker"], ["guest", "Guest Speaker"], ["painel", "Painel"], ["sessao", "Sessão"], ["networking", "Networking"], ["pausa", "Pausa"], ["gala", "Gala"]] }, { k: "numero", l: "Nº do painel", ph: "ex.: 4" }, { k: "hora", l: "Início", ph: "09:00", hint: "Vazio = mostra a ordem" }] },
+    { row: [{ k: "tipo", l: "Tipo", t: "select", opts: [["keynote", "Keynote Speaker"], ["guest", "Guest Speaker"], ["painel", "Painel"], ["sessao", "Sessão"], ["networking", "Networking"], ["pausa", "Pausa"], ["gala", "Gala"], ["premios", "Entrega de prémios"], ["honra", "Momento de honra"], ["musica", "Momento musical"], ["jantar", "Jantar"], ["memoria", "Homenagem póstuma"]] }, { k: "numero", l: "Nº do painel", ph: "ex.: 4" }, { k: "hora", l: "Início", ph: "09:00", hint: "Vazio = mostra a ordem" }] },
     { row: [{ k: "fim", l: "Fim", ph: "10:00" }, { k: "vagas", l: "Nº total de oradores previstos", t: "number", hint: "Os lugares sem nome aparecem como “A anunciar”" }] },
     { k: "titulo", l: "Título", req: true },
     { k: "subtitulo", l: "Subtítulo / tema do painel" },
@@ -439,13 +455,13 @@
     seg.innerHTML = '<div class="seg"><button data-k="forum">Fórum (' + (pr.forum || []).length + ')</button><button data-k="gala">Gala (' + (pr.gala || []).length + ")</button></div>";
     c.appendChild(seg);
     $$("button", seg).forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-k") === S.prog); b.addEventListener("click", function () { S.prog = b.getAttribute("data-k"); go("programa"); }); });
-    var TAG = { keynote: "Keynote", guest: "Guest Speaker", painel: "Painel", sessao: "Sessão", networking: "Networking", pausa: "Pausa", gala: "Gala" };
+    var TAG = { keynote: "Keynote", guest: "Guest Speaker", painel: "Painel", sessao: "Sessão", networking: "Networking", pausa: "Pausa", gala: "Gala", premios: "Prémios", honra: "Honra", musica: "Música", jantar: "Jantar", memoria: "Memória" };
     var ed = listEditor(c, {
       arr: function () { return pr[S.prog] || (pr[S.prog] = []); },
       title: function (s) { return s.titulo; },
       row: function (s, i) {
         var mod = person(s.moderador), sp = (s.oradores || []).map(person).filter(Boolean);
-        return { thumb: '<span class="thumb" style="font-family:Inter;font-size:.8rem;font-weight:700">' + esc(s.hora || (i + 1)) + "</span>", title: s.titulo,
+        return { thumb: '<span class="thumb" style="font-size:.8rem;font-weight:700">' + esc(s.hora || (i + 1)) + "</span>", title: s.titulo,
           pills: '<span class="pill' + (s.tipo === "painel" ? " pill--dark" : "") + '">' + esc(s.tipo === "painel" && s.numero ? "Painel " + s.numero : TAG[s.tipo] || s.tipo) + "</span>" + (s.tipo === "painel" && !mod ? '<span class="pill pill--warn">sem moderador</span>' : ""),
           sub: [mod ? "Mod.: " + mod.nome : "", sp.map(function (p) { return p.nome; }).join(", ")].filter(Boolean).join(" · ") || s.subtitulo };
       },
@@ -458,30 +474,30 @@
   var personFields = function (p) {
     return [
       { k: "foto", l: "Fotografia", t: "image", dir: "assets/img/pessoas/", name: function () { return $("#dlgBody input[placeholder='Nome como aparece no site']").value || p.nome || "pessoa"; } },
-      { row: [{ k: "nome", l: "Nome", req: true, ph: "Nome como aparece no site" }, { k: "papel", l: "Papel no Fórum", t: "select", opts: [["", "— Nenhum (ex.: só nomeado) —"], ["keynote", "Keynote Speaker"], ["guest", "Guest Speaker"], ["moderador", "Moderador(a)"], ["orador", "Orador(a)"]] }] },
+      { row: [{ k: "nome", l: "Nome", req: true, ph: "Nome como aparece no site" }, { k: "papel", l: "Papel no Fórum", t: "select", opts: [["", "— Nenhum (ex.: só distinguido) —"], ["keynote", "Keynote Speaker"], ["guest", "Guest Speaker"], ["moderador", "Moderador(a)"], ["orador", "Orador(a)"]] }] },
       { row: [{ k: "cargo", l: "Cargo" }, { k: "organizacao", l: "Organização" }, { k: "pais", l: "País" }] },
       { k: "tema", l: "Tema da intervenção", t: "textarea", rows: 2 },
       { k: "bio", l: "Biografia", t: "textarea", rows: 5 },
       { row: [{ k: "nomeCompleto", l: "Nome completo (opcional)" }, { k: "linkedin", l: "LinkedIn (URL)" }] },
+      { k: "aliases", l: "Outras formas do nome", t: "lines", rows: 2, hint: "Uma por linha. Serve para ligar a fotografia ao nome escrito na lista de distinguidos (ex.: Márcio Lopes Daniel)." },
       { k: "destaque", l: "Destacar na página inicial", t: "check" }
     ];
   };
   function removePersonRefs(p) {
     var pr = D().programa || {};
     ["forum", "gala"].forEach(function (k) { (pr[k] || []).forEach(function (s) { if (s.moderador === p.id) s.moderador = ""; s.oradores = (s.oradores || []).filter(function (x) { return x !== p.id; }); }); });
-    ((D().premios || {}).categorias || []).forEach(function (c) { c.nomeados = (c.nomeados || []).filter(function (x) { return x !== p.id; }); if (c.vencedor === p.id) c.vencedor = ""; });
   }
   function usage(p) {
     var u = [], pr = D().programa || {};
     ["forum", "gala"].forEach(function (k) { (pr[k] || []).forEach(function (s) { if (s.moderador === p.id) u.push("Modera: " + s.titulo); if ((s.oradores || []).indexOf(p.id) > -1) u.push(s.titulo); }); });
-    ((D().premios || {}).categorias || []).forEach(function (c) { if ((c.nomeados || []).indexOf(p.id) > -1) u.push("Nomeado: " + c.titulo); });
+    honOf(p).forEach(function (c) { u.push("Distinguido: " + c.titulo); });
     return u;
   }
   R.pessoas = function (v) {
-    var c = card(v, "Oradores, moderadores e nomeados", "Uma pessoa pode ser oradora e nomeada ao mesmo tempo. Depois de criar, atribua-a a uma sessão em Programa ou a uma categoria em Prémios.", [["Adicionar pessoa", function () { ed.add(); }]]);
+    var c = card(v, "Oradores, moderadores e distinguidos", "Perfis com fotografia e biografia. Uma pessoa pode ser oradora e distinguida ao mesmo tempo: a ligação aos prémios faz-se pelo nome (ou “Outras formas do nome”).", [["Adicionar pessoa", function () { ed.add(); }]]);
     var tb = document.createElement("div"); tb.className = "toolbar";
-    var nomIds = {}; ((D().premios || {}).categorias || []).forEach(function (cc) { (cc.nomeados || []).forEach(function (id) { nomIds[id] = 1; }); });
-    var F = [["todos", "Todas"], ["keynote", "Keynote"], ["guest", "Guest"], ["moderador", "Moderadores"], ["orador", "Oradores"], ["nomeado", "Nomeados"]];
+    var nomIds = {}; people().forEach(function (pp) { if (honOf(pp).length) nomIds[pp.id] = 1; });
+    var F = [["todos", "Todas"], ["keynote", "Keynote"], ["guest", "Guest"], ["moderador", "Moderadores"], ["orador", "Oradores"], ["nomeado", "Distinguidos"]];
     tb.innerHTML = '<input class="inp" placeholder="Pesquisar…" value="' + esc(S.pQuery) + '"><div class="seg">' + F.map(function (x) { return '<button data-f="' + x[0] + '" class="' + (S.pFilter === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div>";
     c.appendChild(tb);
     var ed = listEditor(c, {
@@ -493,7 +509,7 @@
       title: function (p) { return p.nome; },
       row: function (p) {
         var u = usage(p);
-        return { thumb: thumbP(p), title: p.nome, pills: (p.papel ? '<span class="pill' + (p.papel === "moderador" ? " pill--dark" : "") + '">' + ROLE[p.papel] + "</span>" : "") + (nomIds[p.id] ? '<span class="pill">Nomeado</span>' : "") + (p.destaque ? '<span class="pill pill--new">Destaque</span>' : "") + (!p.foto ? '<span class="pill pill--warn">sem foto</span>' : ""),
+        return { thumb: thumbP(p), title: p.nome, pills: (p.papel ? '<span class="pill' + (p.papel === "moderador" ? " pill--dark" : "") + '">' + ROLE[p.papel] + "</span>" : "") + (nomIds[p.id] ? '<span class="pill">Distinguido</span>' : "") + (p.destaque ? '<span class="pill pill--new">Destaque</span>' : "") + (!p.foto ? '<span class="pill pill--warn">sem foto</span>' : ""),
           sub: [p.cargo, p.organizacao].filter(Boolean).join(" · ") + (u.length ? "  —  " + u.join(" · ") : "") };
       },
       fields: personFields,
@@ -509,36 +525,186 @@
     $$(".seg button", tb).forEach(function (b) { b.addEventListener("click", function () { S.pFilter = b.getAttribute("data-f"); $$(".seg button", tb).forEach(function (x) { x.classList.toggle("on", x === b); }); ed.draw(); }); });
   };
 
-  R.premios = function (v) {
-    var P = D().premios || (D().premios = { categorias: [] });
-    var c0 = card(v, "Definições dos prémios");
-    var f0 = document.createElement("div"); c0.appendChild(f0);
-    inlineForm(f0, [{ k: "nota", l: "Nota sobre a escolha dos vencedores" }, { k: "revelarVencedores", l: "Revelar vencedores no site (activar só depois da Gala)", t: "check" }], P);
-    var cg = card(v, "Grupos de distinções", "Ex.: Figuras nacionais (70), Instituições (30), Homenagens a título póstumo (2), Oradores premiados (10).", [["Novo grupo", function () { eg.add(); }]]);
-    var eg = listEditor(cg, {
-      arr: function () { return P.grupos || (P.grupos = []); }, title: function (g) { return g.titulo; },
-      row: function (g) { var n = (P.categorias || []).filter(function (c) { return c.grupo === g.id; }).length; return { thumb: '<span class="thumb" style="font-family:Inter;font-weight:700">' + esc(g.total || "—") + "</span>", title: g.titulo, sub: n + " categoria(s)" }; },
-      fields: [{ row: [{ k: "titulo", l: "Nome do grupo", req: true }, { k: "total", l: "Total de distinções", t: "number" }] }],
-      before: function (r, old) { if (!old) r.id = slug(r.titulo) + "-" + stamp(); return r; },
-      make: function () { return { id: "", titulo: "", total: 0 }; }, add: "Novo grupo"
+  /* ---------- awards helpers (names are plain text; photos link by name) ---------- */
+  function personByName(n) {
+    var k = nrm(n); if (!k) return null;
+    return people().filter(function (p) { return [p.nome, p.nomeCompleto].concat(p.aliases || []).some(function (x) { return x && nrm(x) === k; }); })[0] || null;
+  }
+  function honOf(p) {
+    var keys = [p.nome, p.nomeCompleto].concat(p.aliases || []).filter(Boolean).map(nrm);
+    return ((D().premios || {}).categorias || []).filter(function (c) { return (c.distinguidos || []).some(function (n) { return keys.indexOf(nrm(n)) > -1; }); });
+  }
+  function honCount() { var n = 0; ((D().premios || {}).categorias || []).forEach(function (c) { n += (c.distinguidos || []).length; }); return n; }
+  var TIPOS = [["personalidade", "Personalidade"], ["instituicao", "Instituição"], ["especial", "Distinção especial"], ["postumo", "Homenagem póstuma"], ["orador", "Orador do GiLF"]];
+  var TIPO_L = {}; TIPOS.forEach(function (t) { TIPO_L[t[0]] = t[1]; });
+  /* categories <-> plain text: "## Título | tipo" followed by one name per line */
+  function catsToText(cats) {
+    return (cats || []).map(function (c) { return "## " + c.titulo + (c.tipo && c.tipo !== "personalidade" ? " | " + c.tipo : "") + "\n" + (c.distinguidos || []).join("\n"); }).join("\n\n");
+  }
+  function textToCats(t) {
+    var out = [], cur = null;
+    String(t || "").split("\n").forEach(function (l) {
+      l = l.trim(); if (!l) return;
+      if (l.indexOf("##") === 0) { var m = l.replace(/^#+\s*/, "").split("|"); cur = { titulo: m[0].trim(), tipo: (m[1] || "personalidade").trim(), distinguidos: [] }; out.push(cur); }
+      else { if (!cur) { cur = { titulo: "Distinguidos", tipo: "personalidade", distinguidos: [] }; out.push(cur); } cur.distinguidos.push(l.replace(/^[-•*]\s*/, "")); }
     });
-    var c = card(v, "Categorias e nomeados", "Os nomeados vêm da lista de pessoas. Para um nome novo, adicione-o primeiro em “Oradores & Pessoas”.", [["Nova categoria", function () { ed.add(); }]]);
+    return out;
+  }
+  function snapshotEdition() {
+    var d = D(), cur = d.edicaoActual || {}, e = d.evento || {}, P = d.premios || {};
+    return { id: "ed-" + (cur.ano || stamp()), ano: cur.ano || "", titulo: cur.titulo || "", tema: cur.tema || e.tema || "", data: e.dataTexto || "", local: [e.local, String(e.cidade || "").split(",")[0]].filter(Boolean).join(", "),
+      resumo: P.nota || "", imagem: "",
+      categorias: (P.categorias || []).filter(function (c) { return (c.distinguidos || []).length; }).map(function (c) { return { titulo: (c.tipo === "orador" ? "Oradores · " : "") + c.titulo, tipo: c.tipo || "personalidade", distinguidos: (c.distinguidos || []).slice() }; }),
+      oradores: people().filter(function (p) { return p.papel; }).map(function (p) { return p.nome; }) };
+  }
+
+  R.premios = function (v) {
+    var P = D().premios || (D().premios = { actos: [], categorias: [] });
+    P.actos = P.actos || []; P.categorias = P.categorias || [];
+    var tot = {}; P.categorias.forEach(function (c) { tot[c.tipo] = (tot[c.tipo] || 0) + (c.distinguidos || []).length; });
+    v.insertAdjacentHTML("beforeend", '<div class="kpis">' + TIPOS.map(function (t) { return '<div class="kpi"><b>' + (tot[t[0]] || 0) + "</b><span>" + t[1] + (t[0] === "instituicao" ? "s" : t[0] === "personalidade" ? "s" : "") + "</span></div>"; }).join("") + "</div>" +
+      '<div class="banner banner--info">Os números grandes que aparecem no site (ex.: “70 Personalidades”) editam-se em <a data-go="evento">Evento → Números dos Prémios</a>. Aqui contam-se os nomes efectivamente inseridos.</div>');
+    var c0 = card(v, "Texto de apresentação");
+    var f0 = document.createElement("div"); c0.appendChild(f0);
+    inlineForm(f0, [{ k: "nota", l: "Nota sobre a escolha dos distinguidos", t: "textarea", rows: 2 }], P);
+
+    var ca = card(v, "Actos da Gala", "Cada categoria pertence a um acto. A ordem aqui é a ordem no site.", [["Novo acto", function () { ea.add(); }]]);
+    var ea = listEditor(ca, {
+      arr: function () { return P.actos; }, title: function (a) { return a.titulo; },
+      row: function (a) { var n = P.categorias.filter(function (c) { return c.acto === a.id; }).length; return { thumb: '<span class="thumb" style="font-size:.72rem;font-weight:700">' + esc(a.hora || "—") + "</span>", title: a.titulo, sub: (a.tema || "") + " · " + n + " categoria(s)" }; },
+      fields: [{ row: [{ k: "titulo", l: "Nome do acto", req: true, ph: "I Acto" }, { k: "hora", l: "Hora", ph: "19:55" }] }, { k: "tema", l: "Tema / subtítulo", ph: "Distinções Especiais, Estado e Instituições Públicas" }],
+      before: function (r, old) { if (!old) r.id = "acto-" + slug(r.titulo) + "-" + stamp(); return r; },
+      onDelete: function (a) { P.categorias.forEach(function (c) { if (c.acto === a.id) c.acto = ""; }); },
+      make: function () { return { id: "", titulo: "", hora: "", tema: "" }; }, add: "Novo acto"
+    });
+
+    var c = card(v, "Categorias e distinguidos", "Escreva um nome por linha. Se o nome coincidir com uma pessoa em “Oradores & Pessoas”, a fotografia e o perfil aparecem automaticamente.", [["Nova categoria", function () { ed.add(); }]]);
+    var tb = document.createElement("div"); tb.className = "toolbar";
+    S.aFilter = S.aFilter || "todos";
+    tb.innerHTML = '<input class="inp" placeholder="Pesquisar nome ou categoria…"><div class="seg"><button data-f="todos">Todos</button>' + P.actos.map(function (a) { return '<button data-f="' + esc(a.id) + '">' + esc(a.titulo) + "</button>"; }).join("") + '<button data-f="">Sem acto</button></div>';
+    c.appendChild(tb);
+    var q = "";
     var ed = listEditor(c, {
-      arr: function () { return P.categorias || (P.categorias = []); },
+      arr: function () { return P.categorias; }, dragAll: true,
+      filter: function (x) {
+        var okA = S.aFilter === "todos" || (x.acto || "") === S.aFilter;
+        return okA && (!q || nrm(x.titulo + " " + (x.distinguidos || []).join(" ")).indexOf(nrm(q)) > -1);
+      },
       title: function (x) { return x.titulo; },
       row: function (x) {
-        var ns = (x.nomeados || []).map(person).filter(Boolean), win = person(x.vencedor);
-        var gr = (P.grupos || []).filter(function (g) { return g.id === x.grupo; })[0];
-        return { thumb: ns[0] ? thumbP(ns[0]) : '<span class="thumb">★</span>', title: x.titulo, pills: (gr ? '<span class="pill pill--dark">' + esc(gr.titulo) + "</span>" : "") + '<span class="pill">' + ns.length + (x.vagas ? " / " + x.vagas : "") + " nomeado(s)</span>" + (win ? '<span class="pill pill--new">Vencedor: ' + esc(win.nome) + "</span>" : ""), sub: ns.map(function (p) { return p.nome; }).join(", ") };
+        var ns = x.distinguidos || [], withP = ns.map(personByName).filter(Boolean), a = P.actos.filter(function (y) { return y.id === x.acto; })[0];
+        return { thumb: withP[0] ? thumbP(withP[0]) : '<span class="thumb">★</span>', title: x.titulo,
+          pills: '<span class="pill pill--dark">' + esc(a ? a.titulo : "sem acto") + '</span><span class="pill">' + esc(TIPO_L[x.tipo] || "Personalidade") + '</span><span class="pill' + (x.vagas > ns.length ? " pill--warn" : "") + '">' + ns.length + (x.vagas ? " / " + x.vagas : "") + "</span>" + (withP.length ? '<span class="pill pill--new">' + withP.length + " com perfil</span>" : ""),
+          sub: ns.join(", ") };
       },
-      fields: function (x) {
-        return [{ k: "titulo", l: "Nome da categoria", req: true, ph: "Líder Jovem do Ano 2026" },
-          { row: [{ k: "grupo", l: "Grupo", t: "select", opts: function () { return [["", "— Sem grupo —"]].concat((P.grupos || []).map(function (g) { return [g.id, g.titulo]; })); } }, { k: "vagas", l: "Nº total de distinções nesta categoria", t: "number", hint: "Os lugares sem nome aparecem como “a anunciar”" }] },
-          { k: "nomeados", l: "Nomeados", t: "people" },
-          { k: "vencedor", l: "Vencedor (só aparece no site se “Revelar vencedores” estiver activo)", t: "select", opts: function () { return [["", "— Por anunciar —"]].concat((x.nomeados || []).map(function (id) { var p = person(id); return [id, p ? p.nome : id]; })); }, hint: "Guarde primeiro os nomeados para os ver nesta lista." }];
+      fields: function () {
+        return [{ k: "titulo", l: "Nome da categoria", req: true, ph: "Líderes Empresários" },
+          { row: [{ k: "acto", l: "Acto da Gala", t: "select", opts: function () { return [["", "— Sem acto (não aparece) —"]].concat(P.actos.map(function (a) { return [a.id, a.titulo + (a.tema ? " · " + a.tema : "")]; })); } },
+            { k: "tipo", l: "Tipo", t: "select", opts: TIPOS }, { k: "vagas", l: "Total previsto", t: "number", hint: "Opcional. Os lugares em falta aparecem como “por indicar”." }] },
+          { k: "distinguidos", l: "Distinguidos (um por linha)", t: "lines", rows: 9, ph: "Nome da personalidade ou instituição" }];
       },
-      make: function () { return { id: "c-" + stamp(), grupo: ((P.grupos || [])[0] || {}).id || "", titulo: "", nomeados: [], vencedor: "", vagas: 0 }; },
-      add: "Nova categoria"
+      before: function (r, old) { if (!old) r.id = "cat-" + slug(r.titulo) + "-" + stamp(); return r; },
+      make: function () { return { id: "", acto: S.aFilter !== "todos" ? S.aFilter : ((P.actos[0] || {}).id || ""), tipo: "personalidade", titulo: "", distinguidos: [], vagas: 0 }; },
+      add: "Nova categoria", empty: "Nenhuma categoria corresponde ao filtro."
+    });
+    $$(".seg button", tb).forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-f") === S.aFilter); b.addEventListener("click", function () { S.aFilter = b.getAttribute("data-f"); $$(".seg button", tb).forEach(function (x) { x.classList.toggle("on", x === b); }); ed.draw(); }); });
+    $("input", tb).addEventListener("input", function (e) { q = e.target.value; ed.draw(); });
+  };
+
+  R.gala = function (v) {
+    var GA = D().gala || (D().gala = {});
+    var c = card(v, "Gala de Premiação", "Página Gala & Prémios. O programa hora-a-hora da Gala edita-se em Programa → Gala.");
+    var f = document.createElement("div"); c.appendChild(f);
+    inlineForm(f, [{ k: "titulo", l: "Título da noite", ph: "Uma noite entre Líderes." },
+      { k: "apresentadores", l: "Apresentadores (um por linha)", t: "lines", rows: 2, hint: "Se só houver um nome, o site mostra “co-apresentador(a) a anunciar”." },
+      { k: "musica", l: "Música ao vivo", t: "textarea", rows: 2 }], GA, function () { if ((GA.apresentadores || []).length < 2) GA.apresentadores = (GA.apresentadores || []).concat([""]); });
+    var c2 = card(v, "Comissão Organizadora", "", [["Novo membro", function () { e2.add(); }]]);
+    var e2 = listEditor(c2, {
+      arr: function () { return GA.comissao || (GA.comissao = []); }, title: function (x) { return x.nome; },
+      row: function (x) { return { thumb: '<span class="thumb">' + esc(initials(x.nome)) + "</span>", title: x.nome, sub: x.organizacao }; },
+      fields: [{ row: [{ k: "nome", l: "Nome", req: true }, { k: "organizacao", l: "Organização" }] }], make: function () { return { nome: "", organizacao: "" }; }, add: "Novo membro"
+    });
+    var c3 = card(v, "Programa da Gala");
+    c3.insertAdjacentHTML("beforeend", '<p class="small muted">' + ((D().programa || {}).gala || []).length + ' momentos no programa. <a data-go="programa" onclick="return true">Editar em Programa → Gala →</a></p>');
+    $("a", c3).addEventListener("click", function () { S.prog = "gala"; });
+  };
+
+  R.edicoes = function (v) {
+    var d = D(), cur = d.edicaoActual || (d.edicaoActual = {});
+    var c0 = card(v, "Edição actual", "Identifica a edição em curso na página “Líderes de todas as edições”. Os distinguidos vêm de Prémios & Distinguidos.");
+    var f0 = document.createElement("div"); c0.appendChild(f0);
+    inlineForm(f0, [{ row: [{ k: "ano", l: "Ano", req: true, ph: "2026" }, { k: "titulo", l: "Edição", ph: "3.ª edição" }] }, { k: "tema", l: "Tema / lema desta edição" }], cur);
+    var cA = card(v, "Preparar a próxima edição", "Quando a Gala terminar: (1) arquive a edição actual — fica guardada para sempre em “Líderes”; (2) prepare a nova edição. Pode rever tudo antes de publicar.");
+    cA.insertAdjacentHTML("beforeend", '<div class="toolbar" style="margin:0"><button class="btn btn--dark" id="arch">' + ic("edicoes") + "Arquivar edição " + esc(cur.ano || "actual") + '</button><button class="btn" id="nextEd">' + ic("plus") + "Começar nova edição</button></div>");
+    $("#arch", cA).addEventListener("click", function () {
+      var snap = snapshotEdition(), list = d.edicoes || (d.edicoes = []);
+      var i = list.map(function (e) { return String(e.ano); }).indexOf(String(snap.ano));
+      if (i > -1 && !confirm("Já existe um arquivo de " + snap.ano + ". Substituir pela versão actual?")) return;
+      if (i > -1) { snap.imagem = list[i].imagem || ""; list[i] = snap; } else list.push(snap);
+      changed(); toast("Edição " + snap.ano + " arquivada com " + snap.categorias.length + " categorias.");
+    });
+    $("#nextEd", cA).addEventListener("click", function () {
+      var archived = (d.edicoes || []).some(function (e) { return String(e.ano) === String(cur.ano); });
+      if (!archived && !confirm("A edição " + (cur.ano || "actual") + " ainda não foi arquivada. Arquivar automaticamente antes de começar a nova?")) return;
+      if (!archived) { (d.edicoes || (d.edicoes = [])).push(snapshotEdition()); }
+      var ano = prompt("Ano da nova edição:", String((+cur.ano || new Date().getFullYear()) + 1)); if (!ano) return;
+      var n = parseInt(String(cur.titulo || "").replace(/\D/g, ""), 10);
+      cur.ano = ano; cur.titulo = n ? (n + 1) + ".ª edição" : cur.titulo;
+      if (confirm("Limpar os nomes dos distinguidos (mantendo actos e categorias) para a nova edição?")) ((d.premios || {}).categorias || []).forEach(function (c) { c.distinguidos = []; });
+      changed(); toast("Nova edição " + ano + " preparada. Actualize datas em Evento, o Programa e os Números antes de publicar.");
+    });
+    var c = card(v, "Arquivo de edições anteriores", "Aparecem na página “Líderes de todas as edições”. Pode acrescentar edições antigas manualmente.", [["Adicionar edição", function () { ed.add(); }]]);
+    var ed = listEditor(c, {
+      arr: function () { return d.edicoes || (d.edicoes = []); }, title: function (e) { return "Edição " + e.ano; },
+      row: function (e) { var n = 0; (e.categorias || []).forEach(function (x) { n += (x.distinguidos || []).length; }); return { thumb: '<span class="thumb" style="font-size:.78rem;font-weight:700">' + esc(e.ano) + "</span>", title: (e.titulo ? e.titulo + " · " : "") + (e.tema || ""), pills: '<span class="pill">' + n + ' distinguidos</span><span class="pill">' + (e.oradores || []).length + " oradores</span>" + (!n ? '<span class="pill pill--warn">sem lista</span>' : ""), sub: [e.data, e.local].filter(Boolean).join(" · ") }; },
+      fields: [{ row: [{ k: "ano", l: "Ano", req: true }, { k: "titulo", l: "Edição", ph: "2.ª edição" }, { k: "data", l: "Data", ph: "18 de Dezembro de 2025" }] },
+        { row: [{ k: "tema", l: "Tema" }, { k: "local", l: "Local" }] },
+        { k: "resumo", l: "Resumo", t: "textarea", rows: 2 },
+        { k: "imagem", l: "Imagem (cartaz ou fotografia)", t: "image", mode: "wide", dir: "assets/img/edicoes/", name: function () { return "edicao"; } },
+        { k: "_cats", l: "Distinguidos por categoria", t: "textarea", rows: 12, hint: "Formato: uma linha “## Nome da categoria” e, por baixo, um nome por linha. Para instituições escreva “## Nome | instituicao”.", ph: "## Líderes Empresários\nNome 1\nNome 2\n\n## Empresa do Ano | instituicao\nEmpresa X" },
+        { k: "oradores", l: "Oradores do GiLF nesta edição (um por linha)", t: "lines", rows: 4 }],
+      before: function (r) { r.categorias = textToCats(r._cats); delete r._cats; if (!r.id) r.id = "ed-" + slug(r.ano); return r; },
+      make: function () { return { id: "", ano: "", titulo: "", tema: "", data: "", local: "Hotel EPIC SANA, Luanda", resumo: "", imagem: "", categorias: [], oradores: [], _cats: "" }; },
+      add: "Adicionar edição", empty: "Ainda não há edições arquivadas."
+    });
+    /* expose categories as text in the edit dialog */
+    (d.edicoes || []).forEach(function (e) { Object.defineProperty(e, "_cats", { get: function () { return catsToText(e.categorias); }, enumerable: false, configurable: true }); });
+  };
+
+  R.noticias = function (v) {
+    var c = card(v, "Notícias e actualizações", "Aparecem na página Notícias e as três mais recentes na página inicial. Use-as para anunciar oradores, distinguidos, novidades e próximas edições.", [["Nova notícia", function () { ed.add(); }]]);
+    var ed = listEditor(c, {
+      arr: function () { return D().noticias || (D().noticias = []); }, title: function (n) { return n.titulo; },
+      row: function (n) { return { thumb: n.imagem ? '<span class="thumb"><img src="' + esc(img(n.imagem)) + '" alt=""></span>' : '<span class="thumb">N</span>', title: n.titulo, pills: (n.destaque ? '<span class="pill pill--new">Destaque</span>' : ""), sub: (n.data || "sem data") + " · " + (n.resumo || "") }; },
+      fields: [{ row: [{ k: "titulo", l: "Título", req: true }, { k: "data", l: "Data", t: "date", req: true }] },
+        { k: "resumo", l: "Resumo (aparece no cartão)", t: "textarea", rows: 2 },
+        { k: "texto", l: "Texto completo", t: "textarea", rows: 8 },
+        { k: "imagem", l: "Imagem", t: "image", mode: "wide", dir: "assets/img/noticias/", name: function () { return $("#dlgBody input").value || "noticia"; } },
+        { row: [{ k: "link", l: "Ligação “Saber mais” (opcional)", ph: "premios.html" }] },
+        { k: "destaque", l: "Destacar", t: "check" }],
+      before: function (r, old) { if (!old) r.id = slug(r.titulo) + "-" + stamp(); return r; },
+      make: function () { return { id: "", data: new Date().toISOString().slice(0, 10), titulo: "", resumo: "", texto: "", imagem: "", link: "", destaque: false }; },
+      add: "Nova notícia", empty: "Ainda não há notícias."
+    });
+  };
+
+  R.clube = function (v) {
+    var C = D().clube || (D().clube = {});
+    var id = String(C.formUrl || "").replace(/\D+$/, "").split("/").pop();
+    v.insertAdjacentHTML("beforeend", '<div class="banner banner--info"><b>Candidaturas:</b> chegam ao formulário Jotform e não ficam guardadas no site (os dados pessoais não ficam públicos). ' +
+      (id ? 'Consulte-as em <a href="https://www.jotform.com/tables/' + esc(id) + '" target="_blank" rel="noopener">Jotform → Tabelas</a>.' : "") + " Depois de aprovar alguém, acrescente-o em “Membros”.</div>");
+    var c = card(v, "Página do Clube de Líderes");
+    var f = document.createElement("div"); c.appendChild(f);
+    inlineForm(f, [{ k: "titulo", l: "Título", req: true }, { k: "texto", l: "Apresentação", t: "textarea", rows: 3 },
+      { k: "beneficios", l: "Benefícios (um por linha)", t: "lines", rows: 4 },
+      { k: "formUrl", l: "Endereço do formulário de inscrição", hint: "Ex.: https://form.jotform.com/… — aparece incorporado na página. Vazio = “inscrições brevemente”." }], C);
+    var c2 = card(v, "Membros", "Só aparecem no site os membros aqui listados (com o consentimento deles).", [["Novo membro", function () { e2.add(); }]]);
+    var e2 = listEditor(c2, {
+      arr: function () { return C.membros || (C.membros = []); }, title: function (m) { return m.nome; },
+      row: function (m) { return { thumb: thumbP(m), title: m.nome, sub: [m.cargo, m.organizacao, m.desde ? "desde " + m.desde : ""].filter(Boolean).join(" · ") }; },
+      fields: [{ k: "foto", l: "Fotografia", t: "image", dir: "assets/img/clube/", name: function () { return $("#dlgBody input[placeholder='Nome']").value || "membro"; } },
+        { row: [{ k: "nome", l: "Nome", req: true, ph: "Nome" }, { k: "desde", l: "Membro desde", ph: "2026" }] }, { row: [{ k: "cargo", l: "Cargo" }, { k: "organizacao", l: "Organização" }] }],
+      make: function () { return { nome: "", cargo: "", organizacao: "", foto: "", desde: String(new Date().getFullYear()) }; }, add: "Novo membro"
     });
   };
 
@@ -614,7 +780,7 @@
     var c1 = card(v, "Percurso", "", [["Novo marco", function () { e1.add(); }]]);
     var e1 = listEditor(c1, {
       arr: function () { return O.percurso || (O.percurso = []); }, title: function (x) { return x.ano; },
-      row: function (x) { return { thumb: '<span class="thumb" style="font-family:Inter;font-size:.7rem;font-weight:700">' + esc(x.ano) + "</span>", title: x.ano, sub: x.texto }; },
+      row: function (x) { return { thumb: '<span class="thumb" style="font-size:.7rem;font-weight:700">' + esc(x.ano) + "</span>", title: x.ano, sub: x.texto }; },
       fields: [{ k: "ano", l: "Ano / data", req: true }, { k: "texto", l: "Texto", t: "textarea", rows: 2 }], make: function () { return { ano: "", texto: "" }; }, add: "Novo marco"
     });
     var c2 = card(v, "Projectos e iniciativas", "Aparecem na página Sobre.", [["Novo projecto", function () { e2.add(); }]]);

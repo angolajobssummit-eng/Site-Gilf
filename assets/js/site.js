@@ -63,7 +63,9 @@
   /* ---------- layout ---------- */
   var page = document.body.getAttribute("data-page") || "";
   var NAV = [["index.html", "Início", "inicio"], ["programa.html", "Programa", "programa"], ["oradores.html", "Oradores", "oradores"],
-    ["premios.html", "Prémios", "premios"], ["parceiros.html", "Parceiros", "parceiros"], ["sobre.html", "Sobre", "sobre"], ["contacto.html", "Contacto", "contacto"]];
+    ["premios.html", "Gala & Prémios", "premios"], ["lideres.html", "Líderes", "lideres"], ["clube.html", "Clube", "clube"],
+    ["noticias.html", "Notícias", "noticias"], ["parceiros.html", "Parceiros", "parceiros"], ["contacto.html", "Contacto", "contacto"]];
+  var NAV_FOOT = NAV.concat([["sobre.html", "Sobre", "sobre"], ["bilhetes.html", "Bilhetes", "bilhetes"]]);
   var tel = (E.telefone || "").replace(/\s/g, "");
   var waLink = G.wa = "https://wa.me/" + (E.whatsapp || "");
   var head = (PREVIEW ? '<div class="preview-bar">Pré-visualização de alterações ainda não publicadas · <a href="?preview=0">Sair</a></div>' : "") +
@@ -86,7 +88,7 @@
   var foot = '<footer class="footer"><div class="wrap"><div class="footer__grid">' +
     '<div class="footer__brand"><img src="assets/img/logos/premios-lideres.png" alt="Prémios Líderes Angola 2026" width="699" height="383" loading="lazy">' +
     "<p>" + esc(E.nomeCompleto) + " e " + esc(E.gala) + ". " + esc(E.tema) + "</p>" + (socials ? '<div class="social">' + socials + "</div>" : "") + "</div>" +
-    "<div><h4>Navegação</h4><ul>" + NAV.map(function (n) { return '<li><a href="' + n[0] + '">' + n[1] + "</a></li>"; }).join("") + '<li><a href="bilhetes.html">Bilhetes</a></li></ul></div>' +
+    "<div><h4>Navegação</h4><ul>" + NAV_FOOT.map(function (n) { return '<li><a href="' + n[0] + '">' + n[1] + "</a></li>"; }).join("") + "</ul></div>" +
     "<div><h4>O evento</h4><ul><li>" + esc(E.dataTexto) + "</li><li>Fórum · " + esc(E.horarioForum) + "</li><li>Gala · " + esc(E.horarioGala) + "</li><li>" + esc(E.local) + "</li><li>" + esc(E.cidade) + "</li></ul></div>" +
     '<div><h4>Contacto</h4><ul><li><a href="tel:' + esc(tel) + '">' + esc(E.telefone) + "</a></li>" +
     (E.telefone2 ? '<li><a href="tel:' + esc(E.telefone2.replace(/\s/g, "")) + '">' + esc(E.telefone2) + "</a></li>" : "") +
@@ -127,7 +129,11 @@
   var photo = G.photo = function (p, cls) { return p.foto ? '<img src="' + esc(p.foto) + '" alt="' + esc(p.nome) + '" loading="lazy">' : '<span class="mono ' + (cls || "") + '">' + esc(initials(p.nome)) + "</span>"; };
   var pos = G.pos = function (p) { return [p.cargo, p.organizacao].filter(Boolean).join(" · "); };
   var CATS = (D.premios && D.premios.categorias) || [];
-  var nominationsOf = function (id) { return CATS.filter(function (c) { return (c.nomeados || []).indexOf(id) > -1; }); };
+  var norm = G.norm = function (s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/^(S\.?E\.?|Dr\.?|Dra\.?|Eng\.?|Sensei)\s+/i, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); };
+  var byName = {};
+  PEOPLE.forEach(function (p) { [p.nome, p.nomeCompleto].concat(p.aliases || []).forEach(function (n) { if (n) byName[norm(n)] = p; }); });
+  G.personByName = function (n) { return byName[norm(n)]; };
+  var nominationsOf = function (id) { return CATS.filter(function (c) { return (c.distinguidos || []).some(function (n) { var p = byName[norm(n)]; return p && p.id === id; }); }); };
   var sessionsOf = function (id) {
     var out = [];
     ["forum", "gala"].forEach(function (k) { ((D.programa || {})[k] || []).forEach(function (s) {
@@ -146,7 +152,7 @@
     $("#mPh").innerHTML = photo(p);
     var noms = nominationsOf(id), ses = sessionsOf(id);
     $("#mBody").innerHTML =
-      (ROLE[p.papel] ? '<span class="badge">' + esc(ROLE[p.papel]) + "</span> " : "") + (noms.length ? '<span class="badge" style="background:#15100a;color:#f2dfab">Nomeado</span>' : "") +
+      (ROLE[p.papel] ? '<span class="badge">' + esc(ROLE[p.papel]) + "</span> " : "") + (noms.length ? '<span class="badge" style="background:#15100a;color:#f2dfab">Distinguido 2026</span>' : "") +
       '<h3 id="mName">' + esc(p.nomeCompleto || p.nome) + '</h3><p class="pos">' + esc(pos(p)) + (p.pais && p.pais !== "Angola" ? " · " + esc(p.pais) : "") + "</p>" +
       (p.tema ? '<div class="topic"><small>Tema da intervenção</small>' + esc(p.tema) + "</div>" : "") +
       (p.bio ? "<p>" + esc(p.bio) + "</p>" : "") +
@@ -185,7 +191,7 @@
       '<div class="panel__mod">' + (mod ? G.who(mod, "Moderador(a)") : '<span class="who"><span class="av">?</span><span><b>A anunciar</b><small>Moderador(a)</small></span></span>') + "</div>" +
       '</div><div class="faces">' + faces + "</div></article>";
   };
-  var TAG = { sessao: "Sessão", keynote: "Keynote Speaker", guest: "Guest Speaker", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala" };
+  var TAG = { sessao: "Sessão", keynote: "Keynote Speaker", guest: "Guest Speaker", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala", premios: "Prémios", musica: "Música", jantar: "Jantar", memoria: "Memória", honra: "Honra" };
   G.agenda = function (el, key) {
     var list = (D.programa || {})[key] || [];
     el.innerHTML = list.map(function (s, i) {
@@ -206,33 +212,62 @@
     el.style.gridTemplateColumns = "repeat(" + list.length + ", 1fr)";
     el.innerHTML = list.map(function (n) { return '<div class="stat' + (cls ? " " + cls : "") + '"><b>' + esc(n.valor) + "</b><span>" + esc(n.rotulo) + "</span></div>"; }).join("");
   };
-  G.categories = function (el) {
-    var reveal = D.premios && D.premios.revelarVencedores;
-    var groups = (D.premios && D.premios.grupos) || [{ id: "", titulo: "", total: 0 }];
-    var catHtml = function (c) {
-      var noms = (c.nomeados || []).filter(function (id) { return byId[id]; });
-      var rest = Math.max(0, (c.vagas || 0) - noms.length);
-      return '<div class="cat rv"><div class="cat__t"><small>Categoria</small>' + esc(c.titulo) + '</div><div class="noms">' +
-        noms.map(function (id) { var p = byId[id];
-          return '<button class="nom' + (reveal && c.vencedor === id ? " nom--win" : "") + '" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span><b>" + esc(p.nome) + "</b><small>" + esc(pos(p) || "Nomeado(a)") + "</small></span></button>"; }).join("") +
-        (rest ? '<div class="nom nom--tba"><span class="av">' + rest + "</span><span><b>" + (noms.length ? "+ " : "") + rest + " a anunciar</b><small>Revelação brevemente</small></span></div>" : "") + "</div></div>";
-    };
-    el.innerHTML = groups.map(function (g) {
-      var cs = CATS.filter(function (c) { return (c.grupo || "") === g.id || (!g.id); });
+  /* ---------- awards (by act) ---------- */
+  var nameHtml = function (n) {
+    var p = byName[norm(n)];
+    return p ? '<li class="dn"><button class="dn--p" type="button" data-p="' + esc(p.id) + '"><span class="av">' + photo(p) + "</span><span>" + esc(n) + "</span></button></li>"
+             : '<li class="dn">' + esc(n) + "</li>";
+  };
+  G.catCard = function (c) {
+    var list = (c.distinguidos || []), rest = Math.max(0, (c.vagas || 0) - list.length);
+    return '<div class="acat acat--' + esc(c.tipo || "") + '"><h4>' + esc(c.titulo) + "</h4><ul>" + list.map(nameHtml).join("") +
+      (rest ? '<li class="dn dn--tba">' + rest + " por indicar</li>" : "") + "</ul></div>";
+  };
+  G.awards = function (el) {
+    var actos = (D.premios && D.premios.actos) || [];
+    el.innerHTML = actos.map(function (a) {
+      var cs = CATS.filter(function (c) { return c.acto === a.id; });
       if (!cs.length) return "";
-      return (g.titulo ? '<div class="cgroup rv"><span class="cgroup__n">' + esc(g.total || "") + "</span><h3>" + esc(g.titulo) + "</h3></div>" : "") + cs.map(catHtml).join("");
+      var pers = cs.filter(function (c) { return c.tipo !== "instituicao"; }), inst = cs.filter(function (c) { return c.tipo === "instituicao"; });
+      return '<section class="acto rv"><header class="acto__h"><span class="acto__t">' + esc(a.titulo) + "</span>" + (a.hora ? '<span class="acto__h1">' + esc(a.hora.replace(":", "h")) + "</span>" : "") +
+        '<span class="acto__s">' + esc(a.tema) + "</span></header>" +
+        (pers.length ? '<div class="acats">' + pers.map(G.catCard).join("") + "</div>" : "") +
+        (inst.length ? '<div class="inst"><div class="inst__t">Instituições do ano · ' + esc(a.titulo) + '</div><div class="acats">' + inst.map(G.catCard).join("") + "</div></div>" : "") + "</section>";
     }).join("");
     observe(el);
   };
-  G.nominees = function (el, limit) {
+  G.categories = G.awards;
+  G.honorees = function () {
     var seen = {}, out = [];
-    CATS.forEach(function (c) { (c.nomeados || []).forEach(function (id) { if (!seen[id] && byId[id]) { seen[id] = 1; out.push([byId[id], c]); } }); });
-    el.innerHTML = out.slice(0, limit || 99).map(function (x, i) {
+    CATS.forEach(function (c) { (c.distinguidos || []).forEach(function (n) { var p = byName[norm(n)]; if (p && p.foto && !seen[p.id]) { seen[p.id] = 1; out.push([p, c]); } }); });
+    return out;
+  };
+  G.nominees = function (el, limit) {
+    el.innerHTML = G.honorees().slice(0, limit || 99).map(function (x, i) {
       return '<button class="nomcard rv' + (i % 5 ? " d" + Math.min(3, i % 5) : "") + '" type="button" data-p="' + esc(x[0].id) + '">' + photo(x[0]) + "<div><b>" + esc(x[0].nome) + "</b><small>" + esc(x[1].titulo) + "</small></div></button>";
     }).join("");
     observe(el);
   };
-  G.nomineeCount = function () { var s = {}; CATS.forEach(function (c) { (c.nomeados || []).forEach(function (id) { s[id] = 1; }); }); return Object.keys(s).length; };
+  G.nomineeCount = function () { var n = 0; CATS.forEach(function (c) { n += (c.distinguidos || []).length; }); return n; };
+
+  /* ---------- editions archive ---------- */
+  G.currentEdition = function () {
+    var cur = D.edicaoActual || {};
+    return { id: "actual", ano: cur.ano || "", titulo: cur.titulo || "", tema: cur.tema || E.tema, data: E.dataTexto, local: E.local + ", " + (E.cidade || "").split(",")[0],
+      resumo: (D.premios && D.premios.nota) || "", actual: true,
+      categorias: CATS.map(function (c) { return { titulo: (c.tipo === "orador" ? "Oradores · " : "") + c.titulo, tipo: c.tipo, distinguidos: c.distinguidos || [], vagas: c.vagas || 0 }; }),
+      oradores: G.speakers().map(function (p) { return p.nome; }) };
+  };
+  G.editions = function () { var cur = G.currentEdition(); return [cur].concat((D.edicoes || []).filter(function (e) { return String(e.ano) !== String(cur.ano); }).sort(function (a, b) { return String(b.ano).localeCompare(String(a.ano)); })); };
+
+  /* ---------- news ---------- */
+  var fmtDate = G.fmtDate = function (d) { var t = new Date(d + "T12:00:00"); return isNaN(t) ? (d || "") : t.toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric" }); };
+  G.news = function () { return (D.noticias || []).slice().sort(function (a, b) { return String(b.data).localeCompare(String(a.data)); }); };
+  G.newsCard = function (n, i) {
+    return '<a class="news rv' + (i ? " d" + Math.min(3, i) : "") + '" href="noticias.html?id=' + encodeURIComponent(n.id) + '">' +
+      '<div class="news__img">' + (n.imagem ? '<img src="' + esc(n.imagem) + '" alt="" loading="lazy">' : '<span class="mono">G</span>') + "</div>" +
+      '<div class="news__b"><time>' + esc(fmtDate(n.data)) + "</time><h3>" + esc(n.titulo) + "</h3><p>" + esc(n.resumo || "") + '</p><span class="arrow-link">Ler mais ' + ic("arrow") + "</span></div></a>";
+  };
 
   function logo(p, eager) {
     var img = '<img src="' + esc(p.logo) + '" alt="' + esc(p.nome) + '" title="' + esc(p.nome) + '"' + (eager ? "" : ' loading="lazy"') + ">";

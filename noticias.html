@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notícias · GiLF Angola & Prémios Líderes Angola</title>
+  <meta name="description" content="Novidades e actualizações do GiLF Angola e dos Prémios Líderes Angola: programa, distinguidos, oradores e próximas edições.">
+  <meta property="og:title" content="Notícias · GiLF Angola & Prémios Líderes Angola">
+  <meta property="og:description" content="Novidades e actualizações do GiLF Angola e dos Prémios Líderes Angola: programa, distinguidos, oradores e próximas edições.">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#15100a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="noticias">
+<main id="main">
+  <section class="phero dark dots" data-waves>
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Início</a> / Notícias</div>
+      <h1>Notícias &amp; actualizações</h1>
+      <p>As novidades do GiLF Angola, dos Prémios Líderes Angola e das próximas edições.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap" id="out"></div>
+  </section>
+</main>
+<script src="assets/dados.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  var list = G.news(), id = new URLSearchParams(location.search).get("id");
+  var n = id && list.filter(function (x) { return x.id === id; })[0];
+  if (n) {
+    document.title = n.titulo + " · GiLF Angola";
+    $("out").innerHTML = '<article class="article rv"><a class="arrow-link" href="noticias.html">← Todas as notícias</a><br><br><time>' + esc(G.fmtDate(n.data)) + "</time><h1>" + esc(n.titulo) + "</h1>" +
+      (n.resumo ? '<p class="lead">' + esc(n.resumo) + "</p>" : "") + (n.imagem ? '<img src="' + esc(n.imagem) + '" alt="">' : "") + "<p>" + esc(n.texto || "") + "</p>" +
+      (n.link ? '<p style="margin-top:24px"><a class="btn btn--dark" href="' + esc(n.link) + '">Saber mais</a></p>' : "") + "</article>" +
+      (list.length > 1 ? '<div class="head rv" style="margin-top:80px"><span class="kicker">Mais notícias</span></div><div class="newsgrid">' + list.filter(function (x) { return x.id !== n.id; }).slice(0, 3).map(G.newsCard).join("") + "</div>" : "");
+  } else {
+    $("out").innerHTML = list.length ? '<div class="newsgrid">' + list.map(G.newsCard).join("") + "</div>" : '<div class="empty">Ainda não há notícias publicadas.</div>';
+  }
+  G.ready();
+})();
+</script>
+</body>
+</html>

@@ -31,6 +31,11 @@ window.GILF = {
     },
     "mestres": "Karina & Julião Correia"
   },
+  "edicaoActual": {
+    "ano": "2026",
+    "titulo": "3.ª edição",
+    "tema": "Conectando Angola ao Mundo. Inspirando Lideranças. Gerando Impacto."
+  },
   "numeros": {
     "forum": [
       {
@@ -56,20 +61,24 @@ window.GILF = {
     ],
     "premios": [
       {
+        "valor": "2",
+        "rotulo": "Distinções especiais"
+      },
+      {
         "valor": "70",
-        "rotulo": "Figuras nacionais"
+        "rotulo": "Personalidades"
       },
       {
         "valor": "30",
         "rotulo": "Instituições"
       },
       {
-        "valor": "2",
-        "rotulo": "Homenagens a título póstumo"
+        "valor": "10",
+        "rotulo": "Oradores"
       },
       {
-        "valor": "10",
-        "rotulo": "Oradores premiados"
+        "valor": "2",
+        "rotulo": "Homenagens póstumas"
       }
     ]
   },
@@ -85,7 +94,10 @@ window.GILF = {
       "tema": "Angola e Emirados Árabes Unidos: parcerias estratégicas para atrair investimento e internacionalizar empresas angolanas.",
       "bio": "Jurista e docente da Universidade Católica de Angola; investigador visitante na Harvard Law School. Foi Secretário de Estado para a Reforma do Estado (2017–2020) e Secretário de Estado para as Autarquias Locais (2020–2024). Desde 2024 é o primeiro titular do Ministério do Turismo autónomo.",
       "linkedin": "",
-      "destaque": true
+      "destaque": true,
+      "aliases": [
+        "Márcio Lopes Daniel"
+      ]
     },
     {
       "id": "agnaldo-jaime",
@@ -98,7 +110,8 @@ window.GILF = {
       "papel": "keynote",
       "tema": "Conectividade que transforma: o digital como motor do investimento, da inclusão e da projecção de Angola no mundo.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/agnaldo-jaime.jpg"
+      "foto": "assets/img/pessoas/agnaldo-jaime.jpg",
+      "aliases": []
     },
     {
       "id": "nadia-evora",
@@ -112,7 +125,10 @@ window.GILF = {
       "tema": "Capital Humano e Formação Profissional: o motor da competitividade e sustentabilidade dos grandes projectos.",
       "bio": "",
       "linkedin": "",
-      "destaque": true
+      "destaque": true,
+      "aliases": [
+        "Nádia Helena Lopes Soares Évora"
+      ]
     },
     {
       "id": "mailand-nguto",
@@ -125,7 +141,8 @@ window.GILF = {
       "papel": "guest",
       "tema": "Liderança com propósito: empreendedorismo, filantropia e impacto social como pilares do desenvolvimento sustentável.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/mailand-nguto.jpg"
+      "foto": "assets/img/pessoas/mailand-nguto.jpg",
+      "aliases": []
     },
     {
       "id": "jaime-beirao",
@@ -138,7 +155,8 @@ window.GILF = {
       "papel": "guest",
       "tema": "Posicionamento estratégico: diferenciar-se e gerar valor.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/jaime-beirao.jpg"
+      "foto": "assets/img/pessoas/jaime-beirao.jpg",
+      "aliases": []
     },
     {
       "id": "bruno-arroba",
@@ -151,7 +169,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "grupo-carrinho",
@@ -164,7 +183,8 @@ window.GILF = {
       "tema": "Angola e Emirados Árabes Unidos: parcerias estratégicas para atrair investimento e internacionalizar empresas angolanas.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "antonio-henriques-da-silva",
@@ -177,7 +197,8 @@ window.GILF = {
       "tema": "Atracção de investimento privado e competitividade industrial para o futuro económico de Angola.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "agostinho-kapaia",
@@ -190,7 +211,8 @@ window.GILF = {
       "tema": "Visão de futuro e inovação empresarial: estratégias para atrair investimento e consolidar grandes negócios globais.",
       "bio": "Natural do Huambo, fundou o Grupo Opaia em 2002, meses após a paz. Empreendedor do Ano nos Prémios Sirius (2015) e presidente da CEEIA, a associação das empresas exportadoras. Em 2026 inaugurou a Opaia Motors, fábrica de montagem de viaturas na ZEE de Luanda, e anunciou a entrada do grupo em Moçambique.",
       "linkedin": "",
-      "destaque": true
+      "destaque": true,
+      "aliases": []
     },
     {
       "id": "ariclenes-de-matos",
@@ -203,7 +225,8 @@ window.GILF = {
       "tema": "Da visão à execução: construir negócios e gerar riqueza em África.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "ayrton-da-costa",
@@ -216,7 +239,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "joao-bartolomeu",
@@ -229,7 +253,8 @@ window.GILF = {
       "tema": "Liderar pelo exemplo: fé, ética e serviço à comunidade.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "filipe-maximiano",
@@ -242,7 +267,8 @@ window.GILF = {
       "tema": "Integridade e valores cristãos: os pilares éticos para uma liderança firme na sociedade moderna.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "josafath-mussaba",
@@ -255,7 +281,8 @@ window.GILF = {
       "tema": "Fé em acção: o papel da Igreja e dos líderes religiosos na resolução dos desafios sociais.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "miguel-simao",
@@ -268,7 +295,8 @@ window.GILF = {
       "tema": "Desenvolvimento humano: desbloquear o potencial liderante através da inteligência emocional e da ética.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "edinilson-muti",
@@ -281,7 +309,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "mari-pongue",
@@ -294,7 +323,8 @@ window.GILF = {
       "tema": "Networking estratégico: conexões que geram oportunidades globais.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "magnata-marleyh-selo",
@@ -307,7 +337,8 @@ window.GILF = {
       "tema": "Comunicação e posicionamento: como construir marcas de autoridade.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "aliondy-garcia",
@@ -320,7 +351,8 @@ window.GILF = {
       "tema": "Diáspora e negócios: construir pontes entre Angola e os mercados globais.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "joao-braga",
@@ -333,7 +365,8 @@ window.GILF = {
       "tema": "Comunicação de influência: transformar presença em oportunidades.",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "joao-baptista-borges",
@@ -346,7 +379,8 @@ window.GILF = {
       "tema": "",
       "bio": "Licenciado em Engenharia Electrotécnica pela Universidade Agostinho Neto (1991), onde passou a leccionar, e mestre pela Universidade Nova de Lisboa. Fez carreira na EDEL (1993–2010), de director-geral adjunto a PCA. Foi vice-ministro e depois secretário de Estado da Energia (2008–2011). É Ministro da Energia e Águas desde 2011.",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "manuel-francisco-pedro",
@@ -359,7 +393,8 @@ window.GILF = {
       "tema": "",
       "bio": "Nomeado em 2023 PCA da Sociedade de Desenvolvimento da ZEE Luanda-Bengo. No mesmo ano foi eleito, no Dubai, para o Conselho Directivo da Organização Mundial das Zonas Francas (WFZO), onde foi reeleito em 2025 no 11.º Congresso Mundial, em Hainan (China). Na FILDA 2026 apresentou 120 projectos em construção na ZEE.",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "luis-nunes",
@@ -372,7 +407,10 @@ window.GILF = {
       "tema": "",
       "bio": "Com percurso empresarial no sector da construção antes da vida pública, foi nomeado Governador da Província da Huíla em 2018 e assumiu o Governo Provincial de Benguela em 2021. É Governador da Província de Luanda desde 2024.",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": [
+        "Luís Manuel da Fonseca Nunes"
+      ]
     },
     {
       "id": "reinaldo-viriato",
@@ -385,7 +423,8 @@ window.GILF = {
       "tema": "",
       "bio": "Lidera, como presidente da Comissão Executiva, a Intellico, tecnológica de inteligência artificial e cibersegurança em Angola, e preside ao Conselho da Comtell, projecto de conectividade satelital soberana. No Fórum Nacional de Inteligência Artificial 2026 anunciou cerca de mil jovens formados em IA. A Intellico é parceira principal da 1.ª edição do Africa Builds Tech, em Luanda.",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "wilson-ganga",
@@ -398,7 +437,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "wiliam-oliveira",
@@ -411,7 +451,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "franco-mufinda",
@@ -424,7 +465,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "virginia-epalanga",
@@ -437,7 +479,8 @@ window.GILF = {
       "tema": "",
       "bio": "",
       "linkedin": "",
-      "destaque": false
+      "destaque": false,
+      "aliases": []
     },
     {
       "id": "armando-paciencia",
@@ -450,7 +493,8 @@ window.GILF = {
       "papel": "moderador",
       "tema": "",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/armando-paciencia.jpg"
+      "foto": "assets/img/pessoas/armando-paciencia.jpg",
+      "aliases": []
     },
     {
       "id": "braulio-augusto",
@@ -463,7 +507,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Micro, Small and Medium Enterprises as a Driver of Africa's Economic Diversification.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/braulio-augusto.jpg"
+      "foto": "assets/img/pessoas/braulio-augusto.jpg",
+      "aliases": []
     },
     {
       "id": "donald-kongwa",
@@ -476,7 +521,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Mobilising Diaspora Capital: Banking, Credit and Cross-Border Investment for Africa's Growth.",
       "pais": "Emirados Árabes Unidos",
-      "foto": "assets/img/pessoas/donald-kongwa.jpg"
+      "foto": "assets/img/pessoas/donald-kongwa.jpg",
+      "aliases": []
     },
     {
       "id": "maurilio-mateus",
@@ -489,7 +535,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Investment and Economic Development in Africa.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/maurilio-mateus.jpg"
+      "foto": "assets/img/pessoas/maurilio-mateus.jpg",
+      "aliases": []
     },
     {
       "id": "ernesto-januario",
@@ -502,7 +549,10 @@ window.GILF = {
       "papel": "orador",
       "tema": "Turismo, mobilidade e investimento privado: novas oportunidades para conectar Angola ao mundo.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/ernesto-januario.jpg"
+      "foto": "assets/img/pessoas/ernesto-januario.jpg",
+      "aliases": [
+        "Ernesto Jamba Januário"
+      ]
     },
     {
       "id": "catarina-antonio",
@@ -515,7 +565,8 @@ window.GILF = {
       "papel": "moderador",
       "tema": "",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/catarina-antonio.jpg"
+      "foto": "assets/img/pessoas/catarina-antonio.jpg",
+      "aliases": []
     },
     {
       "id": "adilson-paulo",
@@ -528,7 +579,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Leadership and People in Times of Innovation (AI), Transformation and Transition.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/adilson-paulo.jpg"
+      "foto": "assets/img/pessoas/adilson-paulo.jpg",
+      "aliases": []
     },
     {
       "id": "zacarias-samba",
@@ -541,7 +593,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Liderança adaptativa e criativa.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/zacarias-samba.jpg"
+      "foto": "assets/img/pessoas/zacarias-samba.jpg",
+      "aliases": []
     },
     {
       "id": "carlos-queta",
@@ -554,7 +607,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Diplomacia e liderança global: o papel de Angola na construção de novas pontes com o mundo.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/carlos-queta.jpg"
+      "foto": "assets/img/pessoas/carlos-queta.jpg",
+      "aliases": []
     },
     {
       "id": "lourenco-kwenda",
@@ -567,7 +621,10 @@ window.GILF = {
       "papel": "orador",
       "tema": "Liderança empresarial e capital humano: estratégias para organizações de alto desempenho.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/lourenco-kwenda.jpg"
+      "foto": "assets/img/pessoas/lourenco-kwenda.jpg",
+      "aliases": [
+        "Lourenço Kwenda"
+      ]
     },
     {
       "id": "genual-sampaio",
@@ -580,7 +637,8 @@ window.GILF = {
       "papel": "moderador",
       "tema": "",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/genual-sampaio.jpg"
+      "foto": "assets/img/pessoas/genual-sampaio.jpg",
+      "aliases": []
     },
     {
       "id": "edgar-leandro",
@@ -593,7 +651,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Marketing com propósito e comunicação estratégica na construção da marca do líder moderno.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/edgar-leandro.jpg"
+      "foto": "assets/img/pessoas/edgar-leandro.jpg",
+      "aliases": []
     },
     {
       "id": "geraldo-dala",
@@ -606,7 +665,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Liderança financeira sustentável: como a gestão estratégica impulsiona negócios transformadores.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/geraldo-dala.jpg"
+      "foto": "assets/img/pessoas/geraldo-dala.jpg",
+      "aliases": []
     },
     {
       "id": "sarchel-necesio",
@@ -619,7 +679,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "O poder do digital: media, inovação e novas oportunidades de liderança na economia moderna.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/sarchel-necesio.jpg"
+      "foto": "assets/img/pessoas/sarchel-necesio.jpg",
+      "aliases": []
     },
     {
       "id": "nuno-baio",
@@ -632,7 +693,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Empreendedorismo com impacto: formando a nova geração de líderes e negócios inovadores.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/nuno-baio.jpg"
+      "foto": "assets/img/pessoas/nuno-baio.jpg",
+      "aliases": []
     },
     {
       "id": "joaquim-francisco",
@@ -645,7 +707,8 @@ window.GILF = {
       "papel": "moderador",
       "tema": "",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/joaquim-francisco.jpg"
+      "foto": "assets/img/pessoas/joaquim-francisco.jpg",
+      "aliases": []
     },
     {
       "id": "armando-gomes",
@@ -658,7 +721,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Vendas com propósito: como estratégias comerciais robustas impulsionam o desenvolvimento sustentável em África.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/armando-gomes.jpg"
+      "foto": "assets/img/pessoas/armando-gomes.jpg",
+      "aliases": []
     },
     {
       "id": "benito-lukeba",
@@ -671,7 +735,10 @@ window.GILF = {
       "papel": "orador",
       "tema": "Globalização e evolução das fintech e AI.",
       "pais": "Europa",
-      "foto": "assets/img/pessoas/benito-lukeba.jpg"
+      "foto": "assets/img/pessoas/benito-lukeba.jpg",
+      "aliases": [
+        "Benito Lukeba"
+      ]
     },
     {
       "id": "mecktilder-mm",
@@ -684,7 +751,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "Governance of Mineral Resources in Africa: From Extraction to Sustainable and Inclusive Prosperity.",
       "pais": "Tanzânia",
-      "foto": "assets/img/pessoas/mecktilder-mm.jpg"
+      "foto": "assets/img/pessoas/mecktilder-mm.jpg",
+      "aliases": []
     },
     {
       "id": "nazario-vilhena",
@@ -697,7 +765,8 @@ window.GILF = {
       "papel": "orador",
       "tema": "África, Angola e o mundo: parcerias para o futuro — liderança, cooperação e desenvolvimento sustentável.",
       "pais": "Angola",
-      "foto": "assets/img/pessoas/nazario-vilhena.jpg"
+      "foto": "assets/img/pessoas/nazario-vilhena.jpg",
+      "aliases": []
     }
   ],
   "programa": {
@@ -986,146 +1055,778 @@ window.GILF = {
     ],
     "gala": [
       {
-        "id": "gala-jantar",
+        "id": "g-recepcao",
         "hora": "19:00",
         "fim": "",
-        "tipo": "gala",
+        "tipo": "networking",
         "numero": "",
-        "titulo": "Gala de Premiação e Jantar",
-        "subtitulo": "Prémios Líderes Angola 2026",
-        "descricao": "Recepção dos convidados, jantar e cerimónia de entrega dos Prémios Líderes Angola 2026 às personalidades e instituições distinguidas.",
+        "titulo": "Recepção com Dança de Boas-Vindas",
+        "subtitulo": "Passadeira, photocall e cocktail ao som da banda ao vivo",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-apresentadores",
+        "hora": "19:30",
+        "fim": "",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Entrada dos Apresentadores",
+        "subtitulo": "Lu Matamba & co-apresentador(a)",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-hino",
+        "hora": "19:33",
+        "fim": "",
+        "tipo": "honra",
+        "numero": "",
+        "titulo": "Hino Nacional",
+        "subtitulo": "",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-abertura",
+        "hora": "19:36",
+        "fim": "",
+        "tipo": "honra",
+        "numero": "",
+        "titulo": "Abertura Oficial",
+        "subtitulo": "Pela entidade convidada",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-organizacao",
+        "hora": "19:42",
+        "fim": "",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Mensagem da Organização",
+        "subtitulo": "David Moma e Indira Sousa · Luadeira Digital Angola e JLDI",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-musica-1",
+        "hora": "19:47",
+        "fim": "",
+        "tipo": "musica",
+        "numero": "",
+        "titulo": "Momento Musical I",
+        "subtitulo": "Actuação ao vivo",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-acto-1",
+        "hora": "19:55",
+        "fim": "",
+        "tipo": "premios",
+        "numero": "",
+        "titulo": "Entrega de Prémios · I Acto",
+        "subtitulo": "Distinções Especiais, Estado e Instituições Públicas",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-jantar",
+        "hora": "20:15",
+        "fim": "",
+        "tipo": "jantar",
+        "numero": "",
+        "titulo": "Brinde de Honra e Jantar de Gala",
+        "subtitulo": "Ao som da banda ao vivo",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-musica-2",
+        "hora": "21:00",
+        "fim": "",
+        "tipo": "musica",
+        "numero": "",
+        "titulo": "Momento Musical II",
+        "subtitulo": "Actuação ao vivo",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-acto-2",
+        "hora": "21:08",
+        "fim": "",
+        "tipo": "premios",
+        "numero": "",
+        "titulo": "Entrega de Prémios · II Acto",
+        "subtitulo": "Economia, Empresas e Instituições",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-postumas",
+        "hora": "21:38",
+        "fim": "",
+        "tipo": "memoria",
+        "numero": "",
+        "titulo": "Homenagens Póstumas",
+        "subtitulo": "Em memória de quem construiu Angola",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-oradores",
+        "hora": "21:43",
+        "fim": "",
+        "tipo": "premios",
+        "numero": "",
+        "titulo": "Distinção aos Oradores",
+        "subtitulo": "Oradores do GiLF Angola 2026",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-acto-3",
+        "hora": "21:50",
+        "fim": "",
+        "tipo": "premios",
+        "numero": "",
+        "titulo": "Entrega de Prémios · III Acto",
+        "subtitulo": "Sociedade, Cultura e Juventude",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-foto",
+        "hora": "22:12",
+        "fim": "",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Fotografia Oficial dos Distinguidos",
+        "subtitulo": "",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-musica-3",
+        "hora": "22:20",
+        "fim": "",
+        "tipo": "musica",
+        "numero": "",
+        "titulo": "Momento Musical III",
+        "subtitulo": "Grande actuação de encerramento",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-encerramento",
+        "hora": "22:40",
+        "fim": "",
+        "tipo": "networking",
+        "numero": "",
+        "titulo": "Encerramento e Pista Aberta",
+        "subtitulo": "Com a banda ao vivo",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [],
+        "vagas": 0
+      },
+      {
+        "id": "g-fim",
+        "hora": "23:00",
+        "fim": "",
+        "tipo": "sessao",
+        "numero": "",
+        "titulo": "Fim da Gala",
+        "subtitulo": "",
+        "descricao": "",
         "moderador": "",
         "oradores": [],
         "vagas": 0
       }
     ]
   },
-  "premios": {
-    "nota": "Os vencedores são escolhidos por um júri independente. A lista completa das distinções é revelada progressivamente até à Gala.",
-    "revelarVencedores": false,
-    "categorias": [
-      {
-        "id": "lider-politico",
-        "titulo": "Líder Político do Ano 2026",
-        "nomeados": [
-          "joao-baptista-borges",
-          "marcio-daniel"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "administracao-publica",
-        "titulo": "Líderes da Administração Pública do Ano 2026",
-        "nomeados": [
-          "manuel-francisco-pedro",
-          "luis-nunes"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "empresarios",
-        "titulo": "Líderes Empresários do Ano 2026",
-        "nomeados": [
-          "agostinho-kapaia",
-          "wilson-ganga"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "tecnologia",
-        "titulo": "Líderes da Tecnologia, Inovação e Economia Digital do Ano 2026",
-        "nomeados": [
-          "reinaldo-viriato"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "ceos-pcas",
-        "titulo": "Líderes CEOs / PCAs do Ano 2026",
-        "nomeados": [
-          "agnaldo-jaime",
-          "wiliam-oliveira"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "saude",
-        "titulo": "Líderes da Saúde e Bem-Estar do Ano 2026",
-        "nomeados": [
-          "franco-mufinda"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "lider-jovem",
-        "titulo": "Líder Jovem do Ano 2026",
-        "nomeados": [
-          "virginia-epalanga"
-        ],
-        "vencedor": "",
-        "grupo": "figuras",
-        "vagas": 0
-      },
-      {
-        "id": "instituicoes",
-        "grupo": "instituicoes",
-        "titulo": "Instituições do Ano 2026",
-        "nomeados": [],
-        "vencedor": "",
-        "vagas": 30
-      },
-      {
-        "id": "homenagem-postuma",
-        "grupo": "postumo",
-        "titulo": "Homenagem a título póstumo",
-        "nomeados": [],
-        "vencedor": "",
-        "vagas": 2
-      },
-      {
-        "id": "oradores-premiados",
-        "grupo": "oradores",
-        "titulo": "Distinção aos Oradores do GiLF 2026",
-        "nomeados": [],
-        "vencedor": "",
-        "vagas": 10
-      }
+  "gala": {
+    "titulo": "Uma noite entre Líderes.",
+    "apresentadores": [
+      "Lu Matamba",
+      ""
     ],
-    "grupos": [
+    "musica": "Três momentos musicais ao vivo, com a banda ao vivo no palco traseiro.",
+    "comissao": [
       {
-        "id": "figuras",
-        "titulo": "Figuras nacionais",
-        "total": 70
+        "nome": "David Moma",
+        "organizacao": "Luadeira Digital Angola"
       },
       {
-        "id": "instituicoes",
-        "titulo": "Instituições",
-        "total": 30
-      },
-      {
-        "id": "postumo",
-        "titulo": "Homenagens a título póstumo",
-        "total": 2
-      },
-      {
-        "id": "oradores",
-        "titulo": "Oradores premiados",
-        "total": 10
+        "nome": "Indira Sousa",
+        "organizacao": "JLDI — Consultoria e Prestação de Serviços"
       }
     ]
   },
+  "premios": {
+    "nota": "Distinguidos por um Júri Independente e pela Comissão Organizadora, pelo seu contributo ao desenvolvimento de Angola.",
+    "actos": [
+      {
+        "id": "acto-1",
+        "titulo": "I Acto",
+        "hora": "19:55",
+        "tema": "Distinções Especiais, Estado e Instituições Públicas"
+      },
+      {
+        "id": "acto-2",
+        "titulo": "II Acto",
+        "hora": "21:08",
+        "tema": "Economia, Empresas e Instituições"
+      },
+      {
+        "id": "postumas",
+        "titulo": "Homenagens Póstumas",
+        "hora": "21:38",
+        "tema": "Em memória de quem construiu Angola"
+      },
+      {
+        "id": "oradores",
+        "titulo": "Oradores",
+        "hora": "21:43",
+        "tema": "Distinção aos oradores do GiLF Angola 2026"
+      },
+      {
+        "id": "acto-3",
+        "titulo": "III Acto",
+        "hora": "21:50",
+        "tema": "Sociedade, Cultura e Juventude"
+      }
+    ],
+    "categorias": [
+      {
+        "id": "acto-1-1",
+        "acto": "acto-1",
+        "tipo": "especial",
+        "titulo": "Grande Líder de Angola",
+        "distinguidos": [
+          "S.E. João Manuel Gonçalves Lourenço"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-2",
+        "acto": "acto-1",
+        "tipo": "especial",
+        "titulo": "Distinção Especial · Primeira-Dama",
+        "distinguidos": [
+          "S.E. Ana Dias Lourenço"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-3",
+        "acto": "acto-1",
+        "tipo": "personalidade",
+        "titulo": "Líderes Políticos",
+        "distinguidos": [
+          "Sílvia Lutucuta",
+          "João Baptista Borges",
+          "Márcio Lopes Daniel",
+          "José Massano",
+          "Pereira Alfredo"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-4",
+        "acto": "acto-1",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Administração Pública",
+        "distinguidos": [
+          "Luís Manuel da Fonseca Nunes",
+          "Nuno Bernabé Dala",
+          "Gerdina Didalelwa"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-5",
+        "acto": "acto-1",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Justiça e Estado de Direito",
+        "distinguidos": [
+          "Matias Caxixi",
+          "Esmeralda Mangueira"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-6",
+        "acto": "acto-1",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Diplomacia e Cooperação Internacional",
+        "distinguidos": [
+          "M'zée Fula-Ngenge"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-1-7",
+        "acto": "acto-1",
+        "tipo": "personalidade",
+        "titulo": "Líderes Carreira e Legados da Década",
+        "distinguidos": [
+          "Beatriz Jacinto António de Sousa",
+          "Roberto de Almeida",
+          "Archer Mangueira",
+          "Ernesto Bartolomeu"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-8",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes CEOs / PCAs",
+        "distinguidos": [
+          "Egídio Monteiro",
+          "Maria do Carmo Corte-Real Bernardo",
+          "José André Lopes",
+          "Manuel Francisco Pedro",
+          "Wiliam Oliveira"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-9",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes Empresários",
+        "distinguidos": [
+          "Henrique Carlos Quissola",
+          "Silvestre Kapose",
+          "Isaac Kangundu",
+          "Bento Kangamba",
+          "Wilson Ganga"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-10",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes do Comércio, Banca e Finanças",
+        "distinguidos": [
+          "Joaquim Pinto Luís",
+          "Sérgio Santos",
+          "Valentina Neto"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-11",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Indústria e Transformação",
+        "distinguidos": [
+          "Dina Moreira",
+          "Sebastião Pai Querido Gaspar Martins",
+          "Luís Rodrigues Lelis",
+          "Marlene Pedro José"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-12",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Agricultura e Agroindústria",
+        "distinguidos": [
+          "Daniel Augusto Bessala"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-13",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Tecnologia, Inovação e Economia Digital",
+        "distinguidos": [
+          "Reinaldo de Sousa Viriato",
+          "Jaqueline Mabiala Ngulo"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-14",
+        "acto": "acto-2",
+        "tipo": "personalidade",
+        "titulo": "Líderes do Turismo, Hotelaria e Aviação",
+        "distinguidos": [
+          "Filipa Brunhoso",
+          "Gelson Quintas"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-15",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Instituição Pública de Excelência",
+        "distinguidos": [
+          "Banco Nacional de Angola",
+          "Fundo Soberano de Angola",
+          "ENSA"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-16",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Empresa Privada do Ano",
+        "distinguidos": [
+          "Grupo Opaia",
+          "Grupo Omatapalo",
+          "Grupo BD",
+          "Grupo Chamavu"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-17",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Banco ou Instituição Financeira",
+        "distinguidos": [
+          "BAI",
+          "BFA",
+          "PAYPAY"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-18",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Empresa Industrial",
+        "distinguidos": [
+          "Sonangol",
+          "Azule Energy",
+          "TotalEnergies Angola",
+          "PRODEL",
+          "Pumangol",
+          "Kixima"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-19",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Empresa Tecnológica",
+        "distinguidos": [
+          "TIS (Tistech)",
+          "Angola Cables",
+          "Africell",
+          "Angola Telecom",
+          "TV Cabo"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-20",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Universidade / Instituição de Ensino",
+        "distinguidos": [
+          "Centro de Formação Franklin Bivingo"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-21",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Organização Social / ONG",
+        "distinguidos": [
+          "Casais Angola",
+          "DAR Angola"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-2-22",
+        "acto": "acto-2",
+        "tipo": "instituicao",
+        "titulo": "Marca Angolana de Destaque",
+        "distinguidos": [
+          "Premier Bet",
+          "Grupo Zahara",
+          "Grupo Carrinho"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "postumas-23",
+        "acto": "postumas",
+        "tipo": "postumo",
+        "titulo": "Homenagens Póstumas",
+        "distinguidos": [
+          "Valentim Amões"
+        ],
+        "vagas": 2
+      },
+      {
+        "id": "oradores-24",
+        "acto": "oradores",
+        "tipo": "orador",
+        "titulo": "Líderes Políticos",
+        "distinguidos": [
+          "Nazário Vilhena"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "oradores-25",
+        "acto": "oradores",
+        "tipo": "orador",
+        "titulo": "Líderes Carreira e Legados da Década",
+        "distinguidos": [
+          "Henrique da Silva"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "oradores-26",
+        "acto": "oradores",
+        "tipo": "orador",
+        "titulo": "Líderes CEOs / PCAs",
+        "distinguidos": [
+          "Edgar Leandro",
+          "Adilson Paulo",
+          "Ernesto Jamba Januário"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "oradores-27",
+        "acto": "oradores",
+        "tipo": "orador",
+        "titulo": "Líderes Empresários",
+        "distinguidos": [
+          "Agostinho Kapaia",
+          "Ariclenes de Matos",
+          "Benito Lukeba",
+          "Filipe Maximiano"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "oradores-28",
+        "acto": "oradores",
+        "tipo": "orador",
+        "titulo": "Líder Mulher Africana",
+        "distinguidos": [
+          "Nádia Évora"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-29",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes Mulheres",
+        "distinguidos": [
+          "Yara Mupei",
+          "Vera Daves de Sousa",
+          "Carolina Cerqueira",
+          "Tacianara Cunha",
+          "Lérias Biwango"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-30",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Educação, Ensino e Académicos",
+        "distinguidos": [
+          "Dárdano Santos",
+          "João Soares da Silva Dono",
+          "Carlos Sangueve",
+          "Rose Gomes"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-31",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Saúde e Bem-Estar",
+        "distinguidos": [
+          "Franco Mufinda",
+          "Filipa Solange"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-32",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Cultura, Artes e Património",
+        "distinguidos": [
+          "Pepetela",
+          "Matias Damásio",
+          "C4 Pedro",
+          "Cef Tanzy"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-33",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Comunicação Social e Conteúdo Digital",
+        "distinguidos": [
+          "Sandra Paula Gaspar Mainsel Cauxeiro Jaime",
+          "Neurite Mendes"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-34",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes do Desporto",
+        "distinguidos": [
+          "Herdeiro Guilherme"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-35",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes na Diáspora Angolana",
+        "distinguidos": [
+          "Ana Edite Gaspar Martins",
+          "Aulinda Furtado"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-36",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes do Ambiente e Sustentabilidade",
+        "distinguidos": [
+          "Maria da Conceição Uini Baptista",
+          "Natália Timóteo Yange"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-37",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes da Inclusão e Responsabilidade Social",
+        "distinguidos": [
+          "Lourenço Kwenda",
+          "Ana dos Santos",
+          "Elsa Barber",
+          "Leonardo Sapalo"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "acto-3-38",
+        "acto": "acto-3",
+        "tipo": "personalidade",
+        "titulo": "Líderes Jovens",
+        "distinguidos": [
+          "Fredy Costa",
+          "Chipema Piloto",
+          "Virgínia Epalanga"
+        ],
+        "vagas": 0
+      }
+    ]
+  },
+  "edicoes": [
+    {
+      "id": "ed-2025",
+      "ano": "2025",
+      "titulo": "2.ª edição",
+      "tema": "Angola que Inspira: Liderar é Fazer História",
+      "data": "18 de Dezembro de 2025",
+      "local": "Hotel EPIC SANA, Luanda",
+      "resumo": "Gala de reconhecimento das figuras e empresas que impulsionam o desenvolvimento económico, social, cultural e humano de Angola.",
+      "imagem": "",
+      "categorias": []
+    }
+  ],
+  "clube": {
+    "titulo": "Clube de Líderes",
+    "texto": "O Clube de Líderes é a comunidade dos Prémios Líderes Angola e do GiLF: reúne distinguidos, oradores, parceiros e profissionais que lideram a transformação de Angola. A Comissão Organizadora analisa cada candidatura.",
+    "beneficios": [
+      "Rede de contactos com líderes, empresários e decisores de todas as edições",
+      "Informação em primeira mão sobre o GiLF, os Prémios Líderes Angola e as próximas edições",
+      "Convites para encontros e iniciativas do Clube",
+      "Visibilidade das suas iniciativas nos canais da organização"
+    ],
+    "formUrl": "https://form.jotform.com/263256335197059",
+    "membros": []
+  },
+  "noticias": [
+    {
+      "id": "n-distinguidos-2026",
+      "data": "2026-11-22",
+      "titulo": "Conhecidos os distinguidos da Gala Prémios Líderes Angola 2026",
+      "resumo": "70 personalidades, 30 instituições, 10 oradores, 2 distinções especiais e 2 homenagens póstumas na noite de 17 de Dezembro, no EPIC SANA.",
+      "texto": "A Comissão Organizadora divulgou o programa da Gala de Premiação Prémios Líderes Angola 2026, “Uma noite entre Líderes”, com a lista dos distinguidos indicados pelo Júri Independente e pela Comissão Organizadora. A cerimónia decorre a 17 de Dezembro de 2026, das 19h00 às 23h00, no Hotel EPIC SANA, em Luanda, em três actos, com homenagens póstumas e a distinção aos oradores do GiLF Angola 2026.",
+      "imagem": "assets/img/cartaz-gala.jpg",
+      "link": "premios.html",
+      "destaque": true
+    },
+    {
+      "id": "n-programa-gilf-2026",
+      "data": "2026-11-20",
+      "titulo": "Divulgado o programa oficial do GiLF Angola 2026",
+      "resumo": "7 painéis, 28 oradores, 7 moderadores, Keynote e Guest Speakers: o Fórum Global de Investimento e Liderança decorre das 08h30 às 15h20.",
+      "texto": "O Fórum Global de Investimento e Liderança — GiLF Angola 2026 — tem programa fechado: Keynote Speakers, três Guest Speakers e sete painéis temáticos sobre investimento, liderança, capital humano, comunicação, governação e o papel de África no mundo. Mestres de cerimónia: Karina & Julião Correia.",
+      "imagem": "",
+      "link": "programa.html",
+      "destaque": false
+    }
+  ],
   "ingressos": {
     "texto": "Compra de bilhetes através da Comissão Organizadora, por WhatsApp ou telefone. Lugares limitados.",
     "tipos": [
@@ -1314,7 +2015,7 @@ window.GILF = {
     },
     {
       "p": "Como são escolhidos os vencedores dos Prémios Líderes Angola?",
-      "r": "Os vencedores são escolhidos por um júri independente. A edição 2026 distingue 70 figuras nacionais, 30 instituições, 2 homenagens a título póstumo e 10 oradores do Fórum."
+      "r": "Os distinguidos são indicados por um Júri Independente e pela Comissão Organizadora. A edição 2026 distingue 70 personalidades, 30 instituições, 10 oradores do GiLF, 2 distinções especiais e 2 homenagens póstumas."
     },
     {
       "p": "A minha empresa pode ser patrocinadora?",
@@ -1422,6 +2123,11 @@ window.GILF = {
         {
           "nome": "GL Services",
           "logo": "assets/img/logos/gl-services.png",
+          "url": ""
+        },
+        {
+          "nome": "Orange Money",
+          "logo": "assets/img/logos/orange-money.png",
           "url": ""
         }
       ]

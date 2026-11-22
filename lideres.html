@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Líderes de todas as edições · Prémios Líderes Angola & GiLF</title>
+  <meta name="description" content="Arquivo dos distinguidos dos Prémios Líderes Angola e dos oradores do GiLF, edição a edição. Pesquise por nome, categoria ou instituição.">
+  <meta property="og:title" content="Líderes de todas as edições · Prémios Líderes Angola & GiLF">
+  <meta property="og:description" content="Arquivo dos distinguidos dos Prémios Líderes Angola e dos oradores do GiLF, edição a edição. Pesquise por nome, categoria ou instituição.">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#15100a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="lideres">
+<main id="main">
+  <section class="phero dark dots" data-waves>
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Início</a> / Líderes</div>
+      <h1>Líderes de todas as edições</h1>
+      <p>O arquivo dos Prémios Líderes Angola e do GiLF: personalidades, instituições e oradores distinguidos em cada edição.</p>
+    </div>
+  </section>
+
+  <section class="sec light">
+    <div class="wrap">
+      <input class="search rv" type="search" id="q" placeholder="Pesquisar por nome, instituição ou categoria" aria-label="Pesquisar líderes">
+      <div class="ed-tabs rv" id="tabs" role="group" aria-label="Edição"></div>
+      <div id="edition"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta dark rv">
+        <div><span class="kicker">Clube de Líderes</span><h2>Os líderes continuam ligados</h2><p>O Clube de Líderes reúne os distinguidos e oradores de todas as edições numa só comunidade.</p></div>
+        <div class="actions"><a class="btn btn--gold" href="clube.html">Conhecer o Clube</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="assets/dados.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  var eds = G.editions(), cur = 0, q = $("q");
+  var qs = new URLSearchParams(location.search).get("ano");
+  eds.forEach(function (e, i) { if (qs && String(e.ano) === qs) cur = i; });
+  function tabs() {
+    $("tabs").innerHTML = '<button class="chip" data-i="all" aria-pressed="' + (cur === "all") + '">Todas</button>' + eds.map(function (e, i) { return '<button class="chip" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + esc(e.ano) + (e.titulo ? " <small>" + esc(e.titulo) + "</small>" : "") + "</button>"; }).join("");
+  }
+  function count(e, tipo) { var n = 0; (e.categorias || []).forEach(function (c) { if (!tipo || c.tipo === tipo || (tipo === "personalidade" && !c.tipo)) n += (c.distinguidos || []).length; }); return n; }
+  function render() {
+    var term = q.value.trim(), nt = G.norm(term);
+    var list = cur === "all" ? eds : [eds[cur]];
+    var html = list.map(function (e) {
+      var cats = (e.categorias || []).map(function (c) {
+        var names = (c.distinguidos || []).filter(function (n) { return !nt || G.norm(n).indexOf(nt) > -1 || G.norm(c.titulo).indexOf(nt) > -1; });
+        return names.length ? G.catCard({ titulo: c.titulo, tipo: c.tipo, distinguidos: names, vagas: nt ? 0 : c.vagas }) : "";
+      }).join("");
+      var spk = (e.oradores || []).filter(function (n) { return !nt || G.norm(n).indexOf(nt) > -1; });
+      if (nt && !cats && !spk.length) return "";
+      var head = '<div class="ed-head dark rv"><div><span class="kicker">' + esc(e.titulo || "Edição") + (e.actual ? " · edição actual" : "") + '</span><h2 style="color:#fff">Prémios Líderes Angola ' + esc(e.ano) + "</h2>" +
+        (e.tema ? '<p class="hero__theme" style="margin:0 0 10px">' + esc(e.tema) + "</p>" : "") + '<div class="meta"><span>' + esc(e.data || "") + "</span><span>" + esc(e.local || "") + "</span></div>" + (e.resumo ? '<p style="margin:12px 0 0;color:rgba(255,255,255,.65)">' + esc(e.resumo) + "</p>" : "") + "</div>" +
+        '<div class="ed-count">' + (count(e, "personalidade") ? "<div><b>" + count(e, "personalidade") + "</b><span>Personalidades</span></div>" : "") + (count(e, "instituicao") ? "<div><b>" + count(e, "instituicao") + "</b><span>Instituições</span></div>" : "") + ((e.oradores || []).length ? "<div><b>" + e.oradores.length + "</b><span>Oradores GiLF</span></div>" : "") + "</div></div>";
+      var body = cats ? '<div class="acats" style="margin-bottom:22px">' + cats + "</div>" : (nt ? "" : '<div class="empty" style="margin-bottom:22px">A lista de distinguidos desta edição está a ser actualizada.</div>');
+      var spkHtml = spk.length ? '<div class="acats" style="margin-bottom:40px">' + G.catCard({ titulo: "Oradores do GiLF " + e.ano, tipo: "orador", distinguidos: spk }) + "</div>" : "";
+      return head + body + spkHtml;
+    }).join("");
+    $("edition").innerHTML = html || '<div class="empty">Nenhum resultado para “' + esc(term) + "”.</div>";
+    G.observe($("edition"));
+  }
+  $("tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-i]"); if (!b) return;
+    cur = b.getAttribute("data-i") === "all" ? "all" : +b.getAttribute("data-i"); tabs(); render();
+  });
+  q.addEventListener("input", function () { if (q.value.trim() && cur !== "all") { cur = "all"; tabs(); } render(); });
+  tabs(); render();
+  G.ready();
+})();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
   --ink: #15100a; --ink-2: #241b10; --text: #2f2a22; --muted: #7a7062; --line: #e6ddc9; --line-2: #efe8d8;
   --bg: #f6f2e9; --panel: #fff; --gold: #a8782a; --gold-d: #7a5517; --gold-l: #d9b56a; --gold-xl: #f2dfab;
   --red: #c62828; --green: #2e7d32; --amber: #b26a00; --blue: #1f5fa8;
-  --r: 14px; --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --display: "Cormorant Garamond", Georgia, serif;
+  --r: 14px; --sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --display: "Playfair Display", Georgia, serif;
   --shadow: 0 20px 50px -28px rgba(30, 20, 5, .45);
 }
 * { box-sizing: border-box; }
