@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GiLF Eventos</title>
+<meta name="description" content="GiLF Eventos — a rede de encontros de líderes, investidores e empreendedores de Angola e da diáspora. Um projecto Luadeira Digital Angola.">
+<meta name="theme-color" content="#15100a">
+<link rel="icon" href="img/gilf-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="#/">
+      <img src="img/gilf-mark.png" alt="" width="34" height="34">
+      <span><b>GiLF</b> Eventos</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#/eventos" data-nav="eventos">Eventos</a>
+      <a href="#/capitulos" data-nav="capitulos">Capítulos</a>
+      <a href="#/organizar" data-nav="organizar">Organizar</a>
+      <a href="#/conta" data-nav="conta" class="nav__me">A minha conta</a>
+    </nav>
+  </div>
+</header>
+<div id="demo" class="demo" hidden>Protótipo com dados de demonstração. Excepto o GiLF Angola 2026, os eventos são exemplos.</div>
+<main id="main" tabindex="-1"></main>
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div><b>GiLF Eventos</b><br><span id="fMarca"></span></div>
+    <div class="foot__links"><a href="#/eventos">Eventos</a><a href="#/capitulos">Capítulos</a><a href="#/organizar">Criar um capítulo</a><a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a></div>
+  </div>
+</footer>
+<div id="modal" class="modal" hidden>
+  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal__x" type="button" aria-label="Fechar" data-close>&times;</button>
+    <div id="mBody"></div>
+  </div>
+</div>
+<script src="vendor/qrcode.js"></script>
+<script src="dados.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
