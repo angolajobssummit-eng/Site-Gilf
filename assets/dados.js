@@ -43,7 +43,7 @@ window.GILF = {
         "rotulo": "Painéis temáticos"
       },
       {
-        "valor": "2",
+        "valor": "3",
         "rotulo": "Keynote Speakers"
       },
       {
@@ -55,7 +55,7 @@ window.GILF = {
         "rotulo": "Moderadores"
       },
       {
-        "valor": "28",
+        "valor": "27",
         "rotulo": "Oradores"
       }
     ],
@@ -83,6 +83,20 @@ window.GILF = {
     ]
   },
   "pessoas": [
+    {
+      "id": "nazario-vilhena",
+      "bio": "",
+      "linkedin": "",
+      "destaque": false,
+      "nome": "Nazário Vilhena",
+      "cargo": "Deputado",
+      "organizacao": "Assembleia Nacional",
+      "papel": "keynote",
+      "tema": "África, Angola e o mundo: parcerias para o futuro — liderança, cooperação e desenvolvimento sustentável.",
+      "pais": "Angola",
+      "foto": "assets/img/pessoas/nazario-vilhena.jpg",
+      "aliases": []
+    },
     {
       "id": "marcio-daniel",
       "nome": "Márcio Daniel",
@@ -753,20 +767,6 @@ window.GILF = {
       "pais": "Tanzânia",
       "foto": "assets/img/pessoas/mecktilder-mm.jpg",
       "aliases": []
-    },
-    {
-      "id": "nazario-vilhena",
-      "bio": "",
-      "linkedin": "",
-      "destaque": false,
-      "nome": "Nazário Vilhena",
-      "cargo": "Deputado",
-      "organizacao": "Assembleia Nacional",
-      "papel": "orador",
-      "tema": "África, Angola e o mundo: parcerias para o futuro — liderança, cooperação e desenvolvimento sustentável.",
-      "pais": "Angola",
-      "foto": "assets/img/pessoas/nazario-vilhena.jpg",
-      "aliases": []
     }
   ],
   "programa": {
@@ -800,9 +800,24 @@ window.GILF = {
         "vagas": 0
       },
       {
-        "id": "keynote-marcio",
+        "id": "keynote-vilhena",
         "hora": "08:42",
         "fim": "08:57",
+        "tipo": "keynote",
+        "numero": "",
+        "titulo": "África, Angola e o mundo",
+        "subtitulo": "Parcerias para o futuro — liderança, cooperação e desenvolvimento sustentável",
+        "descricao": "",
+        "moderador": "",
+        "oradores": [
+          "nazario-vilhena"
+        ],
+        "vagas": 0
+      },
+      {
+        "id": "keynote-marcio",
+        "hora": "08:57",
+        "fim": "09:12",
         "tipo": "keynote",
         "numero": "",
         "titulo": "Angola e Emirados Árabes Unidos",
@@ -816,8 +831,8 @@ window.GILF = {
       },
       {
         "id": "keynote-agnaldo",
-        "hora": "08:57",
-        "fim": "09:12",
+        "hora": "09:12",
+        "fim": "09:27",
         "tipo": "keynote",
         "numero": "",
         "titulo": "Conectividade que transforma",
@@ -831,8 +846,8 @@ window.GILF = {
       },
       {
         "id": "painel-1",
-        "hora": "09:12",
-        "fim": "09:52",
+        "hora": "09:27",
+        "fim": "10:07",
         "tipo": "painel",
         "numero": "1",
         "titulo": "Liderança Empresarial e o Futuro de Angola",
@@ -849,8 +864,8 @@ window.GILF = {
       },
       {
         "id": "painel-2",
-        "hora": "09:52",
-        "fim": "10:32",
+        "hora": "10:07",
+        "fim": "10:47",
         "tipo": "painel",
         "numero": "2",
         "titulo": "Investimento, Financiamento e Diversificação Económica de África",
@@ -867,8 +882,8 @@ window.GILF = {
       },
       {
         "id": "painel-3",
-        "hora": "10:32",
-        "fim": "11:12",
+        "hora": "10:47",
+        "fim": "11:27",
         "tipo": "painel",
         "numero": "3",
         "titulo": "Liderança e Capital Humano na Era da Transformação",
@@ -986,8 +1001,7 @@ window.GILF = {
         "oradores": [
           "armando-gomes",
           "benito-lukeba",
-          "mecktilder-mm",
-          "nazario-vilhena"
+          "mecktilder-mm"
         ],
         "vagas": 4
       },
