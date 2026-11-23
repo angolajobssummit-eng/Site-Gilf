@@ -7,19 +7,17 @@ O GiLF Angola acontece uma vez por ano. O GiLF Eventos mantém a comunidade acti
 > Projecto independente do site `gilf-angola.com`. Esta branch contém só o GiLF Eventos; o site do fórum continua na sua própria branch, sem alterações.
 
 ## O que o protótipo já faz
-- **Início:** pesquisa por tema e cidade, próximos eventos, capítulos e "como funciona".
-- **Eventos:** filtros por cidade, tema e preço; barra de lugares ocupados; marcação de esgotado.
-- **Página do evento:** data, local, preço em Kz, programa, organizador, partilha no WhatsApp.
-- **Confirmar presença:** perfil, objectivo do participante (para reuniões B2B), consentimento WhatsApp.
-  - Com lugares: bilhete com **código QR** e código `GE-XXXXXX`.
-  - Esgotado: **lista de espera** automática.
-  - Evento pago: aviso de pagamento por **Multicaixa Express**.
-  - Confirmação enviada pelo **WhatsApp** e evento adicionado ao **calendário** (.ics).
-- **Capítulos:** juntar-se e sair, lista de membros e eventos do capítulo.
-- **Organizar:** planos (membro, organizador, empresa, patrocinador) e formulários para propor um evento ou criar um capítulo, enviados por WhatsApp.
-- **A minha conta:** bilhetes com QR, cancelar, capítulos e **pontos de liderança**.
+Funciona como o Meetup, com marca própria e adaptado a Angola.
+- **Início:** eventos perto da sua cidade, eventos online, categorias, grupos populares, "como funciona", cidades populares.
+- **Pesquisa:** separadores Eventos/Grupos; filtros por dia (hoje, amanhã, fim de semana, semana), tipo, cidade, categoria e preço; calendário com os dias que têm eventos.
+- **Página do evento:** organizador, detalhes, participantes, comentários, local com link para o mapa, calendário (.ics), partilha no WhatsApp, eventos semelhantes, barra fixa "Participar".
+- **Participar:** bilhete com código QR, lista de espera quando esgota, aviso de pagamento Multicaixa Express, objectivo para reuniões B2B, confirmação por WhatsApp. Junta automaticamente ao grupo.
+- **Página do grupo:** separadores Sobre / Eventos (próximos e passados) / Membros / Discussões; juntar-se, sair, convidar por WhatsApp.
+- **Criar grupo:** assistente em 5 passos (cidade, temas, nome, descrição, regras). O grupo fica "em análise pela Luadeira".
+- **Criar evento:** organizadores marcam eventos (presencial ou online, lugares, preço em Kz, certificado).
+- **Conta:** registo/entrada, bilhetes com QR, grupos, perfil e pontos de liderança.
 
-Limitações do protótipo: as inscrições ficam guardadas só no browser de cada pessoa, e os eventos que não são o GiLF Angola 2026 são exemplos (`dados.js`).
+Limitações do protótipo: conta e dados ficam guardados só no browser de cada pessoa; excepto o GiLF Angola 2026, grupos, pessoas e eventos são fictícios (`dados.js`).
 
 ## Correr localmente
 ```bash
