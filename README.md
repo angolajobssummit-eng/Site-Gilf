@@ -19,26 +19,26 @@ Funciona como o Meetup, com marca própria e adaptado a Angola.
 
 Limitações do protótipo: conta e dados ficam guardados só no browser de cada pessoa; excepto o GiLF Angola 2026, grupos, pessoas e eventos são fictícios (`dados.js`).
 
+## Dois modos
+- **Modo real**: com `config.js` preenchido, usa o Supabase. Há contas com email e palavra-passe, os dados são partilhados por todos e as regras de segurança são aplicadas na base de dados.
+- **Modo demonstração**: com `config.js` vazio, os dados de exemplo ficam guardados no browser e a primeira conta criada fica administradora.
+
+**Para publicar, siga [`PUBLICAR.md`](PUBLICAR.md).**
+
 ## Correr localmente
 ```bash
-python3 -m http.server 8000   # abrir http://localhost:8000
+python3 -m http.server 8000   # na raiz do projecto; abrir http://localhost:8000
 ```
-Não depende de serviços externos além das Google Fonts: o gerador de QR está em `vendor/`.
 
 ## Estrutura
 | Ficheiro | Função |
 |---|---|
 | `index.html` | Estrutura da página |
 | `app.css` | Estilo (identidade GiLF, modo escuro, telemóvel) |
-| `app.js` | Páginas, inscrições, QR, calendário, WhatsApp |
-| `dados.js` | Capítulos e eventos de demonstração |
-| `schema.sql` | Base de dados para o MVP (Supabase) |
-| `vendor/qrcode.js` | Gerador de QR (MIT, Kazuhiko Arase) |
-
-## Próximas fases
-1. **MVP (6–8 semanas):** Supabase com login por telefone, base de dados (`schema.sql`), painel do organizador e **check-in por câmara** a ler o QR.
-2. **WhatsApp Business API:** confirmações, lembretes 24 horas antes, aviso de vaga na lista de espera.
-3. **Pagamentos:** Multicaixa Express e referência bancária (por exemplo, via ProxyPay ou EMIS GPO).
-4. **Reuniões B2B:** sugestões automáticas por sector e objectivo, enviadas 48 horas antes.
-5. **Certificados digitais** com código de verificação e **relatórios para patrocinadores**.
-6. **Ligação ao GiLF:** perfis verificados de oradores e premiados; os pontos de liderança passam a contar para as candidaturas aos Prémios Líderes Angola.
+| `app.js` | Interface: site público, conta, organizadores (inscrições e check-in) e administração |
+| `api.js` | Dados: Supabase (modo real) ou browser (modo demonstração) |
+| `config.js` | URL e chave pública do Supabase |
+| `schema.sql` | Base de dados, regras de segurança, lista de espera, funções de administração |
+| `dados.js` | Categorias, cidades e dados de demonstração |
+| `vendor/` | Bibliotecas: gerador de QR (MIT) e cliente Supabase (MIT) |
+| `PUBLICAR.md` | Guia de publicação passo a passo |

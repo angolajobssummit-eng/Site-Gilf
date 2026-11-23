@@ -313,3 +313,59 @@ svg { flex: none; }
 .foot__cols a { display: block; padding: 3px 0; }
 .foot a:hover { color: #fff; }
 .foot__base { margin-top: 26px; font-size: .78rem; color: #8a8276; }
+
+/* ---- estados, carregamento, mensagens ---- */
+body.busy { cursor: progress; }
+body.busy .btn { pointer-events: none; opacity: .7; }
+.loading { display: flex; align-items: center; gap: 10px; color: var(--muted); padding: 18px 0; font-size: .9rem; }
+.loading span { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--brand); animation: gira .8s linear infinite; }
+@keyframes gira { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .loading span { animation: none; } }
+.toast--mau { background: var(--brand); color: #fff; }
+.status--mau { background: var(--brand-l); color: var(--brand); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--brand); font-weight: 700; font-size: inherit; text-decoration: underline; }
+.demo .linkbtn { font-size: .78rem; }
+.btn.danger { color: var(--brand); border-color: var(--brand-l); }
+.btn.danger:hover { background: var(--brand-l); }
+
+/* ---- barras de gestão ---- */
+.adminbar { background: #1d1914; color: #f2dfab; font-size: .86rem; }
+.adminbar__in { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 52px; padding: 8px 0; }
+.adminbar__in > span { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; margin-right: auto; }
+.adminbar .btn--line { background: transparent; color: #f2dfab; border-color: rgba(242,223,171,.35); }
+.adminbar .btn--line:hover { background: rgba(242,223,171,.1); }
+.adminhead { background: #1d1914; color: #f2dfab; padding-top: 18px; }
+.adminhead__t { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; }
+.adminhead .tabs { border-bottom: 0; margin: 0; }
+.adminhead .tabs a { color: #b9b0a3; }
+.adminhead .tabs a.on { color: #fff; border-bottom-color: var(--brand); }
+
+/* ---- estatísticas e tabelas ---- */
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); gap: 12px; margin: 18px 0; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.stat b { display: block; font-size: 1.8rem; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.stat span { font-size: .8rem; color: var(--muted); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.tbl { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.tbl th { text-align: left; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--soft); white-space: nowrap; }
+.tbl td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl select { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--bg); }
+.tbl input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--ok); }
+.acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.search-in { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 14px; font-size: .86rem; min-width: 0; max-width: 100%; }
+.filters > input[type=search] { flex: 1 1 200px; }
+.pend + .pend { margin-top: 12px; }
+.pend .gmini .ratio { width: 64px; }
+@media (max-width: 560px) { .tbl .hide-s { display: none; } }
+
+/* ---- check-in ---- */
+.checkin .cform { flex-wrap: wrap; }
+.checkin .cform input { flex: 1 1 220px; font: 700 1rem ui-monospace, Menlo, monospace; letter-spacing: .06em; }
+#camBox { margin-top: 12px; display: grid; gap: 8px; justify-items: start; }
+#camBox[hidden] { display: none; }
+#cam { width: min(360px, 100%); border-radius: 12px; background: #000; aspect-ratio: 4 / 3; object-fit: cover; }
+.ci { margin-top: 12px; padding: 12px 14px; border-radius: 10px; font-size: .95rem; display: flex; align-items: center; gap: 8px; }
+.ci--ok { background: var(--ok-l); color: var(--ok); }
+.ci--ja { background: var(--gold-l); color: var(--gold); }
+.ci--mau { background: var(--brand-l); color: var(--brand); }
