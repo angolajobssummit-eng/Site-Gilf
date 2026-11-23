@@ -1,36 +1,46 @@
-# GiLF Angola 2026 — site oficial
+# GiLF Eventos
 
-**Fórum Global de Investimento e Liderança** + **Gala de Premiação Prémios Líderes Angola 2026**
-17 de Dezembro de 2026 · Hotel EPIC SANA, Luanda · www.gilf-angola.com
+**A rede de encontros de líderes, investidores, empreendedores e da diáspora angolana. Um projecto Luadeira Digital Angola, extensão do GiLF.**
 
-Site estático (HTML/CSS/JS, sem servidor) com **área administrativa** que publica directamente no repositório.
+O GiLF Angola acontece uma vez por ano. O GiLF Eventos mantém a comunidade activa o ano todo, com **capítulos** locais e temáticos que organizam encontros regulares. Inspira-se no Meetup e foi adaptado a Angola.
 
-## Páginas
-| Página | Conteúdo |
-|---|---|
-| `index.html` | Início: keynotes, painéis, nomeados, organização, parceiros, contagem decrescente |
-| `programa.html` | Programa do Fórum e da Gala, com moderadores, oradores e temas |
-| `oradores.html` | Oradores e moderadores (filtros, pesquisa, perfis) |
-| `premios.html` | Prémios Líderes Angola: categorias e nomeados |
-| `parceiros.html` | Logótipos por grupo + pacotes de patrocínio + pedido de dossiê |
-| `bilhetes.html` | Tipos de bilhete + reserva por WhatsApp/e-mail + mapa |
-| `sobre.html` | O fórum, o fundador, percurso e iniciativas |
-| `contacto.html` | Contactos, sala de imprensa e perguntas frequentes |
-| `admin/` | **Área administrativa** (não indexada) |
+> Projecto independente do site `gilf-angola.com`. Esta branch contém só o GiLF Eventos; o site do fórum continua na sua própria branch, sem alterações.
 
-## Área administrativa (`/admin/`)
-- **Entrar** com uma chave de acesso GitHub (fine-grained token, só para este repositório, permissão *Contents: Read and write*). As instruções estão no ecrã de login.
-- Gerir: evento, programa (sessões, moderadores, oradores), oradores e pessoas (com fotografia), prémios (categorias, nomeados, vencedores), parceiros (logótipos), bilhetes, patrocínio, organização e FAQ.
-- **Pré-visualizar** antes de publicar · **Publicar** cria um único commit (`assets/dados.js` + imagens novas) · **Histórico de versões** permite restaurar versões anteriores.
-- Painel com verificação automática de conteúdos (referências partidas, pessoas sem foto, painéis sem moderador…).
-- Rascunhos guardados automaticamente no browser.
+## O que o protótipo já faz
+- **Início:** pesquisa por tema e cidade, próximos eventos, capítulos e "como funciona".
+- **Eventos:** filtros por cidade, tema e preço; barra de lugares ocupados; marcação de esgotado.
+- **Página do evento:** data, local, preço em Kz, programa, organizador, partilha no WhatsApp.
+- **Confirmar presença:** perfil, objectivo do participante (para reuniões B2B), consentimento WhatsApp.
+  - Com lugares: bilhete com **código QR** e código `GE-XXXXXX`.
+  - Esgotado: **lista de espera** automática.
+  - Evento pago: aviso de pagamento por **Multicaixa Express**.
+  - Confirmação enviada pelo **WhatsApp** e evento adicionado ao **calendário** (.ics).
+- **Capítulos:** juntar-se e sair, lista de membros e eventos do capítulo.
+- **Organizar:** planos (membro, organizador, empresa, patrocinador) e formulários para propor um evento ou criar um capítulo, enviados por WhatsApp.
+- **A minha conta:** bilhetes com QR, cancelar, capítulos e **pontos de liderança**.
 
-## Publicação (GitHub Pages)
-Settings → Pages → *Deploy from a branch* → branch `claude/gilf-angola-dubai-site-wo7caz`, pasta `/ (root)`.
-Depois de cada publicação no admin, o site actualiza em poucos minutos.
+Limitações do protótipo: as inscrições ficam guardadas só no browser de cada pessoa, e os eventos que não são o GiLF Angola 2026 são exemplos (`dados.js`).
+
+## Correr localmente
+```bash
+python3 -m http.server 8000   # abrir http://localhost:8000
+```
+Não depende de serviços externos além das Google Fonts: o gerador de QR está em `vendor/`.
 
 ## Estrutura
-- `assets/dados.js` — todo o conteúdo (gerido pelo admin)
-- `assets/css/site.css`, `assets/js/site.js` — site público
-- `admin/` — área administrativa
-- `assets/img/pessoas/`, `assets/img/logos/` — fotografias e logótipos
+| Ficheiro | Função |
+|---|---|
+| `index.html` | Estrutura da página |
+| `app.css` | Estilo (identidade GiLF, modo escuro, telemóvel) |
+| `app.js` | Páginas, inscrições, QR, calendário, WhatsApp |
+| `dados.js` | Capítulos e eventos de demonstração |
+| `schema.sql` | Base de dados para o MVP (Supabase) |
+| `vendor/qrcode.js` | Gerador de QR (MIT, Kazuhiko Arase) |
+
+## Próximas fases
+1. **MVP (6–8 semanas):** Supabase com login por telefone, base de dados (`schema.sql`), painel do organizador e **check-in por câmara** a ler o QR.
+2. **WhatsApp Business API:** confirmações, lembretes 24 horas antes, aviso de vaga na lista de espera.
+3. **Pagamentos:** Multicaixa Express e referência bancária (por exemplo, via ProxyPay ou EMIS GPO).
+4. **Reuniões B2B:** sugestões automáticas por sector e objectivo, enviadas 48 horas antes.
+5. **Certificados digitais** com código de verificação e **relatórios para patrocinadores**.
+6. **Ligação ao GiLF:** perfis verificados de oradores e premiados; os pontos de liderança passam a contar para as candidaturas aos Prémios Líderes Angola.

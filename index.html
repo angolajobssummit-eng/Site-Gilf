@@ -1,187 +1,49 @@
 <!doctype html>
 <html lang="pt">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GiLF Angola 2026 · Fórum Global de Investimento e Liderança</title>
-  <meta name="description" content="GiLF Angola 2026 — Fórum Global de Investimento e Liderança e Gala dos Prémios Líderes Angola. 17 de Dezembro de 2026, Hotel EPIC SANA, Luanda. Keynotes de Nazário Vilhena, Márcio Daniel e Agnaldo Jaime; Gala Prémios Líderes Angola 2026.">
-  <meta property="og:title" content="GiLF Angola 2026 · Fórum Global de Investimento e Liderança">
-  <meta property="og:description" content="17 de Dezembro de 2026 · Hotel EPIC SANA, Luanda. Fórum das 08h30 às 15h20 e Gala Prémios Líderes Angola a partir das 19h00.">
-  <meta property="og:image" content="assets/img/og.jpg">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#15100a">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css">
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Event","name":"GiLF Angola 2026 — Fórum Global de Investimento e Liderança","startDate":"2026-12-17T08:30:00+01:00","endDate":"2026-12-17T23:00:00+01:00","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","eventStatus":"https://schema.org/EventScheduled","location":{"@type":"Place","name":"Hotel EPIC SANA Luanda","address":{"@type":"PostalAddress","streetAddress":"Rua da Missão","addressLocality":"Luanda","addressCountry":"AO"}},"image":["assets/img/cartaz-gala.jpg"],"description":"Conectando Angola ao Mundo. Inspirando Lideranças. Gerando Impacto.","organizer":{"@type":"Organization","name":"Luadeira Digital Angola & JLDI"}}
-  </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GiLF Eventos</title>
+<meta name="description" content="GiLF Eventos — a rede de encontros de líderes, investidores e empreendedores de Angola e da diáspora. Um projecto Luadeira Digital Angola.">
+<meta name="theme-color" content="#15100a">
+<link rel="icon" href="img/gilf-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
 </head>
-<body data-page="inicio">
-<main id="main">
-
-  <section class="hero dark dots" data-waves>
-    <div class="wrap hero__grid">
-      <div>
-        <span class="pill rv"><i></i> <span data-bind="evento.dataTexto">17 de Dezembro de 2026</span></span>
-        <h1 class="rv d1">Fórum Global de <em>Investimento</em> e Liderança</h1>
-        <p class="hero__theme rv d2" data-bind="evento.tema">Conectando Angola ao Mundo. Inspirando Lideranças. Gerando Impacto.</p>
-        <div class="facts rv d2">
-          <div class="fact" data-ic="pin"><span><small>Local</small><span data-bind="evento.local">Hotel EPIC SANA</span>, Luanda</span></div>
-          <div class="fact" data-ic="clock"><span><small>Fórum</small><span data-bind="evento.horarioForum">08h30 – 15h30</span></span></div>
-          <div class="fact" data-ic="ticket"><span><small>Gala</small><span data-bind="evento.horarioGala">19h00 – 23h00</span></span></div>
-        </div>
-        <div class="actions rv d3">
-          <a class="btn btn--gold" href="bilhetes.html">Comprar bilhete</a>
-          <a class="btn btn--ghost" href="programa.html">Ver o programa</a>
-        </div>
-        <div class="countdown rv d3" data-countdown aria-label="Contagem decrescente para o evento"></div>
-      </div>
-      <div class="portraits" id="heroPortraits"></div>
-    </div>
-  </section>
-
-  <div class="stats" id="stats"></div>
-
-  <section class="sec sec--paper">
-    <div class="wrap split">
-      <div class="rv">
-        <div class="head head--l"><span class="kicker">Um dia · dois momentos</span><h2>Onde a liderança angolana encontra o investimento</h2></div>
-        <p class="lead">O GiLF Angola reúne num só dia, no EPIC SANA, ministros, gestores públicos, PCAs, investidores, empreendedores e especialistas — para debater investimento, liderança e a projecção internacional de Angola, de Luanda ao Dubai.</p>
-        <p>Pela manhã, o Fórum: keynotes e painéis com quem decide. À noite, a Gala de Premiação e Jantar dos Prémios Líderes Angola, que distingue as personalidades e instituições que fazem o país avançar.</p>
-      </div>
-      <div class="moments">
-        <a class="moment rv" href="programa.html">
-          <span class="moment__t">Manhã · <span data-bind="evento.horarioForum">08h30 – 15h30</span></span>
-          <h3>Fórum Global de Investimento e Liderança</h3>
-          <p>Keynotes, painéis e networking.</p>
-          <span class="arrow-link">Programa <span data-ic="arrow"></span></span>
-        </a>
-        <a class="moment rv d1" href="premios.html">
-          <span class="moment__t">Noite · <span data-bind="evento.horarioGala">19h00 – 23h00</span></span>
-          <img class="mlogo" src="assets/img/logos/premios-lideres.png" alt="Gala de Premiação Prémios Líderes Angola 2026" width="699" height="383" loading="lazy">
-          <p>Gala de Premiação e Jantar.</p>
-          <span class="arrow-link">Distinguidos <span data-ic="arrow"></span></span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="wrap">
-      <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Keynote &amp; Guest Speakers</span><h2>Quem abre a conversa</h2></div>
-        <a class="arrow-link rv" href="oradores.html">Todos os oradores <span data-ic="arrow"></span></a>
-      </div>
-      <div class="keynotes" id="keynotes"></div>
-    </div>
-  </section>
-
-  <section class="sec dark dots">
-    <div class="wrap" style="position:relative">
-      <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Painéis temáticos</span><h2>Debates com quem decide</h2><p id="panNote"></p></div>
-        <a class="arrow-link rv" href="programa.html" style="color:var(--gold-xl)">Programa completo <span data-ic="arrow"></span></a>
-      </div>
-      <div class="panels" id="panels"></div>
-    </div>
-  </section>
-
-  <section class="sec dark" data-waves style="background:#120d07">
-    <div class="wrap" style="position:relative">
-      <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Prémios Líderes Angola 2026</span><h2>Os distinguidos</h2><p>Personalidades, instituições e oradores homenageados na Gala de 17 de Dezembro.</p></div>
-        <a class="btn btn--ghost rv" href="premios.html">Ver todos os distinguidos</a>
-      </div>
-      <div class="stats stats--dark rv" id="awardStats" style="margin-bottom:34px"></div>
-      <div class="nomgrid" id="nominees"></div>
-    </div>
-  </section>
-
-  <section class="sec" id="newsSec" hidden>
-    <div class="wrap">
-      <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Notícias</span><h2>Últimas actualizações</h2></div>
-        <a class="arrow-link rv" href="noticias.html">Todas as notícias <span data-ic="arrow"></span></a>
-      </div>
-      <div class="newsgrid" id="news"></div>
-    </div>
-  </section>
-
-  <section class="sec" style="padding-top:0">
-    <div class="wrap">
-      <div class="cta dark rv">
-        <div><span class="kicker">Clube de Líderes</span><h2>Uma comunidade de quem lidera</h2><p>Distinguidos, oradores e parceiros de todas as edições, ligados durante todo o ano.</p></div>
-        <div class="actions"><a class="btn btn--gold" href="clube.html">Candidatar-me ao Clube</a><a class="btn btn--ghost" href="lideres.html">Líderes de todas as edições</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec sec--paper">
-    <div class="wrap founder">
-      <div class="founder__ph rv"><img id="fPhoto" src="assets/img/pessoas/david-moma.jpg" alt="David Moma" loading="lazy"></div>
-      <div class="rv d1">
-        <span class="kicker">A organização</span>
-        <h2 id="fName">David Moma</h2>
-        <p class="lead" id="fRole"></p>
-        <p id="fBio"></p>
-        <div class="actions" style="margin-top:24px"><a class="btn btn--dark" href="sobre.html">Sobre a organização</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="wrap">
-      <div class="head rv"><span class="kicker">Parceiros &amp; Patrocinadores</span><h2>Juntos, conectamos Angola ao mundo</h2></div>
-      <div class="marquee rv" id="marquee"></div>
-      <div class="center mt"><a class="btn btn--line" href="parceiros.html">Ser patrocinador</a></div>
-    </div>
-  </section>
-
-  <section class="sec" style="padding-top:0">
-    <div class="wrap">
-      <div class="cta dark rv">
-        <div><span class="kicker">Lugares limitados</span><h2>O teu lugar entre líderes</h2><p>Bilhetes para o Fórum, para a Gala & Jantar ou para o dia completo — reserve directamente com a Comissão Organizadora.</p></div>
-        <div class="actions"><a class="btn btn--gold" href="bilhetes.html">Comprar bilhete</a><a class="btn btn--ghost" id="ctaWa" href="#" target="_blank" rel="noopener">WhatsApp</a></div>
-      </div>
-    </div>
-  </section>
-</main>
-<script src="assets/dados.js"></script>
-<script src="assets/js/site.js"></script>
-<script>
-(function () {
-  var G = GILF_UI, D = G.data, esc = G.esc;
-  var keys = G.speakers().filter(function (p) { return p.papel === "keynote" || p.papel === "guest"; });
-  var hp = keys.slice(0, 3);
-  document.getElementById("heroPortraits").innerHTML = hp.map(function (p, i) {
-    return '<button class="portrait rv d' + (i + 1) + (i === 0 ? " portrait--tall" : "") + '" type="button" data-p="' + esc(p.id) + '">' + G.photo(p) + '<figcaption><span class="badge">' + esc(G.ROLE[p.papel]) + "</span><b>" + esc(p.nome) + "</b><span>" + esc(G.pos(p)) + "</span></figcaption></button>";
-  }).join("");
-  var tbaKn = function (role) { return '<div class="kn rv" style="cursor:default"><div class="kn__ph"><span class="badge">' + role + '</span><span class="mono" style="position:absolute;inset:0;font-size:4rem">?</span></div><div class="kn__b"><h3>A anunciar</h3><span class="pos">Brevemente</span></div></div>'; };
-  var kHtml = keys.map(G.keynote).join("");
-  (D.programa.forum || []).forEach(function (s) { if ((s.tipo === "guest" || s.tipo === "keynote") && !(s.oradores || []).length) kHtml += tbaKn(s.tipo === "guest" ? "Guest Speaker" : "Keynote Speaker"); });
-  document.getElementById("keynotes").innerHTML = kHtml;
-  var panels = (D.programa.forum || []).filter(function (s) { return s.tipo === "painel"; });
-  var shown = panels.filter(function (s) { return s.moderador || (s.oradores || []).length; });
-  document.getElementById("panels").innerHTML = shown.map(G.panel).join("");
-  document.getElementById("panNote").textContent = shown.length < panels.length ? (panels.length - shown.length) + " painéis com moderadores e oradores a anunciar brevemente." : "";
-  G.nominees(document.getElementById("nominees"), 10);
-  G.marquee(document.getElementById("marquee"));
-  var nw = G.news().slice(0, 3);
-  if (nw.length) { document.getElementById("newsSec").hidden = false; document.getElementById("news").innerHTML = nw.map(G.newsCard).join(""); }
-  G.stats(document.getElementById("stats"), (D.numeros || {}).forum);
-  G.stats(document.getElementById("awardStats"), (D.numeros || {}).premios);
-  var O = D.organizacao || {};
-  if (O.foto) document.getElementById("fPhoto").src = O.foto;
-  document.getElementById("fName").textContent = O.nome || "";
-  document.getElementById("fRole").textContent = O.cargo || "";
-  document.getElementById("fBio").textContent = O.bio || "";
-  document.getElementById("ctaWa").href = G.wa;
-  G.ready();
-})();
-</script>
+<body>
+<a class="skip" href="#main">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="#/">
+      <img src="img/gilf-mark.png" alt="" width="34" height="34">
+      <span><b>GiLF</b> Eventos</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#/eventos" data-nav="eventos">Eventos</a>
+      <a href="#/capitulos" data-nav="capitulos">Capítulos</a>
+      <a href="#/organizar" data-nav="organizar">Organizar</a>
+      <a href="#/conta" data-nav="conta" class="nav__me">A minha conta</a>
+    </nav>
+  </div>
+</header>
+<div id="demo" class="demo" hidden>Protótipo com dados de demonstração. Excepto o GiLF Angola 2026, os eventos são exemplos.</div>
+<main id="main" tabindex="-1"></main>
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div><b>GiLF Eventos</b><br><span id="fMarca"></span></div>
+    <div class="foot__links"><a href="#/eventos">Eventos</a><a href="#/capitulos">Capítulos</a><a href="#/organizar">Criar um capítulo</a><a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a></div>
+  </div>
+</footer>
+<div id="modal" class="modal" hidden>
+  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal__x" type="button" aria-label="Fechar" data-close>&times;</button>
+    <div id="mBody"></div>
+  </div>
+</div>
+<script src="vendor/qrcode.js"></script>
+<script src="dados.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
