@@ -1113,7 +1113,7 @@ window.GILF = {
         "tipo": "sessao",
         "numero": "",
         "titulo": "Mensagem da Organização",
-        "subtitulo": "David Moma e Indira Sousa · Luadeira Digital Angola e JLDI",
+        "subtitulo": "Indira Soares e David Moma · JLDI e Luadeira Digital Angola",
         "descricao": "",
         "moderador": "",
         "oradores": [],
@@ -1286,12 +1286,12 @@ window.GILF = {
     "musica": "Três momentos musicais ao vivo, com a banda ao vivo no palco traseiro.",
     "comissao": [
       {
-        "nome": "David Moma",
-        "organizacao": "Luadeira Digital Angola"
+        "nome": "Indira Soares",
+        "organizacao": "JLDI — Consultoria e Prestação de Serviços"
       },
       {
-        "nome": "Indira Sousa",
-        "organizacao": "JLDI — Consultoria e Prestação de Serviços"
+        "nome": "David Moma",
+        "organizacao": "Luadeira Digital Angola"
       }
     ]
   },
