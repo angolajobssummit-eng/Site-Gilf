@@ -361,6 +361,19 @@ begin
   on conflict (grupo_id, perfil_id) do update set funcao = excluded.funcao;
 end $$;
 
+-- ---------- Permissões da API (o Supabase não as dá automaticamente em projectos novos) ----------
+revoke all on perfis, grupos, grupo_membros, eventos, inscricoes, comentarios, publicacoes from anon;
+revoke truncate, trigger, references on perfis, grupos, grupo_membros, eventos, inscricoes, comentarios, publicacoes from authenticated;
+revoke truncate, trigger, references on v_grupos, v_eventos, v_participantes, v_membros, v_comentarios, v_publicacoes from anon, authenticated;
+grant select, update on perfis to authenticated;
+grant select, insert, update, delete on grupos, grupo_membros, eventos to authenticated;
+grant select on inscricoes to authenticated;
+grant select, insert, delete on comentarios, publicacoes to authenticated;
+
+-- Funções internas (gatilhos) não ficam expostas na API; acções só para quem tem sessão iniciada
+revoke execute on function handle_new_user(), guard_perfis(), guard_grupos(), guard_eventos(), grupo_criador_organiza() from public, anon, authenticated;
+revoke execute on function participar(text, text, boolean), cancelar_participacao(text), lista_inscricoes(text), check_in(text, text),
+  marcar_presenca(uuid, boolean), admin_resumo(), admin_utilizadores(text), admin_definir_organizador(text, text, boolean) from public, anon;
 grant execute on function participar(text, text, boolean), cancelar_participacao(text), lista_inscricoes(text), check_in(text, text),
   marcar_presenca(uuid, boolean), admin_resumo(), admin_utilizadores(text), admin_definir_organizador(text, text, boolean) to authenticated;
 
