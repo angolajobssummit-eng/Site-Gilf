@@ -19,46 +19,28 @@
       <img src="../assets/img/logos/premios-lideres.png" alt="Prémios Líderes Angola 2026">
       <div>
         <h2>Área Administrativa</h2>
-        <p style="margin:0 0 10px"><a href="registos.html">→ Ver reservas de bilhetes e mensagens</a> (entra com o email e a palavra-passe de administrador do GiLF)</p>
-        <p>Gestão completa do site do GiLF Angola 2026.</p>
+        <p>Plataforma de gestão de todas as edições do GiLF e das Galas Prémios Líderes.</p>
         <ul>
-          <li>Oradores, moderadores e painéis</li>
-          <li>Categorias e nomeados dos Prémios</li>
-          <li>Parceiros, bilhetes e patrocínio</li>
-          <li>Publicação imediata e histórico de versões</li>
+          <li>Várias edições: GiLF Angola, Dubai, galas futuras</li>
+          <li>Programa, oradores, prémios e premiados</li>
+          <li>Reservas de bilhetes e mensagens do site</li>
+          <li>Equipa com níveis de acesso e registo de actividade</li>
+          <li>Rascunhos na nuvem, publicação imediata e histórico</li>
         </ul>
       </div>
       <small>GiLF Angola · Luadeira Digital Angola &amp; JLDI</small>
     </div>
     <div class="login__form">
-      <form class="login__box" id="loginForm" autocomplete="off">
+      <form class="login__box" id="loginForm" autocomplete="on">
         <img class="logo" src="../assets/img/logos/gilf-lockup.png" alt="GiLF Angola">
         <h1>Entrar</h1>
-        <p class="muted" style="margin:0 0 22px">Use a chave de acesso (token GitHub) da equipa.</p>
-        <label class="f"><span class="req">Chave de acesso</span><input id="tok" type="password" placeholder="github_pat_…" required autocomplete="current-password"></label>
-        <details style="margin-bottom:14px"><summary class="small muted" style="cursor:pointer">Definições do repositório</summary>
-          <div style="margin-top:12px">
-            <label class="f">Repositório<input id="repo" value="angolajobssummit-eng/site-gilf"></label>
-            <label class="f">Branch publicado<input id="branch" value="claude/gilf-angola-dubai-site-wo7caz"></label>
-          </div>
-        </details>
-        <label class="f f--check"><input type="checkbox" id="remember" checked> Manter sessão iniciada neste computador</label>
+        <p class="muted" style="margin:0 0 22px">Área de gestão do GiLF: fóruns, galas, edições, conteúdos, reservas e equipa.</p>
+        <label class="f"><span class="req">Email</span><input id="lemail" type="email" required autocomplete="email"></label>
+        <label class="f"><span class="req">Palavra-passe</span><input id="lpass" type="password" required autocomplete="current-password"></label>
         <button class="btn btn--dark" style="width:100%;min-height:46px" type="submit">Entrar</button>
         <p id="loginErr" class="small" style="color:var(--red);min-height:1.4em;margin:10px 0 0"></p>
-        <button class="btn" style="width:100%" type="button" id="offline">Trabalhar sem publicar (modo local)</button>
-        <details class="help">
-          <summary>Como obter a chave de acesso (uma vez)</summary>
-          <ol>
-            <li>Inicie sessão no GitHub com a conta dona do repositório.</li>
-            <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
-            <li>Em <b>Repository access</b>, escolha <b>Only select repositories</b> → <b>site-gilf</b>.</li>
-            <li>Em <b>Permissions → Repository permissions → Contents</b>, escolha <b>Read and write</b>.</li>
-            <li>Clique em <b>Generate token</b>, copie e cole aqui. Guarde-a num local seguro.</li>
-          </ol>
-          <p style="margin:8px 0 0"><b>Alternativa mais simples:</b> em <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Admin%20GiLF" target="_blank" rel="noopener">github.com/settings/tokens/new</a> marque <b>public_repo</b>, escolha a validade e clique em <b>Generate token</b> (começa por ghp_).</p>
-          <p style="margin:8px 0 0">Importante: abra este admin pelo endereço do Vercel (…vercel.app/admin/), não pelo link do Claude.</p>
-          <p style="margin:8px 0 0">A chave fica guardada só neste browser. Cada membro da equipa pode ter a sua.</p>
-        </details>
+        <button class="btn" style="width:100%" type="button" id="forgot">Esqueci-me da palavra-passe</button>
+        <p class="small muted" style="margin:14px 0 0">O acesso é dado por um administrador em «Equipa &amp; acessos». Use a mesma conta do gilf-evento.com.</p>
       </form>
     </div>
   </section>
@@ -70,7 +52,7 @@
       <nav id="nav"></nav>
       <div class="side__foot">
         <div class="user" id="who"></div>
-        <a class="btn btn--ghost btn--sm" href="registos.html" style="width:100%;margin-bottom:6px">Reservas e mensagens</a>
+        <button class="btn btn--ghost btn--sm" data-go="registos" style="width:100%;margin-bottom:6px">Reservas e mensagens</button>
         <a class="btn btn--ghost btn--sm" href="../index.html" target="_blank" style="width:100%;margin-bottom:6px">Abrir site ↗</a>
         <button class="btn btn--ghost btn--sm" id="logout" style="width:100%">Terminar sessão</button>
       </div>
@@ -97,7 +79,7 @@
   <div class="toast" id="toast"></div>
   <div class="busy hidden" id="busy"><div><span class="spin"></span><span id="busyTxt">A carregar…</span></div></div>
 
-  <script src="../assets/dados.js"></script>
+  <script src="../assets/vendor/supabase.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

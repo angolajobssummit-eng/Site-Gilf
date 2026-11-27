@@ -41,7 +41,8 @@
   var lsGet = function (k) { try { return JSON.parse(localStorage.getItem(k) || sessionStorage.getItem(k) || "null"); } catch (e) { return null; } };
 
   /* ======================= state ======================= */
-  var S = { auth: null, user: null, data: null, base: "", fileSha: null, files: {}, view: "painel", offline: false, prog: "forum", pFilter: "todos", pQuery: "" };
+  var S = { user: null, papel: "", edicao: localStorage.getItem("gilf-admin-edicao") || "", edicoes: [], publicadoEm: null, data: null, base: "", fileSha: null, files: {}, view: "painel", offline: false, prog: "forum", pFilter: "todos", pQuery: "" };
+  var podeEditar = function () { return S.papel === "admin" || S.papel === "editor"; };
   var isDirty = function () { return JSON.stringify(S.data) !== S.base || Object.keys(usedFiles()).length > 0; };
   function usedFiles() {
     var used = {}, txt = JSON.stringify(S.data);
@@ -50,16 +51,26 @@
   }
   function save() {
     try {
-      localStorage.setItem(K.draft, JSON.stringify({ data: S.data, fileSha: S.fileSha, at: Date.now() }));
+      localStorage.setItem(K.draft, JSON.stringify({ data: S.data, edicao: S.edicao, publicadoEm: S.publicadoEm, at: Date.now() }));
       localStorage.setItem(K.files, JSON.stringify(usedFiles()));
     } catch (e) { toast("Aviso: o rascunho é grande demais para guardar no browser. Publique em breve.", true); }
-    status();
+    status(); rascunhoServidor();
+  }
+  var tRasc = null, rascEstado = "";
+  function rascunhoServidor() {
+    if (!S.edicao || !S.data || !podeEditar()) return;
+    clearTimeout(tRasc);
+    tRasc = setTimeout(function () {
+      if (!isDirty()) return;
+      rascEstado = "a guardar…"; status();
+      api("forum_guardar_rascunho", { p_slug: S.edicao, p_conteudo: S.data }).then(function () { rascEstado = "rascunho guardado na nuvem"; status(); }, function () { rascEstado = "rascunho só neste computador"; status(); });
+    }, 2500);
   }
   function status() {
     var st = $("#status"), d = isDirty();
-    st.className = "status" + (S.offline ? " off" : d ? " dirty" : "");
-    $("span", st).textContent = S.offline ? (d ? "Modo local · alterações por exportar" : "Modo local") : d ? "Alterações por publicar" : "Tudo publicado";
-    $("#publishBtn").textContent = S.offline ? "Exportar dados.js" : "Publicar";
+    st.className = "status" + (d ? " dirty" : "");
+    $("span", st).textContent = (d ? "Alterações por publicar" : "Tudo publicado") + (d && rascEstado ? " · " + rascEstado : "");
+    $("#publishBtn").textContent = "Publicar"; $("#publishBtn").hidden = !podeEditar();
   }
   var img = function (p) { return !p ? "" : S.files[p] || (/^(data:|https?:)/.test(p) ? p : "../" + p); };
   var D = function () { return S.data; };
@@ -67,33 +78,21 @@
   var person = function (id) { return people().filter(function (p) { return p.id === id; })[0]; };
   var ROLE = { keynote: "Keynote", guest: "Guest Speaker", moderador: "Moderador(a)", orador: "Orador(a)", "": "—" };
 
-  /* ======================= GitHub API ======================= */
-  function gh(path, method, body) {
-    return fetch("https://api.github.com" + path, {
-      method: method || "GET", cache: "no-store",
-      headers: { Authorization: "Bearer " + S.auth.token, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "Content-Type": "application/json" },
-      body: body ? JSON.stringify(body) : undefined
-    }).then(function (r) {
-      if (r.status === 204) return null;
-      return r.json().catch(function () { return {}; }).then(function (j) {
-        if (!r.ok) { var e = new Error((j && j.message) || ("Erro " + r.status)); e.status = r.status; throw e; }
-        return j;
-      });
-    });
+  /* ======================= base de dados (Supabase) ======================= */
+  var sb = window.supabase.createClient("https://sohducskrepqpsbrxwgr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaGR1Y3NrcmVwcXBzYnJ4d2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0ODc5ODksImV4cCI6MjExMTA2Mzk4OX0.-YSWoI851LXBnKXKQB8FYvCFIkEdYb9mVz8fZl1Q3i0", { auth: { persistSession: true, autoRefreshToken: true, storageKey: "gilf-admin-sessao" } });
+  function api(fn, args) {
+    return sb.rpc(fn, args || {}).then(function (r) { if (r.error) { var e = new Error(r.error.message); e.code = r.error.code; throw e; } return r.data; });
   }
-  /* Portuguese, actionable explanation of any GitHub/network error */
+  /* explicação clara de qualquer erro */
   function why(err) {
-    var st = err && err.status, m = String((err && err.message) || "");
-    if (!st && /fetch|network|load failed|NetworkError/i.test(m + " " + (err && err.name)))
-      return "Sem ligação ao GitHub. Se abriu o admin a partir do link do Claude (claude.ai/artifact), aí não funciona: abra o endereço do Vercel terminado em /admin/ (ex.: https://site-gilf.vercel.app/admin/). Verifique também a internet.";
-    if (st === 401) return "Chave inválida ou expirada. Confirme que copiou a chave completa (começa por github_pat_ ou ghp_) ou crie uma nova.";
-    if (st === 403 && /rate limit/i.test(m)) return "Demasiados pedidos ao GitHub. Aguarde alguns minutos e tente de novo.";
-    if (st === 403) return "A chave não tem permissão de escrita. No GitHub, edite a chave e em Permissions → Repository permissions → Contents escolha “Read and write”.";
-    if (st === 404) return "A chave não tem acesso ao repositório site-gilf, ou o nome do repositório/branch está errado. No GitHub, edite a chave e em Repository access escolha “site-gilf”.";
-    if (st === 409 || st === 422) return "O site mudou entretanto. Recarregue a página e tente de novo.";
-    return m || "Erro desconhecido.";
+    var m = String((err && err.message) || err || "");
+    if (/fetch|network|load failed|NetworkError/i.test(m)) return "Sem ligação à internet. Verifique a ligação e tente de novo.";
+    if (/Invalid login credentials/i.test(m)) return "Email ou palavra-passe incorrectos.";
+    if (/Email not confirmed/i.test(m)) return "Esta conta ainda não confirmou o email.";
+    if (/Sem permiss/i.test(m)) return "A sua conta não tem permissão para esta acção. Peça a um administrador para o adicionar à equipa.";
+    if (/JWT|expired/i.test(m)) return "A sessão expirou. Entre de novo.";
+    return m.replace(/^CONFLITO: /, "") || "Erro desconhecido.";
   }
-  var b64dec = function (s) { var bin = atob(s.replace(/\s/g, "")); var u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); };
   function parseDados(text) {
     var m = /^window\.GILF\s*=\s*/m.exec(text);
     var a = m ? m.index + m[0].length : -1, b = text.lastIndexOf("}");
@@ -103,62 +102,61 @@
   function serialize(d) {
     return "/* GiLF ANGOLA 2026 — CONTEÚDOS DO SITE\n   Este ficheiro é gerido pela Área Administrativa (/admin/).\n   Edições manuais: manter o formato  window.GILF = { ... };  (JSON válido). */\nwindow.GILF = " + JSON.stringify(d, null, 2) + ";\n";
   }
-  var repoPath = function () { return "/repos/" + S.auth.repo; };
-  function loadRemote(ref) {
-    return gh(repoPath() + "/contents/assets/dados.js?ref=" + encodeURIComponent(ref || S.auth.branch)).then(function (r) { return { data: parseDados(b64dec(r.content)), sha: r.sha }; });
-  }
 
   /* ======================= login ======================= */
   function showApp() { $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); buildNav(); go(location.hash.slice(1) || "painel"); status(); }
-  function start(data, fileSha) {
-    S.data = data; S.base = JSON.stringify(data); S.fileSha = fileSha; S.files = {};
+  function start(ed) {
+    S.edicao = ed.slug; S.papel = ed.papel || S.papel; S.publicadoEm = ed.publicado_em; localStorage.setItem("gilf-admin-edicao", ed.slug);
+    var base = ed.conteudo || ed.rascunho || { evento: {} };
+    S.data = clone(base); S.base = JSON.stringify(ed.conteudo || {}); S.fileSha = null; S.files = {};
+    if (ed.rascunho && ed.conteudo && JSON.stringify(ed.rascunho) !== S.base) {
+      var quando = new Date(ed.rascunho_em).toLocaleString("pt-PT");
+      if (confirm("Há um rascunho por publicar desta edição, guardado por " + (ed.rascunho_por || "alguém da equipa") + " em " + quando + ".\n\nOK = continuar esse rascunho · Cancelar = começar da versão publicada")) S.data = clone(ed.rascunho);
+    }
     var dr = lsGet(K.draft);
-    if (dr && dr.data && JSON.stringify(dr.data) !== S.base) {
-      var same = !fileSha || dr.fileSha === fileSha;
-      var when = new Date(dr.at).toLocaleString("pt-PT");
-      if (confirm((same ? "Existe um rascunho por publicar" : "Existe um rascunho antigo (o site foi entretanto publicado por outra pessoa)") + " guardado neste browser em " + when + ".\n\nOK = recuperar o rascunho · Cancelar = descartar")) {
-        S.data = dr.data; S.files = lsGet(K.files) || {};
-      }
+    if (dr && dr.data && dr.edicao === ed.slug && JSON.stringify(dr.data) !== JSON.stringify(S.data) && JSON.stringify(dr.data) !== S.base && dr.at > (ed.rascunho_em ? +new Date(ed.rascunho_em) : 0)) {
+      if (confirm("Existe um rascunho mais recente guardado neste computador (" + new Date(dr.at).toLocaleString("pt-PT") + ").\n\nOK = recuperar · Cancelar = ignorar")) S.data = dr.data;
     }
     save(); showApp();
   }
+  function abrirEdicao(slug) {
+    busy("A carregar a edição…");
+    return api("forum_edicoes").then(function (l) {
+      S.edicoes = l || [];
+      var alvo = slug || S.edicao, ex = S.edicoes.filter(function (e) { return e.slug === alvo; })[0] || S.edicoes.filter(function (e) { return e.actual; })[0] || S.edicoes[0];
+      if (!ex) throw new Error("Ainda não existe nenhuma edição.");
+      return api("forum_obter", { p_slug: ex.slug });
+    }).then(function (ed) { busy(); start(ed); }).catch(function (err) { busy(); throw err; });
+  }
+  function entrar() {
+    return sb.auth.getSession().then(function (r) {
+      var ses = r.data.session; if (!ses) return false;
+      S.user = { email: ses.user.email };
+      return api("forum_papel").then(function (p) {
+        if (!p) { sb.auth.signOut(); throw new Error("A conta " + ses.user.email + " não faz parte da equipa do GiLF. Peça a um administrador para o adicionar em Equipa."); }
+        S.papel = p; return abrirEdicao().then(function () { toast("Bem-vindo(a), " + ses.user.email); return true; });
+      });
+    });
+  }
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var token = $("#tok").value.trim().replace(/^(bearer|token)\s+/i, "").replace(/^["']|["']$/g, "").replace(/\s+/g, ""), repo = $("#repo").value.trim().replace(/^https:\/\/github.com\//, "").replace(/\.git$/, ""), branch = $("#branch").value.trim();
-    if (!token) return;
-    S.auth = { token: token, repo: repo, branch: branch }; S.offline = false;
-    $("#loginErr").textContent = ""; busy("A verificar acesso…");
-    Promise.all([gh("/user"), gh(repoPath())]).then(function (r) {
-      S.user = r[0];
-      if (r[1].permissions && !r[1].permissions.push) throw new Error("noPush");
-      (($("#remember").checked) ? localStorage : sessionStorage).setItem(K.auth, JSON.stringify(S.auth));
-      busy("A carregar conteúdos…");
-      return loadRemote().catch(function (e) { if (e.status === 404) e.message = "branch"; throw e; });
-    }).then(function (res) { busy(); start(res.data, res.sha); toast("Bem-vindo, " + (S.user.name || S.user.login) + "!"); })
-      .catch(function (err) { busy(); S.auth = null; $("#loginErr").textContent = err.message === "noPush" ? "Esta chave só tem permissão de leitura. No GitHub, edite a chave e em Contents escolha “Read and write”." : why(err); });
+    var em = $("#lemail").value.trim(), pw = $("#lpass").value;
+    if (!em || !pw) return;
+    $("#loginErr").textContent = ""; busy("A entrar…");
+    sb.auth.signInWithPassword({ email: em, password: pw }).then(function (r) { if (r.error) throw r.error; return entrar(); })
+      .catch(function (err) { busy(); $("#loginErr").textContent = why(err); });
   });
-  $("#offline").addEventListener("click", function () {
-    S.offline = true; S.user = null;
-    start(clone(window.GILF || {}), null);
-    toast("Modo local: as alterações são exportadas como ficheiro dados.js.");
+  $("#forgot").addEventListener("click", function () {
+    var em = $("#lemail").value.trim(); if (!em) { $("#loginErr").textContent = "Escreva primeiro o seu email."; return; }
+    sb.auth.resetPasswordForEmail(em, { redirectTo: "https://gilf-evento.com/#/nova-password" }).then(function () { $("#loginErr").textContent = "Enviámos um email para definir uma nova palavra-passe."; });
   });
   $("#logout").addEventListener("click", function () {
-    if (isDirty() && !confirm("Tem alterações por publicar (ficam guardadas como rascunho neste browser). Sair?")) return;
-    localStorage.removeItem(K.auth); sessionStorage.removeItem(K.auth); location.hash = ""; location.reload();
+    if (isDirty() && !confirm("Tem alterações por publicar (ficam guardadas como rascunho). Sair?")) return;
+    sb.auth.signOut().then(function () { location.hash = ""; location.reload(); });
   });
   window.addEventListener("beforeunload", function (e) { if (S.data && isDirty()) { e.preventDefault(); e.returnValue = ""; } });
-  (function probe() {
-    var host = location.hostname;
-    var sandbox = /claude\.ai|claudeusercontent|anthropic/i.test(host + " " + document.referrer) || location.protocol === "file:";
-    var warn = function (txt) { var b = document.createElement("div"); b.className = "banner banner--warn"; b.style.cssText = "margin:0 0 16px;font-size:13px"; b.innerHTML = txt; $("#loginForm").insertBefore(b, $("#loginForm h1")); };
-    if (sandbox) return warn("<b>Esta é só uma pré-visualização.</b> Para editar e publicar, abra o admin no endereço do Vercel: <b>https://&lt;o-seu-projecto&gt;.vercel.app/admin/</b>");
-    fetch("https://api.github.com/zen", { cache: "no-store" }).catch(function () { warn("<b>Sem ligação ao GitHub a partir desta página.</b> Abra o admin no endereço do Vercel (…vercel.app/admin/) e verifique a internet."); });
-  })();
-  (function auto() {
-    var a = lsGet(K.auth); if (!a || !a.token) return;
-    $("#tok").value = a.token; $("#repo").value = a.repo; $("#branch").value = a.branch;
-    $("#loginForm").requestSubmit ? $("#loginForm").requestSubmit() : $("#loginForm").dispatchEvent(new Event("submit"));
-  })();
+  busy("A verificar sessão…");
+  entrar().then(function (ok) { if (!ok) busy(); }).catch(function (err) { busy(); $("#loginErr").textContent = why(err); });
 
   /* ======================= navigation ======================= */
   var VIEWS = [
@@ -166,15 +164,19 @@
     ["sep", "Gala & Prémios"], ["premios", "Prémios & Distinguidos"], ["gala", "Gala"], ["edicoes", "Edições & Líderes"],
     ["sep", "Comunidade"], ["noticias", "Notícias"], ["clube", "Clube de Líderes"],
     ["sep", "Mais"], ["parceiros", "Parceiros"], ["bilhetes", "Bilhetes"], ["patrocinio", "Patrocínio"], ["organizacao", "Organização"], ["faq", "Perguntas frequentes"],
-    ["sep", "Sistema"], ["historico", "Histórico de versões"], ["definicoes", "Definições"]
+    ["sep", "Gestão"], ["registos", "Reservas & mensagens"], ["plataforma", "Edições do evento"], ["equipa", "Equipa & acessos"],
+    ["sep", "Sistema"], ["historico", "Histórico de versões"], ["actividade", "Registo de actividade"], ["definicoes", "Definições & cópias"]
   ];
   function buildNav() {
     $("#nav").innerHTML = VIEWS.map(function (v) {
       if (v[0] === "sep") return '<div class="side__sep">' + v[1] + "</div>";
-      var c = v[0] === "pessoas" ? people().length : v[0] === "premios" ? honCount() : v[0] === "noticias" ? (D().noticias || []).length : v[0] === "edicoes" ? (D().edicoes || []).length + 1 : v[0] === "parceiros" ? (D().parceiros || []).reduce(function (n, g) { return n + (g.itens || []).length; }, 0) : "";
+      var c = ["registos", "plataforma", "equipa", "actividade"].indexOf(v[0]) >= 0 ? "" : v[0] === "pessoas" ? people().length : v[0] === "premios" ? honCount() : v[0] === "noticias" ? (D().noticias || []).length : v[0] === "edicoes" ? (D().edicoes || []).length + 1 : v[0] === "parceiros" ? (D().parceiros || []).reduce(function (n, g) { return n + (g.itens || []).length; }, 0) : "";
       return '<button class="nav' + (S.view === v[0] ? " on" : "") + '" data-go="' + v[0] + '">' + ic(v[0]) + "<span>" + v[1] + "</span>" + (c !== "" ? '<span class="count">' + c + "</span>" : "") + "</button>";
     }).join("");
-    $("#who").innerHTML = S.user ? '<img src="' + esc(S.user.avatar_url) + '" alt=""><span><b style="color:#fff">' + esc(S.user.name || S.user.login) + '</b><br><span class="small">@' + esc(S.user.login) + "</span></span>" : '<span class="small">Modo local (sem publicação)</span>';
+    var PAP = { admin: "Administrador", editor: "Editor", leitor: "Só leitura" };
+    $("#who").innerHTML = '<span><b style="color:#fff">' + esc(S.user ? S.user.email : "") + '</b><br><span class="small">' + esc(PAP[S.papel] || "") + '</span></span>' +
+      '<label class="small" style="display:block;margin-top:8px;color:#d8c9a8">Edição<select id="edSel" style="width:100%;margin-top:4px">' + S.edicoes.map(function (e) { return '<option value="' + esc(e.slug) + '"' + (e.slug === S.edicao ? " selected" : "") + ">" + esc(e.nome) + (e.actual ? " ★" : "") + "</option>"; }).join("") + "</select></label>";
+    var es = $("#edSel"); if (es) es.onchange = function () { var v = es.value; if (isDirty() && !confirm("As alterações desta edição ficam guardadas como rascunho. Mudar de edição?")) { es.value = S.edicao; return; } abrirEdicao(v).catch(function (err) { toast(why(err), true); }); };
   }
   document.addEventListener("click", function (e) {
     var g = e.target.closest("[data-go]"); if (!g) return;
@@ -184,7 +186,7 @@
   function go(v) {
     if (!R[v]) v = "painel";
     S.view = v; location.hash = v;
-    $("#title").textContent = VIEWS.filter(function (x) { return x[0] === v; })[0][1];
+    $("#title").textContent = VIEWS.filter(function (x) { return x[0] === v; })[0][1] + (S.edicao ? " · " + ((S.edicoes.filter(function (e) { return e.slug === S.edicao; })[0] || {}).nome || S.edicao) : "");
     buildNav(); $("#view").innerHTML = ""; R[v]($("#view")); window.scrollTo(0, 0);
   }
   function changed(rerender) { save(); buildNav(); if (rerender !== false) R[S.view]($("#view").replaceChildren() || $("#view")); }
@@ -281,10 +283,16 @@
           var file = e.target.files[0]; if (!file) return;
           processImage(file, f.mode || (isLogo ? "logo" : "photo")).then(function (data) {
             var base = f.name ? slug(f.name()) : "img";
-            var path = (f.dir || "assets/img/pessoas/") + base + "-" + stamp() + (isLogo ? ".png" : ".jpg");
-            S.files[path] = data; cur = path; show();
-            prev.dispatchEvent(new Event("change", { bubbles: true }));
-          }).catch(function (err) { toast(err.status ? why(err) : err.message, true); });
+            var path = (S.edicao || "geral") + "/" + (f.dir || "assets/img/pessoas/").replace(/^assets\/img\//, "") + base + "-" + stamp() + (isLogo ? ".png" : ".jpg");
+            prev.innerHTML = '<span class="small">A carregar…</span>';
+            return fetch(data).then(function (r) { return r.blob(); }).then(function (blob) {
+              return sb.storage.from("gilf-media").upload(path, blob, { contentType: isLogo ? "image/png" : "image/jpeg", upsert: false });
+            }).then(function (r) {
+              if (r.error) throw r.error;
+              cur = sb.storage.from("gilf-media").getPublicUrl(path).data.publicUrl; show();
+              prev.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+          }).catch(function (err) { show(); toast("A imagem não foi carregada: " + why(err), true); });
         });
         $("button", wrap).addEventListener("click", function () { cur = ""; show(); prev.dispatchEvent(new Event("change", { bubbles: true })); });
         show();
@@ -820,42 +828,155 @@
   };
 
   R.historico = function (v) {
-    var c = card(v, "Histórico de publicações", "Cada publicação fica guardada. Pode carregar uma versão anterior, revê-la e publicá-la de novo para a restaurar.");
-    if (S.offline) { c.insertAdjacentHTML("beforeend", '<div class="empty">Disponível apenas com sessão iniciada.</div>'); return; }
+    var c = card(v, "Histórico de publicações", "Cada publicação desta edição fica guardada. Pode abrir uma versão anterior, revê-la e publicá-la de novo para a restaurar.");
     c.insertAdjacentHTML("beforeend", '<div id="hist"><div class="empty">A carregar…</div></div>');
-    gh(repoPath() + "/commits?path=assets/dados.js&sha=" + encodeURIComponent(S.auth.branch) + "&per_page=30").then(function (list) {
-      $("#hist").innerHTML = list.map(function (cm, i) {
-        var a = cm.commit.author || {};
-        return '<div class="commit"><div><b>' + esc(cm.commit.message.split("\n")[0]) + (i === 0 ? '<span class="pill pill--new">actual</span>' : "") + "</b><small>" + esc(new Date(a.date).toLocaleString("pt-PT")) + " · " + esc((cm.author && cm.author.login) || a.name || "") + "</small></div>" +
-          (i === 0 ? "" : '<button class="btn btn--sm" data-sha="' + cm.sha + '">Carregar esta versão</button>') + "</div>";
-      }).join("") || '<div class="empty">Sem histórico.</div>';
-    }).catch(function (e) { $("#hist").innerHTML = '<div class="empty">Erro: ' + esc(e.message) + "</div>"; });
+    api("forum_versoes", { p_slug: S.edicao }).then(function (list) {
+      $("#hist").innerHTML = (list || []).map(function (x, i) {
+        return '<div class="commit"><div><b>' + esc(x.nota || "Publicação") + (i === 0 ? '<span class="pill pill--new">actual</span>' : "") + "</b><small>" + esc(new Date(x.criado_em).toLocaleString("pt-PT")) + " · " + esc(x.autor || "") + "</small></div>" +
+          (i === 0 ? "" : '<button class="btn btn--sm" data-ver="' + x.id + '">Abrir esta versão</button>') + "</div>";
+      }).join("") || '<div class="empty">Ainda sem publicações nesta edição.</div>';
+    }).catch(function (e) { $("#hist").innerHTML = '<div class="empty">Erro: ' + esc(why(e)) + "</div>"; });
     c.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-sha]"); if (!b) return;
+      var b = e.target.closest("[data-ver]"); if (!b) return;
       if (isDirty() && !confirm("Isto substitui as alterações por publicar. Continuar?")) return;
-      busy("A carregar versão…");
-      loadRemote(b.getAttribute("data-sha")).then(function (r) { busy(); S.data = r.data; save(); toast("Versão carregada. Reveja e clique em Publicar para a restaurar."); go("painel"); })
+      busy("A abrir versão…");
+      api("forum_versao", { p_id: +b.getAttribute("data-ver") }).then(function (d) { busy(); S.data = d; save(); toast("Versão aberta. Reveja e clique em Publicar para a restaurar."); go("painel"); })
         .catch(function (err) { busy(); toast(why(err), true); });
     });
   };
 
   R.definicoes = function (v) {
-    var c = card(v, "Ligação");
-    c.insertAdjacentHTML("beforeend", S.offline ? '<p class="muted">Modo local — sem ligação ao repositório.</p>' :
-      '<p>Repositório: <b>' + esc(S.auth.repo) + "</b><br>Branch publicado: <b>" + esc(S.auth.branch) + '</b></p><p class="small muted">Depois de publicar, o GitHub Pages actualiza o site em 1 a 2 minutos. Se não vir a alteração, actualize a página do site (Ctrl+F5).</p>');
-    var c2 = card(v, "Cópias de segurança");
-    c2.insertAdjacentHTML("beforeend", '<div class="toolbar"><button class="btn" id="dlJson">Descarregar cópia (JSON)</button><label class="btn" style="cursor:pointer">Importar cópia (JSON)<input type="file" accept="application/json,.json,.js" hidden id="upJson"></label><button class="btn" id="dlJs">Descarregar dados.js</button><button class="btn btn--danger" id="reset">Descartar alterações por publicar</button></div>');
-    $("#dlJson").addEventListener("click", function () { download("gilf-conteudos-" + new Date().toISOString().slice(0, 10) + ".json", "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(S.data, null, 2))); });
+    var ed = S.edicoes.filter(function (e) { return e.slug === S.edicao; })[0] || {};
+    var c = card(v, "Esta edição");
+    c.insertAdjacentHTML("beforeend", '<p>Edição: <b>' + esc(ed.nome || S.edicao) + "</b>" + (ed.actual ? ' <span class="pill pill--new">no site</span>' : "") + "<br>Última publicação: <b>" + esc(S.publicadoEm ? new Date(S.publicadoEm).toLocaleString("pt-PT") : "—") + "</b>" + (ed.publicado_por ? " por " + esc(ed.publicado_por) : "") +
+      '</p><p class="small muted">Os conteúdos ficam guardados na base de dados. Ao publicar, o site actualiza em menos de um minuto. Os rascunhos são guardados automaticamente na nuvem enquanto edita.</p>');
+    var c2 = card(v, "Cópias de segurança", "Descarregue uma cópia completa desta edição sempre que quiser. Pode importá-la mais tarde, por exemplo para começar uma edição nova.");
+    c2.insertAdjacentHTML("beforeend", '<div class="toolbar"><button class="btn" id="dlJson">Descarregar cópia (JSON)</button><button class="btn" id="dlJs">Descarregar dados.js</button><label class="btn" style="cursor:pointer">Importar cópia (JSON)<input type="file" accept="application/json,.json,.js" hidden id="upJson"></label><button class="btn" id="reset">Descartar alterações por publicar</button></div>');
+    $("#dlJson").addEventListener("click", function () { download(S.edicao + "-" + new Date().toISOString().slice(0, 10) + ".json", "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(S.data, null, 2))); });
     $("#dlJs").addEventListener("click", exportJs);
     $("#upJson").addEventListener("change", function (e) {
       var f = e.target.files[0]; if (!f) return;
-      f.text().then(function (t) { var d = /window\.GILF/.test(t) ? parseDados(t) : JSON.parse(t); if (!d.evento || !d.pessoas) throw new Error("Ficheiro sem a estrutura esperada."); S.data = d; save(); toast("Cópia importada. Reveja e publique."); go("painel"); })
+      f.text().then(function (t) { var d = /window\.GILF/.test(t) ? parseDados(t) : JSON.parse(t); if (!d.evento) throw new Error("Ficheiro sem a estrutura esperada."); S.data = d; save(); toast("Cópia importada. Reveja e publique."); go("painel"); })
         .catch(function (err) { toast("Importação falhou: " + err.message, true); });
     });
     $("#reset").addEventListener("click", function () {
-      if (!confirm("Descartar todas as alterações por publicar?")) return;
-      S.data = JSON.parse(S.base); S.files = {}; save(); toast("Alterações descartadas."); go("painel");
+      if (!confirm("Descartar todas as alterações por publicar desta edição?")) return;
+      S.data = JSON.parse(S.base || "{}"); save(); api("forum_descartar_rascunho", { p_slug: S.edicao }).catch(function () {}); toast("Alterações descartadas."); go("painel");
     });
+  };
+
+  /* ---------- reservas & mensagens ---------- */
+  var ESTADOS = [["novo", "Novo"], ["contactado", "Contactado"], ["confirmado", "Confirmado"], ["pago", "Pago"], ["cancelado", "Cancelado"]];
+  var REG = { lista: null, q: "", e: "", f: "" };
+  var tipoReg = function (f) { return /bilhete/i.test(f) ? "Bilhete" : /patroc/i.test(f) ? "Patrocínio" : /orador/i.test(f) ? "Oradores" : "Contacto"; };
+  var waLink = function (t) { return "https://wa.me/" + String(t || "").replace(/\D/g, ""); };
+  R.registos = function (v) {
+    if (!REG.lista) { v.innerHTML = '<div class="empty">A carregar…</div>'; api("forum_admin_lista").then(function (l) { REG.lista = l || []; if (S.view === "registos") go("registos"); }).catch(function (e) { v.innerHTML = '<div class="empty">' + esc(why(e)) + "</div>"; }); return; }
+    var L = REG.lista, f = REG.q.toLowerCase();
+    var V = L.filter(function (x) { return (!REG.e || x.estado === REG.e) && (!REG.f || tipoReg(x.formulario) === REG.f) && (!f || (x.codigo + " " + x.nome + " " + x.email + " " + x.telefone + " " + x.empresa).toLowerCase().indexOf(f) >= 0); });
+    var bil = L.filter(function (x) { return tipoReg(x.formulario) === "Bilhete" && x.estado !== "cancelado"; });
+    v.insertAdjacentHTML("beforeend", '<div class="kpis">' + [[L.length, "pedidos no total"], [L.filter(function (x) { return x.estado === "novo"; }).length, "novos por tratar"], [bil.length, "reservas de bilhete"], [bil.reduce(function (s, x) { return s + (x.quantidade || 1); }, 0), "lugares reservados"], [bil.filter(function (x) { return x.estado === "pago"; }).length, "reservas pagas"]]
+      .map(function (k, i) { return '<div class="kpi' + (i === 1 ? " kpi--hero" : "") + '"><b>' + k[0] + "</b><span>" + k[1] + "</span></div>"; }).join("") + "</div>");
+    var c = card(v, "Pedidos recebidos pelo site", "Reservas de bilhete, contactos, patrocínio e pedidos sobre oradores. Cada pedido tem um código (GILF-B… bilhetes, GILF-M… mensagens).");
+    c.insertAdjacentHTML("beforeend", '<div class="toolbar"><input id="rq" type="search" placeholder="Procurar código, nome, email, telefone" value="' + esc(REG.q) + '" style="flex:1 1 220px"><select id="re"><option value="">Todos os estados</option>' + ESTADOS.map(function (k) { return '<option value="' + k[0] + '"' + (REG.e === k[0] ? " selected" : "") + ">" + k[1] + "</option>"; }).join("") + '</select><select id="rf"><option value="">Todos os tipos</option>' + ["Bilhete", "Contacto", "Patrocínio", "Oradores"].map(function (k) { return "<option" + (REG.f === k ? " selected" : "") + ">" + k + "</option>"; }).join("") + '</select><button class="btn" id="rcsv">Exportar Excel (CSV)</button><button class="btn" id="rref">Actualizar</button></div>' +
+      (V.length ? '<div class="rows">' + V.map(function (x) {
+        return '<div class="row" style="cursor:pointer" data-reg="' + x.id + '"><span class="thumb" style="font-size:11px">' + esc(tipoReg(x.formulario).slice(0, 3)) + '</span><div class="row__b"><b>' + esc(x.codigo) + " · " + esc(x.nome) + "</b><small>" + esc([new Date(x.criado_em).toLocaleString("pt-PT"), x.ingresso ? x.ingresso + (x.quantidade ? " × " + x.quantidade : "") : "", x.telefone, x.email].filter(Boolean).join(" · ")) + '</small></div><span class="pill' + (x.estado === "novo" ? " pill--new" : "") + '">' + esc((ESTADOS.filter(function (k) { return k[0] === x.estado; })[0] || [0, x.estado])[1]) + "</span></div>";
+      }).join("") + "</div>" : '<div class="empty">' + (L.length ? "Nenhum pedido com estes filtros." : "Ainda não há pedidos. Aparecem aqui assim que alguém preencher um formulário do site.") + "</div>"));
+    $("#rq").addEventListener("change", function () { REG.q = this.value; go("registos"); });
+    $("#re").addEventListener("change", function () { REG.e = this.value; go("registos"); });
+    $("#rf").addEventListener("change", function () { REG.f = this.value; go("registos"); });
+    $("#rref").addEventListener("click", function () { REG.lista = null; go("registos"); });
+    $("#rcsv").addEventListener("click", function () {
+      var linhas = [["Código", "Data", "Tipo", "Nome", "Empresa", "Email", "Telefone", "Ingresso", "Quantidade", "Estado", "Nota"]].concat(V.map(function (x) { return [x.codigo, new Date(x.criado_em).toLocaleString("pt-PT"), tipoReg(x.formulario), x.nome, x.empresa, x.email, x.telefone, x.ingresso, x.quantidade || "", x.estado, x.nota]; }));
+      var t = linhas.map(function (l) { return l.map(function (cc) { cc = String(cc == null ? "" : cc); return /[",;\n]/.test(cc) ? '"' + cc.replace(/"/g, '""') + '"' : cc; }).join(";"); }).join("\r\n");
+      download("gilf-pedidos-" + new Date().toISOString().slice(0, 10) + ".csv", URL.createObjectURL(new Blob(["﻿" + t], { type: "text/csv;charset=utf-8" })));
+    });
+    c.addEventListener("click", function (e) {
+      var r = e.target.closest("[data-reg]"); if (!r) return;
+      var x = L.filter(function (y) { return y.id === r.getAttribute("data-reg"); })[0]; if (!x) return;
+      var extra = Object.keys(x.dados || {}).filter(function (k) { return ["nome", "email", "telefone", "empresa", "ingresso", "quantidade"].indexOf(k) < 0; }).map(function (k) { return k + ": " + x.dados[k]; }).join("\n");
+      openForm(x.codigo + " · " + x.nome, [
+        { html: '<p class="small muted" style="margin:0 0 10px">' + esc(x.formulario) + " · " + esc(new Date(x.criado_em).toLocaleString("pt-PT")) + "</p><p>" + esc([x.empresa, x.email, x.telefone].filter(Boolean).join(" · ")) + "</p>" + (x.ingresso ? "<p>Ingresso: <b>" + esc(x.ingresso) + "</b>" + (x.quantidade ? " × " + x.quantidade : "") + "</p>" : "") + (extra ? '<pre style="white-space:pre-wrap;background:#faf6ec;padding:10px;border-radius:10px">' + esc(extra) + "</pre>" : "") +
+          '<p>' + (x.telefone ? '<a class="btn btn--sm" target="_blank" rel="noopener" href="' + esc(waLink(x.telefone)) + '">WhatsApp</a> ' : "") + (x.email ? '<a class="btn btn--sm" href="mailto:' + esc(x.email) + "?subject=" + encodeURIComponent("GiLF · " + x.codigo) + '">Email</a>' : "") + "</p>" },
+        { k: "estado", l: "Estado", t: "select", opts: ESTADOS },
+        { k: "nota", l: "Nota interna", t: "textarea", rows: 3 }
+      ], { estado: x.estado, nota: x.nota }, { ok: "Guardar" }).then(function (res) {
+        if (!res) return;
+        api("forum_admin_actualizar", { p_id: x.id, p_estado: res.estado, p_nota: res.nota }).then(function () { x.estado = res.estado; x.nota = res.nota; toast("Pedido actualizado."); go("registos"); }).catch(function (err) { toast(why(err), true); });
+      });
+    });
+  };
+
+  /* ---------- edições (base para todos os GiLF e galas futuras) ---------- */
+  R.plataforma = function (v) {
+    var admin = S.papel === "admin";
+    var c = card(v, "Edições do evento", "Cada edição (GiLF Angola 2026, GiLF Dubai, Gala 2027…) tem os seus conteúdos, histórico e publicação próprios. A edição marcada com ★ é a que aparece no site.",
+      admin ? [["Nova edição", function () { novaEdicao(); }, "btn--gold"]] : []);
+    c.insertAdjacentHTML("beforeend", '<div class="rows">' + S.edicoes.map(function (e) {
+      return '<div class="row"><span class="thumb">' + (e.actual ? "★" : esc(String(e.ano || "").slice(-2))) + '</span><div class="row__b"><b>' + esc(e.nome) + (e.slug === S.edicao ? ' <span class="pill pill--new">a editar</span>' : "") + "</b><small>" + esc([e.slug, { rascunho: "Rascunho", publicada: "Publicada", arquivada: "Arquivada" }[e.estado], e.publicado_em ? "publicada " + new Date(e.publicado_em).toLocaleString("pt-PT") : "", e.tem_rascunho ? "com rascunho por publicar" : ""].filter(Boolean).join(" · ")) + '</small></div>' +
+        (e.slug !== S.edicao ? '<button class="btn btn--sm" data-abrir="' + esc(e.slug) + '">Editar</button>' : "") + (admin ? ' <button class="btn btn--sm" data-def="' + esc(e.slug) + '">Definições</button>' : "") + "</div>";
+    }).join("") + "</div>");
+    c.addEventListener("click", function (ev) {
+      var a = ev.target.closest("[data-abrir]"), d = ev.target.closest("[data-def]");
+      if (a) { if (isDirty() && !confirm("As alterações desta edição ficam guardadas como rascunho. Continuar?")) return; abrirEdicao(a.getAttribute("data-abrir")).then(function () { go("painel"); }).catch(function (err) { toast(why(err), true); }); return; }
+      if (d) {
+        var e = S.edicoes.filter(function (x) { return x.slug === d.getAttribute("data-def"); })[0];
+        openForm("Definições · " + e.nome, [
+          { k: "nome", l: "Nome da edição", req: true },
+          { k: "estado", l: "Estado", t: "select", opts: [["rascunho", "Rascunho (não aparece no site)"], ["publicada", "Publicada"], ["arquivada", "Arquivada (edição passada)"]] },
+          { k: "actual", l: "Mostrar esta edição no site (substitui a actual)", t: "check" }
+        ], { nome: e.nome, estado: e.estado, actual: e.actual }, { ok: "Guardar" }).then(function (r) {
+          if (!r) return;
+          if (r.actual && !e.actual && !confirm("O site público passa a mostrar «" + r.nome + "». Confirmar?")) return;
+          api("forum_edicao_definir", { p_slug: e.slug, p_nome: r.nome, p_estado: r.estado, p_actual: !!r.actual }).then(function () { return api("forum_edicoes"); }).then(function (l) { S.edicoes = l; toast("Edição actualizada."); go("plataforma"); }).catch(function (err) { toast(why(err), true); });
+        });
+        return;
+      }
+    });
+    function novaEdicao() {
+      openForm("Nova edição", [
+        { html: '<p class="small muted">A nova edição começa como cópia de uma edição existente (oradores, parceiros, textos…), para só ter de mudar o que é diferente. Fica em rascunho até a publicar e marcar como actual.</p>' },
+        { k: "nome", l: "Nome", ph: "ex.: GiLF Angola 2027 · Fórum + Gala", req: true },
+        { row: [{ k: "ano", l: "Ano", t: "number" }, { k: "tipo", l: "Tipo", t: "select", opts: [["forum-gala", "Fórum + Gala"], ["forum", "Só fórum"], ["gala", "Só gala"], ["outro", "Outro evento"]] }] },
+        { k: "base", l: "Copiar conteúdos de", t: "select", opts: [["", "— começar vazio —"]].concat(S.edicoes.map(function (e) { return [e.slug, e.nome]; })) }
+      ], { nome: "", ano: new Date().getFullYear() + 1, tipo: "forum-gala", base: S.edicao }, { ok: "Criar edição" }).then(function (r) {
+        if (!r) return;
+        var sl = slug(r.nome).replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").slice(0, 60);
+        api("forum_nova_edicao", { p_base: r.base, p_slug: sl, p_nome: r.nome, p_ano: r.ano || null, p_tipo: r.tipo }).then(function () { return abrirEdicao(sl); }).then(function () { toast("Edição criada. Já está a editá-la."); go("evento"); }).catch(function (err) { toast(why(err), true); });
+      });
+    }
+  };
+
+  /* ---------- equipa ---------- */
+  R.equipa = function (v) {
+    var admin = S.papel === "admin";
+    var c = card(v, "Equipa & acessos", "Quem pode entrar nesta área. Administrador: tudo, incluindo edições e equipa. Editor: edita e publica conteúdos e trata pedidos. Só leitura: consulta.", admin ? [["Adicionar pessoa", function () { form({ email: "", nome: "", papel: "editor" }); }, "btn--gold"]] : []);
+    c.insertAdjacentHTML("beforeend", '<div id="eq"><div class="empty">A carregar…</div></div><p class="small muted">Para adicionar alguém, a pessoa cria primeiro uma conta em <a href="https://gilf-evento.com/#/registar" target="_blank" rel="noopener">gilf-evento.com</a> (Registar) e depois um administrador adiciona-a aqui com o mesmo email.</p>');
+    var PAP = [["admin", "Administrador"], ["editor", "Editor"], ["leitor", "Só leitura"]];
+    api("forum_equipa").then(function (l) {
+      $("#eq").innerHTML = '<div class="rows">' + l.map(function (p) { return '<div class="row"><span class="thumb">' + esc(initials(p.nome || p.email)) + '</span><div class="row__b"><b>' + esc(p.nome || p.email) + "</b><small>" + esc(p.email) + '</small></div><span class="pill">' + esc((PAP.filter(function (x) { return x[0] === p.papel; })[0] || [0, p.papel])[1]) + "</span>" + (admin ? ' <button class="btn btn--sm" data-eq="' + esc(p.email) + '" data-pap="' + esc(p.papel) + '" data-nome="' + esc(p.nome) + '">Alterar</button>' : "") + "</div>"; }).join("") + "</div>";
+    }).catch(function (e) { $("#eq").innerHTML = '<div class="empty">' + esc(why(e)) + "</div>"; });
+    function form(o) {
+      openForm(o.email ? "Acesso · " + o.email : "Adicionar pessoa à equipa", [
+        { k: "email", l: "Email da conta", req: true }, { k: "nome", l: "Nome" },
+        { k: "papel", l: "Acesso", t: "select", opts: PAP.concat(o.email ? [["", "— retirar acesso —"]] : []) }
+      ], o, { ok: "Guardar" }).then(function (r) {
+        if (!r) return;
+        api("forum_equipa_definir", { p_email: r.email, p_papel: r.papel, p_nome: r.nome }).then(function () { toast("Equipa actualizada."); go("equipa"); }).catch(function (err) { toast(why(err), true); });
+      });
+    }
+    c.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-eq]"); if (b) return form({ email: b.getAttribute("data-eq"), papel: b.getAttribute("data-pap"), nome: b.getAttribute("data-nome") });
+    });
+  };
+
+  /* ---------- registo de actividade ---------- */
+  R.actividade = function (v) {
+    var c = card(v, "Registo de actividade", "Quem fez o quê: publicações, edições criadas, alterações na equipa e pedidos apagados.");
+    c.insertAdjacentHTML("beforeend", '<div id="act"><div class="empty">A carregar…</div></div>');
+    api("forum_actividade").then(function (l) {
+      $("#act").innerHTML = (l || []).length ? '<div class="rows">' + l.map(function (x) { return '<div class="row"><div class="row__b"><b>' + esc(x.accao) + "</b><small>" + esc(new Date(x.quando).toLocaleString("pt-PT")) + " · " + esc(x.autor) + (x.alvo ? " · " + esc(x.alvo) : "") + "</small></div></div>"; }).join("") + "</div>" : '<div class="empty">Sem actividade registada.</div>';
+    }).catch(function (e) { $("#act").innerHTML = '<div class="empty">' + esc(why(e)) + "</div>"; });
   };
 
   /* ======================= publish ======================= */
@@ -868,53 +989,31 @@
   }
   $("#previewBtn").addEventListener("click", function () { save(); });
   $("#publishBtn").addEventListener("click", function () {
-    if (S.offline) return exportJs();
+    if (!podeEditar()) return toast("A sua conta é só de leitura.", true);
     if (!isDirty()) return toast("Não há alterações por publicar.");
     var errs = health().filter(function (x) { return x[0] === "err"; });
-    var files = usedFiles(), nf = Object.keys(files).length;
+    var ed = S.edicoes.filter(function (e) { return e.slug === S.edicao; })[0] || {};
     openForm("Publicar alterações", [
       { html: (errs.length ? '<div class="banner banner--warn"><b>Atenção:</b> ' + errs.length + " erro(s) por corrigir:<br>" + errs.slice(0, 5).map(function (x) { return "• " + esc(x[1]); }).join("<br>") + "</div>" : "") +
-        '<p>As alterações ficam visíveis no site para todos em 1 a 2 minutos.' + (nf ? " Inclui " + nf + " imagem(ns) nova(s)." : "") + "</p>" },
-      { k: "msg", l: "Descrição da alteração (fica no histórico)", ph: "ex.: Adicionados os oradores do Painel 5" }
-    ], { msg: "" }, { ok: "Publicar agora" }).then(function (r) { if (r) publish(r.msg || "Actualização de conteúdos", files); });
+        "<p>Edição: <b>" + esc(ed.nome || S.edicao) + "</b>. " + (ed.actual ? "É a edição que está no site: as alterações ficam visíveis para todos em menos de um minuto." : "Esta edição não é a que está no site: fica publicada, mas só aparece quando a marcar como actual em «Edições do evento».") + "</p>" },
+      { k: "msg", l: "Descrição da alteração (fica no histórico)", ph: "ex.: Adicionados os premiados do II Acto" }
+    ], { msg: "" }, { ok: "Publicar agora" }).then(function (r) { if (r) publish(r.msg || "Actualização de conteúdos"); });
   });
-  function publish(msg, files) {
-    var repo = repoPath(), br = S.auth.branch, head, baseTree;
+  function publish(msg, forcar) {
     busy("A publicar…");
-    gh(repo + "/contents/assets/dados.js?ref=" + encodeURIComponent(br)).then(function (cur) {
-      if (S.fileSha && cur.sha !== S.fileSha && !confirm("Outra pessoa publicou alterações desde que abriu a área administrativa. Publicar mesmo assim substitui as alterações dela. Continuar?\n\n(Cancelar = parar e recarregar mais tarde)")) throw new Error("cancel");
-      return gh(repo + "/git/ref/heads/" + br);
-    }).then(function (ref) {
-      head = ref.object.sha; return gh(repo + "/git/commits/" + head);
-    }).then(function (cm) {
-      baseTree = cm.tree.sha;
-      var jobs = [gh(repo + "/git/blobs", "POST", { content: serialize(S.data), encoding: "utf-8" }).then(function (b) { return { path: "assets/dados.js", mode: "100644", type: "blob", sha: b.sha }; })];
-      Object.keys(files).forEach(function (p) {
-        jobs.push(gh(repo + "/git/blobs", "POST", { content: files[p].split(",")[1], encoding: "base64" }).then(function (b) { return { path: p, mode: "100644", type: "blob", sha: b.sha }; }));
-      });
-      return Promise.all(jobs);
-    }).then(function (tree) {
-      return gh(repo + "/git/trees", "POST", { base_tree: baseTree, tree: tree });
-    }).then(function (t) {
-      return gh(repo + "/git/commits", "POST", { message: "Admin: " + msg, tree: t.sha, parents: [head] });
-    }).then(function (c) {
-      return gh(repo + "/git/refs/heads/" + br, "PATCH", { sha: c.sha });
-    }).then(function () {
-      return loadRemote();
-    }).then(function (res) {
-      S.fileSha = res.sha; S.base = JSON.stringify(S.data);
-      /* keep showing the just-published images locally until GitHub Pages serves them */
-      var pub = {}; Object.keys(files).forEach(function (p) { pub["__pub__" + p] = files[p]; });
-      S.files = pub;
+    api("forum_publicar", { p_slug: S.edicao, p_conteudo: S.data, p_nota: msg, p_publicado_em: forcar ? null : S.publicadoEm }).then(function (t) {
+      S.publicadoEm = t; S.base = JSON.stringify(S.data);
       localStorage.removeItem(K.draft); localStorage.removeItem(K.files);
-      busy(); status(); toast("Publicado! O site público actualiza em poucos minutos.");
-      go(S.view);
+      return api("forum_edicoes").then(function (l) { S.edicoes = l; });
+    }).then(function () {
+      busy(); status(); toast("Publicado! O site actualiza em menos de um minuto."); go(S.view);
     }).catch(function (err) {
-      busy(); if (err.message === "cancel") return;
+      busy();
+      if (/CONFLITO/.test(err.message)) {
+        if (confirm(why(err) + "\n\nOK = publicar mesmo assim (substitui a versão dessa pessoa, que fica no histórico) · Cancelar = não publicar")) return publish(msg, true);
+        return;
+      }
       toast("Não foi possível publicar. " + why(err), true);
     });
   }
-  /* published images keep showing locally until GitHub Pages serves them */
-  var _img = img;
-  img = function (p) { return S.files["__pub__" + p] || _img(p); };
 })();

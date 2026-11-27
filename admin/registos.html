@@ -53,7 +53,7 @@
 <script>
 (function () {
   "use strict";
-  var sb = window.supabase.createClient("https://sohducskrepqpsbrxwgr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaGR1Y3NrcmVwcXBzYnJ4d2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0ODc5ODksImV4cCI6MjExMTA2Mzk4OX0.-YSWoI851LXBnKXKQB8FYvCFIkEdYb9mVz8fZl1Q3i0", { auth: { persistSession: true, storageKey: "gilf-forum-admin" } });
+  var sb = window.supabase.createClient("https://sohducskrepqpsbrxwgr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaGR1Y3NrcmVwcXBzYnJ4d2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0ODc5ODksImV4cCI6MjExMTA2Mzk4OX0.-YSWoI851LXBnKXKQB8FYvCFIkEdYb9mVz8fZl1Q3i0", { auth: { persistSession: true, storageKey: "gilf-admin-sessao" } });
   var app = document.getElementById("app"), who = document.getElementById("who"), dlg = document.getElementById("dlg"), L = [], F = { q: "", e: "", f: "" };
   var ESTADOS = [["novo", "Novo"], ["contactado", "Contactado"], ["confirmado", "Confirmado"], ["pago", "Pago"], ["cancelado", "Cancelado"]];
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
