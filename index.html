@@ -6,7 +6,7 @@
   <title>GiLF Angola 2026 · Fórum Global de Investimento e Liderança</title>
   <meta name="description" content="GiLF Angola 2026 — Fórum Global de Investimento e Liderança e Gala dos Prémios Líderes Angola. 17 de Dezembro de 2026, Hotel EPIC SANA, Luanda. Keynotes de Nazário Vilhena, Márcio Daniel e Agnaldo Jaime; Gala Prémios Líderes Angola 2026.">
   <meta property="og:title" content="GiLF Angola 2026 · Fórum Global de Investimento e Liderança">
-  <meta property="og:description" content="17 de Dezembro de 2026 · Hotel EPIC SANA, Luanda. Fórum das 08h30 às 15h20 e Gala Prémios Líderes Angola a partir das 19h00.">
+  <meta property="og:description" content="17 de Dezembro de 2026 · Hotel EPIC SANA, Luanda. Fórum das 08h30 às 13h20 e Gala Prémios Líderes Angola a partir das 19h00.">
   <meta property="og:image" content="assets/img/og.jpg">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
@@ -51,13 +51,13 @@
       <div class="rv">
         <div class="head head--l"><span class="kicker">Um dia · dois momentos</span><h2>Onde a liderança angolana encontra o investimento</h2></div>
         <p class="lead">O GiLF Angola reúne num só dia, no EPIC SANA, ministros, gestores públicos, PCAs, investidores, empreendedores e especialistas — para debater investimento, liderança e a projecção internacional de Angola, de Luanda ao Dubai.</p>
-        <p>Pela manhã, o Fórum: keynotes e painéis com quem decide. À noite, a Gala de Premiação e Jantar dos Prémios Líderes Angola, que distingue as personalidades e instituições que fazem o país avançar.</p>
+        <p>Pela manhã, o Fórum: GiLF Talks com 16 líderes num só palco. À noite, a Gala de Premiação e Jantar dos Prémios Líderes Angola, que distingue as personalidades e instituições que fazem o país avançar.</p>
       </div>
       <div class="moments">
         <a class="moment rv" href="programa.html">
           <span class="moment__t">Manhã · <span data-bind="evento.horarioForum">08h30 – 15h30</span></span>
           <h3>Fórum Global de Investimento e Liderança</h3>
-          <p>Keynotes, painéis e networking.</p>
+          <p>GiLF Talks: 16 líderes, um palco.</p>
           <span class="arrow-link">Programa <span data-ic="arrow"></span></span>
         </a>
         <a class="moment rv d1" href="premios.html">
@@ -83,7 +83,7 @@
   <section class="sec dark dots">
     <div class="wrap" style="position:relative">
       <div class="row-head">
-        <div class="head head--l rv"><span class="kicker">Painéis temáticos</span><h2>Debates com quem decide</h2><p id="panNote"></p></div>
+        <div class="head head--l rv"><span class="kicker">GiLF Talks</span><h2>16 líderes. Um palco.</h2><p id="panNote"></p></div>
         <a class="arrow-link rv" href="programa.html" style="color:var(--gold-xl)">Programa completo <span data-ic="arrow"></span></a>
       </div>
       <div class="panels" id="panels"></div>
@@ -164,9 +164,10 @@
   var kHtml = keys.map(G.keynote).join("");
   (D.programa.forum || []).forEach(function (s) { if ((s.tipo === "guest" || s.tipo === "keynote") && !(s.oradores || []).length) kHtml += tbaKn(s.tipo === "guest" ? "Guest Speaker" : "Keynote Speaker"); });
   document.getElementById("keynotes").innerHTML = kHtml;
+  var talks = (D.programa.forum || []).filter(function (s) { return s.tipo === "talk"; });
   var panels = (D.programa.forum || []).filter(function (s) { return s.tipo === "painel"; });
   var shown = panels.filter(function (s) { return s.moderador || (s.oradores || []).length; });
-  document.getElementById("panels").innerHTML = shown.map(G.panel).join("");
+  document.getElementById("panels").innerHTML = talks.length ? '<div class="talks talks--home">' + talks.map(function (s) { return (s.oradores || []).map(function (id) { var p = (G.PEOPLE || D.pessoas).filter(function (x) { return x.id === id; })[0]; return p ? '<button class="talk" type="button" data-p="' + G.esc(p.id) + '"><span class="av">' + G.photo(p) + "</span><span><b>" + G.esc(p.nome) + "</b><small>" + G.esc(G.pos(p)) + "</small><em>" + G.esc(s.titulo) + "</em></span></button>" : ""; }).join(""); }).join("") + "</div>" : shown.map(G.panel).join("");
   document.getElementById("panNote").textContent = shown.length < panels.length ? (panels.length - shown.length) + " painéis com moderadores e oradores a anunciar brevemente." : "";
   G.nominees(document.getElementById("nominees"), 10);
   G.marquee(document.getElementById("marquee"));

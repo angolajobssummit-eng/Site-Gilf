@@ -191,7 +191,7 @@
       '<div class="panel__mod">' + (mod ? G.who(mod, "Moderador(a)") : '<span class="who"><span class="av">?</span><span><b>A anunciar</b><small>Moderador(a)</small></span></span>') + "</div>" +
       '</div><div class="faces">' + faces + "</div></article>";
   };
-  var TAG = { sessao: "Sessão", keynote: "Keynote Speaker", guest: "Guest Speaker", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala", premios: "Prémios", musica: "Música", jantar: "Jantar", memoria: "Memória", honra: "Honra" };
+  var TAG = { sessao: "Sessão", keynote: "Keynote Speaker", guest: "Guest Speaker", talk: "GiLF Talk", painel: "Painel", pausa: "Pausa", networking: "Networking", gala: "Gala", premios: "Prémios", musica: "Música", jantar: "Jantar", memoria: "Memória", honra: "Honra" };
   G.agenda = function (el, key) {
     var list = (D.programa || {})[key] || [];
     el.innerHTML = list.map(function (s, i) {
@@ -286,7 +286,8 @@
   };
   G.partnerCount = function () { var n = 0; (D.parceiros || []).forEach(function (g) { if (g.grupo !== "Organização") n += (g.itens || []).length; }); return n; };
 
-  /* ---------- forms: compose an e-mail or WhatsApp message (no server needed) ---------- */
+  /* ---------- forms: registered in the database (Supabase), then sent by e-mail or WhatsApp ---------- */
+  var DB_URL = "https://sohducskrepqpsbrxwgr.supabase.co", DB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaGR1Y3NrcmVwcXBzYnJ4d2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0ODc5ODksImV4cCI6MjExMTA2Mzk4OX0.-YSWoI851LXBnKXKQB8FYvCFIkEdYb9mVz8fZl1Q3i0";
   G.forms = function () {
     $$("form[data-form]").forEach(function (form) {
       if (form._ok) return; form._ok = 1;
@@ -307,11 +308,23 @@
           var v = (f.value || "").trim(); if (!v || !f.name) return;
           var lab = f.closest(".field"); lines.push((lab ? lab.firstChild.textContent.replace("*", "").trim() : f.name) + ": " + v);
         });
-        var body = lines.join("\n"), nm = form.querySelector("[name=nome]");
-        if (via === "wa") window.open(waLink + "?text=" + encodeURIComponent(body), "_blank", "noopener");
-        else location.href = "mailto:" + E.email + "?subject=" + encodeURIComponent(form.getAttribute("data-form") + (nm ? " — " + nm.value : "")) + "&body=" + encodeURIComponent(body);
-        st.className = "form__status ok";
-        st.textContent = "Mensagem preparada — confirme o envio na aplicação de " + (via === "wa" ? "WhatsApp." : "e-mail.");
+        var nm = form.querySelector("[name=nome]"), dados = {};
+        $$("input, select, textarea", form).forEach(function (f) { var v = (f.value || "").trim(); if (v && f.name) dados[f.name] = v; });
+        var envia = function (cod) {
+          if (cod) lines.splice(1, 0, "Código: " + cod);
+          var body = lines.join("\n"), wl = waLink + "?text=" + encodeURIComponent(body);
+          if (via === "wa") { if (win && !win.closed) win.location.href = wl; else location.href = wl; }
+          else location.href = "mailto:" + E.email + "?subject=" + encodeURIComponent(form.getAttribute("data-form") + (cod ? " · " + cod : "") + (nm ? " — " + nm.value : "")) + "&body=" + encodeURIComponent(body);
+          st.className = "form__status ok";
+          st.textContent = (cod ? "Pedido registado com o código " + cod + ". " : "") + "Confirme o envio na aplicação de " + (via === "wa" ? "WhatsApp." : "e-mail.");
+        };
+        var win = via === "wa" ? window.open("", "_blank") : null, btns = $$("button", form);
+        btns.forEach(function (x) { x.disabled = true; });
+        st.className = "form__status"; st.textContent = "A registar o pedido…";
+        var fim = false, pronto = function (cod) { if (fim) return; fim = true; btns.forEach(function (x) { x.disabled = false; }); envia(cod); };
+        setTimeout(function () { pronto(""); }, 6000);
+        fetch(DB_URL + "/rest/v1/rpc/forum_registar", { method: "POST", headers: { apikey: DB_KEY, Authorization: "Bearer " + DB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_formulario: form.getAttribute("data-form"), p_dados: dados }) })
+          .then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { pronto(j && j.codigo || ""); }, function () { pronto(""); });
       });
     });
   };

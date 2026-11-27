@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservas e mensagens · GiLF Angola 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #15100a; --text: #2f2a22; --muted: #7a7062; --line: #e6ddc9; --bg: #f6f2e9; --panel: #fff; --gold: #a8782a; --gold-d: #7a5517; --gold-xl: #f2dfab; --red: #c62828; --green: #2e7d32; --amber: #b26a00; --blue: #1f5fa8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 400 14.5px/1.55 "Montserrat", system-ui, sans-serif; color: var(--text); background: var(--bg); }
+  h1, h2 { font-family: "Playfair Display", Georgia, serif; color: var(--ink); margin: 0; }
+  .top { background: var(--ink); color: var(--gold-xl); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .top b { font-family: "Playfair Display", serif; font-size: 1.15rem; color: #fff; }
+  .top a, .top button { color: var(--gold-xl); background: none; border: 1px solid rgba(242,223,171,.4); border-radius: 8px; padding: 6px 12px; font: inherit; cursor: pointer; text-decoration: none; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 16px 60px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .login { max-width: 400px; margin: 40px auto; display: grid; gap: 12px; }
+  label { display: grid; gap: 4px; font-weight: 600; font-size: .9rem; color: var(--ink); }
+  input, select, textarea { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; width: 100%; }
+  .btn { background: var(--gold); color: #fff; border: 0; border-radius: 10px; padding: 10px 16px; font: inherit; font-weight: 700; cursor: pointer; }
+  .btn--line { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn--sm { padding: 6px 10px; font-size: .82rem; }
+  .msg { padding: 10px 12px; border-radius: 10px; background: #fdeaea; color: var(--red); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .stat b { display: block; font-size: 1.6rem; color: var(--ink); line-height: 1.1; }
+  .stat span { font-size: .8rem; color: var(--muted); }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; align-items: center; }
+  .bar input, .bar select { width: auto; flex: 1 1 180px; }
+  .tablewrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+  table { width: 100%; border-collapse: collapse; min-width: 820px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: .88rem; }
+  th { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: #fbf8f1; }
+  .cod { font-family: ui-monospace, Menlo, monospace; font-weight: 700; color: var(--gold-d); white-space: nowrap; }
+  .badge { display: inline-block; font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; background: #eee; color: #555; white-space: nowrap; }
+  .e-novo { background: #fff1d6; color: var(--amber); } .e-contactado { background: #e3eefb; color: var(--blue); } .e-confirmado, .e-pago { background: #e5f5ec; color: var(--green); } .e-cancelado { background: #fdeaea; color: var(--red); }
+  .small { font-size: .8rem; color: var(--muted); }
+  .muted { color: var(--muted); }
+  dialog { border: 0; border-radius: 14px; padding: 22px; width: min(560px, 94vw); }
+  dialog::backdrop { background: rgba(20,14,5,.55); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  pre { white-space: pre-wrap; background: #fbf8f1; padding: 10px; border-radius: 10px; font: inherit; font-size: .85rem; margin: 0; }
+</style>
+</head>
+<body>
+<header class="top"><b>GiLF Angola 2026 · Reservas e mensagens</b><span id="who"></span></header>
+<main class="wrap" id="app"><p class="muted">A carregar…</p></main>
+<dialog id="dlg"></dialog>
+<script src="../assets/vendor/supabase.js"></script>
+<script>
+(function () {
+  "use strict";
+  var sb = window.supabase.createClient("https://sohducskrepqpsbrxwgr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaGR1Y3NrcmVwcXBzYnJ4d2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0ODc5ODksImV4cCI6MjExMTA2Mzk4OX0.-YSWoI851LXBnKXKQB8FYvCFIkEdYb9mVz8fZl1Q3i0", { auth: { persistSession: true, storageKey: "gilf-forum-admin" } });
+  var app = document.getElementById("app"), who = document.getElementById("who"), dlg = document.getElementById("dlg"), L = [], F = { q: "", e: "", f: "" };
+  var ESTADOS = [["novo", "Novo"], ["contactado", "Contactado"], ["confirmado", "Confirmado"], ["pago", "Pago"], ["cancelado", "Cancelado"]];
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function data(s) { return new Intl.DateTimeFormat("pt-PT", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(s)); }
+  function badge(e) { var x = ESTADOS.filter(function (k) { return k[0] === e; })[0]; return '<span class="badge e-' + esc(e) + '">' + esc(x ? x[1] : e) + "</span>"; }
+  function tipo(f) { return /bilhete/i.test(f) ? "Bilhete" : /patroc/i.test(f) ? "Patrocínio" : /orador/i.test(f) ? "Oradores" : "Contacto"; }
+  function wa(t) { return "https://wa.me/" + String(t || "").replace(/\D/g, ""); }
+
+  function login(msg) {
+    who.innerHTML = "";
+    app.innerHTML = '<form class="card login" id="fL"><h2>Entrar</h2><p class="small">Use a conta de administrador do GiLF (a mesma do gilf-evento.com).</p><label>Email<input name="e" type="email" required autocomplete="email"></label><label>Palavra-passe<input name="p" type="password" required autocomplete="current-password"></label>' + (msg ? '<div class="msg">' + esc(msg) + "</div>" : "") + '<button class="btn" type="submit">Entrar</button></form>';
+    document.getElementById("fL").addEventListener("submit", async function (ev) {
+      ev.preventDefault(); var d = new FormData(this); var r = await sb.auth.signInWithPassword({ email: d.get("e"), password: d.get("p") });
+      if (r.error) return login("Email ou palavra-passe incorrectos."); arranque();
+    });
+  }
+  async function arranque() {
+    var s = (await sb.auth.getSession()).data.session; if (!s) return login();
+    who.innerHTML = '<span class="small" style="color:#f2dfab">' + esc(s.user.email) + '</span> <button type="button" id="sair">Sair</button>';
+    document.getElementById("sair").onclick = async function () { await sb.auth.signOut(); login(); };
+    var r = await sb.rpc("forum_admin_lista");
+    if (r.error) return login(/permiss/i.test(r.error.message) ? "Esta conta não é administradora do GiLF." : r.error.message);
+    L = r.data || []; desenhar();
+  }
+  function desenhar() {
+    var f = F.q.toLowerCase();
+    var V = L.filter(function (x) { return (!F.e || x.estado === F.e) && (!F.f || tipo(x.formulario) === F.f) && (!f || (x.codigo + " " + x.nome + " " + x.email + " " + x.telefone + " " + x.empresa).toLowerCase().indexOf(f) >= 0); });
+    var bil = L.filter(function (x) { return tipo(x.formulario) === "Bilhete" && x.estado !== "cancelado"; });
+    var lugares = bil.reduce(function (s, x) { return s + (x.quantidade || 1); }, 0);
+    app.innerHTML = '<div class="stats">' +
+      [[L.length, "pedidos no total"], [L.filter(function (x) { return x.estado === "novo"; }).length, "novos por tratar"], [bil.length, "reservas de bilhete"], [lugares, "lugares reservados"], [bil.filter(function (x) { return x.estado === "pago"; }).length, "reservas pagas"]]
+        .map(function (s) { return '<div class="stat"><b>' + s[0] + "</b><span>" + s[1] + "</span></div>"; }).join("") + "</div>" +
+      '<div class="bar"><input id="q" type="search" placeholder="Procurar código, nome, email, telefone" value="' + esc(F.q) + '"><select id="fe"><option value="">Todos os estados</option>' + ESTADOS.map(function (k) { return '<option value="' + k[0] + '"' + (F.e === k[0] ? " selected" : "") + ">" + k[1] + "</option>"; }).join("") + '</select><select id="ff"><option value="">Todos os tipos</option>' + ["Bilhete", "Contacto", "Patrocínio", "Oradores"].map(function (k) { return "<option" + (F.f === k ? " selected" : "") + ">" + k + "</option>"; }).join("") + '</select><button class="btn btn--line btn--sm" type="button" id="csv">Exportar Excel (CSV)</button><button class="btn btn--line btn--sm" type="button" id="rf">Actualizar</button></div>' +
+      (V.length ? '<div class="tablewrap"><table><thead><tr><th>Código</th><th>Data</th><th>Tipo</th><th>Nome</th><th>Contacto</th><th>Pedido</th><th>Estado</th><th></th></tr></thead><tbody>' + V.map(function (x) {
+        return "<tr><td class=\"cod\">" + esc(x.codigo) + "</td><td class=\"small\">" + esc(data(x.criado_em)) + "</td><td>" + esc(tipo(x.formulario)) + "</td><td><b>" + esc(x.nome) + "</b>" + (x.empresa ? '<br><span class="small">' + esc(x.empresa) + "</span>" : "") + '</td><td class="small">' + (x.email ? esc(x.email) + "<br>" : "") + (x.telefone ? '<a href="' + esc(wa(x.telefone)) + '" target="_blank" rel="noopener">' + esc(x.telefone) + "</a>" : "") + "</td><td>" + (x.ingresso ? esc(x.ingresso) : "") + (x.quantidade ? " × " + x.quantidade : "") + "</td><td>" + badge(x.estado) + '</td><td><button class="btn btn--line btn--sm" type="button" data-id="' + x.id + '">Abrir</button></td></tr>';
+      }).join("") + "</tbody></table></div>" : '<div class="card muted">' + (L.length ? "Nenhum pedido com estes filtros." : "Ainda não há reservas nem mensagens. Aparecem aqui assim que alguém preencher um formulário do site.") + "</div>");
+    document.getElementById("q").oninput = function () { F.q = this.value; clearTimeout(this._t); var el = this; this._t = setTimeout(function () { desenhar(); var n = document.getElementById("q"); n.focus(); n.setSelectionRange(el.value.length, el.value.length); }, 250); };
+    document.getElementById("fe").onchange = function () { F.e = this.value; desenhar(); };
+    document.getElementById("ff").onchange = function () { F.f = this.value; desenhar(); };
+    document.getElementById("rf").onclick = arranque;
+    document.getElementById("csv").onclick = function () { csv(V); };
+    app.querySelectorAll("[data-id]").forEach(function (b) { b.onclick = function () { abrir(b.getAttribute("data-id")); }; });
+  }
+  function abrir(id) {
+    var x = L.filter(function (r) { return r.id === id; })[0]; if (!x) return;
+    var extra = Object.keys(x.dados || {}).filter(function (k) { return ["nome", "email", "telefone", "empresa", "ingresso", "quantidade"].indexOf(k) < 0; }).map(function (k) { return k + ": " + x.dados[k]; }).join("\n");
+    dlg.innerHTML = '<form method="dialog" id="fD" style="display:grid;gap:12px"><h2><span class="cod">' + esc(x.codigo) + "</span> " + badge(x.estado) + '</h2><p class="small" style="margin:0">' + esc(x.formulario) + " · " + esc(data(x.criado_em)) + "</p>" +
+      "<div><b>" + esc(x.nome) + "</b>" + (x.empresa ? " · " + esc(x.empresa) : "") + '<br><span class="small">' + esc([x.email, x.telefone].filter(Boolean).join(" · ")) + "</span></div>" +
+      (x.ingresso ? "<div>Ingresso: <b>" + esc(x.ingresso) + "</b>" + (x.quantidade ? " × " + x.quantidade : "") + "</div>" : "") + (extra ? "<pre>" + esc(extra) + "</pre>" : "") +
+      '<div class="row"><label>Estado<select name="estado">' + ESTADOS.map(function (k) { return '<option value="' + k[0] + '"' + (x.estado === k[0] ? " selected" : "") + ">" + k[1] + "</option>"; }).join("") + '</select></label><label>&nbsp;<span style="display:flex;gap:6px">' + (x.telefone ? '<a class="btn btn--sm" style="text-decoration:none;background:#1fa855" target="_blank" rel="noopener" href="' + esc(wa(x.telefone)) + '">WhatsApp</a>' : "") + (x.email ? '<a class="btn btn--line btn--sm" style="text-decoration:none" href="mailto:' + esc(x.email) + "?subject=" + encodeURIComponent("GiLF Angola 2026 · " + x.codigo) + '">Email</a>' : "") + "</span></label></div>" +
+      '<label>Nota interna<textarea name="nota" rows="3">' + esc(x.nota) + '</textarea></label><div style="display:flex;gap:8px;justify-content:space-between"><button class="btn btn--line btn--sm" type="button" id="del">Apagar</button><span style="display:flex;gap:8px"><button class="btn btn--line" value="cancel">Fechar</button><button class="btn" type="button" id="gd">Guardar</button></span></div></form>';
+    dlg.showModal();
+    document.getElementById("gd").onclick = async function () { var d = new FormData(document.getElementById("fD")); var r = await sb.rpc("forum_admin_actualizar", { p_id: id, p_estado: d.get("estado"), p_nota: d.get("nota") }); if (r.error) return alert(r.error.message); dlg.close(); arranque(); };
+    document.getElementById("del").onclick = async function () { if (!confirm("Apagar " + x.codigo + "?")) return; var r = await sb.rpc("forum_admin_apagar", { p_id: id }); if (r.error) return alert(r.error.message); dlg.close(); arranque(); };
+  }
+  function csv(V) {
+    var linhas = [["Código", "Data", "Tipo", "Nome", "Empresa", "Email", "Telefone", "Ingresso", "Quantidade", "Estado", "Nota", "Outros"]].concat(V.map(function (x) {
+      var extra = Object.keys(x.dados || {}).filter(function (k) { return ["nome", "email", "telefone", "empresa", "ingresso", "quantidade"].indexOf(k) < 0; }).map(function (k) { return k + ": " + x.dados[k]; }).join(" | ");
+      return [x.codigo, data(x.criado_em), tipo(x.formulario), x.nome, x.empresa, x.email, x.telefone, x.ingresso, x.quantidade || "", x.estado, x.nota, extra]; }));
+    var t = linhas.map(function (l) { return l.map(function (c) { c = String(c == null ? "" : c); return /[",;\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(";"); }).join("\r\n");
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + t], { type: "text/csv;charset=utf-8" })); a.download = "gilf-2026-reservas-e-mensagens.csv"; document.body.appendChild(a); a.click(); a.remove();
+  }
+  arranque();
+})();
+</script>
+</body>
+</html>
