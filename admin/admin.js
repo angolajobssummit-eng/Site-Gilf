@@ -72,7 +72,7 @@
     $("span", st).textContent = (d ? "Alterações por publicar" : "Tudo publicado") + (d && rascEstado ? " · " + rascEstado : "");
     $("#publishBtn").textContent = "Publicar"; $("#publishBtn").hidden = !podeEditar();
   }
-  var img = function (p) { return !p ? "" : S.files[p] || (/^(data:|https?:)/.test(p) ? p : "../" + p); };
+  var img = function (p) { return !p ? "" : S.files[p] || (/^(data:|https?:|\/)/.test(p) ? p : "/" + p); };
   var D = function () { return S.data; };
   var people = function () { return D().pessoas || (D().pessoas = []); };
   var person = function (id) { return people().filter(function (p) { return p.id === id; })[0]; };
