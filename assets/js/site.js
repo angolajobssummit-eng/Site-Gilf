@@ -63,7 +63,7 @@
   /* ---------- layout ---------- */
   var page = document.body.getAttribute("data-page") || "";
   var NAV = [["index.html", "Início", "inicio"], ["programa.html", "Programa", "programa"], ["oradores.html", "Oradores", "oradores"],
-    ["premios.html", "Gala & Prémios", "premios"], ["lideres.html", "Líderes", "lideres"], ["clube.html", "Clube", "clube"],
+    ["premios.html", "Gala & Prémios", "premios"], ["lideres.html", "Líderes", "lideres"], ["https://clubgloballideres.org", "Clube", "clube"],
     ["noticias.html", "Notícias", "noticias"], ["parceiros.html", "Parceiros", "parceiros"], ["contacto.html", "Contacto", "contacto"]];
   var NAV_FOOT = NAV.concat([["sobre.html", "Sobre", "sobre"], ["bilhetes.html", "Bilhetes", "bilhetes"]]);
   var tel = (E.telefone || "").replace(/\s/g, "");
@@ -76,9 +76,9 @@
     '<a class="topbar__x" href="mailto:' + esc(E.email) + '">' + esc(E.email) + "</a></div></div></div>" +
     '<header class="header" id="hdr"><div class="wrap header__in">' +
     '<a class="logo" href="index.html" aria-label="GiLF Angola — início"><img src="assets/img/logos/gilf-lockup.png" alt="GiLF Angola — Fórum Global de Investimento e Liderança Angola 2026" width="472" height="121"></a>' +
-    '<nav class="menu" id="menu" aria-label="Principal">' + NAV.map(function (n) { return '<a href="' + n[0] + '"' + (page === n[2] ? ' aria-current="page"' : "") + ">" + n[1] + "</a>"; }).join("") +
-    '<a class="btn btn--gold" href="bilhetes.html">Comprar bilhete</a></nav>' +
-    '<div class="header__cta"><a class="btn btn--gold btn--sm" href="bilhetes.html">Comprar bilhete</a>' +
+    '<nav class="menu" id="menu" aria-label="Principal">' + NAV.map(function (n) { return '<a href="' + n[0] + '"' + (/^https?:/.test(n[0]) ? ' target="_blank" rel="noopener"' : "") + (page === n[2] ? ' aria-current="page"' : "") + ">" + n[1] + "</a>"; }).join("") +
+    '<a class="menu__entrar" href="/admin">Entrar</a><a class="btn btn--gold" href="bilhetes.html">Comprar bilhete</a></nav>' +
+    '<div class="header__cta"><a class="btn btn--line btn--sm header__entrar" href="/admin" title="Entrar na área de gestão" aria-label="Entrar">' + ic("user") + 'Entrar</a><a class="btn btn--gold btn--sm" href="bilhetes.html">Comprar bilhete</a>' +
     '<button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><span></span></button></div></div></header>';
   document.body.insertAdjacentHTML("afterbegin", head);
 
@@ -88,7 +88,7 @@
   var foot = '<footer class="footer"><div class="wrap"><div class="footer__grid">' +
     '<div class="footer__brand"><img src="assets/img/logos/premios-lideres.png" alt="Prémios Líderes Angola 2026" width="699" height="383" loading="lazy">' +
     "<p>" + esc(E.nomeCompleto) + " e " + esc(E.gala) + ". " + esc(E.tema) + "</p>" + (socials ? '<div class="social">' + socials + "</div>" : "") + "</div>" +
-    "<div><h4>Navegação</h4><ul>" + NAV_FOOT.map(function (n) { return '<li><a href="' + n[0] + '">' + n[1] + "</a></li>"; }).join("") + "</ul></div>" +
+    "<div><h4>Navegação</h4><ul>" + NAV_FOOT.map(function (n) { return '<li><a href="' + n[0] + '"' + (/^https?:/.test(n[0]) ? ' target="_blank" rel="noopener"' : "") + ">" + n[1] + "</a></li>"; }).join("") + '<li><a href="/admin">Entrar · Área reservada</a></li>' + "</ul></div>" +
     "<div><h4>O evento</h4><ul><li>" + esc(E.dataTexto) + "</li><li>Fórum · " + esc(E.horarioForum) + "</li><li>Gala · " + esc(E.horarioGala) + "</li><li>" + esc(E.local) + "</li><li>" + esc(E.cidade) + "</li></ul></div>" +
     '<div><h4>Contacto</h4><ul><li><a href="tel:' + esc(tel) + '">' + esc(E.telefone) + "</a></li>" +
     (E.telefone2 ? '<li><a href="tel:' + esc(E.telefone2.replace(/\s/g, "")) + '">' + esc(E.telefone2) + "</a></li>" : "") +
