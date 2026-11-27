@@ -1,14 +1,74 @@
 <!doctype html>
 <html lang="pt">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Club Global de Líderes</title>
-<meta http-equiv="refresh" content="0; url=https://clubgloballideres.org">
-<link rel="canonical" href="https://clubgloballideres.org">
-<script>location.replace("https://clubgloballideres.org" + (location.hash || ""));</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clube de Líderes · Prémios Líderes Angola & GiLF</title>
+  <meta name="description" content="O Clube de Líderes reúne distinguidos, oradores, parceiros e profissionais dos Prémios Líderes Angola e do GiLF. Candidate-se.">
+  <meta property="og:title" content="Clube de Líderes · Prémios Líderes Angola & GiLF">
+  <meta property="og:description" content="O Clube de Líderes reúne distinguidos, oradores, parceiros e profissionais dos Prémios Líderes Angola e do GiLF. Candidate-se.">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#15100a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body style="font-family:system-ui,sans-serif;padding:40px;text-align:center">
-<p>A abrir o <a href="https://clubgloballideres.org">Club Global de Líderes</a>…</p>
+<body data-page="clube">
+<main id="main">
+  <section class="phero dark dots" data-waves>
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Início</a> / Clube de Líderes</div>
+      <h1 id="cTitle">Clube de Líderes</h1>
+      <p id="cText"></p>
+      <div class="actions" style="margin-top:28px"><a class="btn btn--gold" href="#inscricao">Candidatar-me</a><a class="btn btn--ghost" href="lideres.html">Líderes de todas as edições</a></div>
+    </div>
+  </section>
+
+  <section class="sec sec--paper">
+    <div class="wrap split split--top">
+      <div class="rv sticky">
+        <div class="head head--l"><span class="kicker">Porquê aderir</span><h2>Uma comunidade de quem lidera</h2></div>
+        <ul class="benefits" id="benef"></ul>
+        <p class="note" style="margin:22px 0 0">As candidaturas são analisadas pela Comissão Organizadora. Dúvidas: <a class="link" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>.</p>
+      </div>
+      <div class="rv d1" id="inscricao">
+        <div class="head head--l" style="margin-bottom:20px"><span class="kicker">Inscrição</span><h2>Candidatura ao Clube</h2></div>
+        <div id="formBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="membrosSec" hidden>
+    <div class="wrap">
+      <div class="head rv"><span class="kicker">Membros</span><h2>Membros do Clube</h2></div>
+      <div class="members" id="membros"></div>
+    </div>
+  </section>
+</main>
+<script src="/api/dados"></script>
+<script>window.GILF || document.write('<script src="assets/dados.js"><\/script>');</script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  var G = GILF_UI, D = G.data, esc = G.esc, $ = function (i) { return document.getElementById(i); };
+  var C = D.clube || {};
+  if (C.titulo) $("cTitle").textContent = C.titulo;
+  $("cText").textContent = C.texto || "";
+  $("benef").innerHTML = (C.beneficios || []).map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
+  $("waLink").href = G.wa;
+  $("formBox").innerHTML = C.formUrl ? '<iframe class="jf" src="' + esc(C.formUrl) + '" title="Formulário de candidatura ao Clube de Líderes" loading="lazy" allow="geolocation; microphone; camera"></iframe><p class="note">Se o formulário não abrir, <a class="link" href="' + esc(C.formUrl) + '" target="_blank" rel="noopener">abra-o numa nova página</a>.</p>'
+    : '<div class="empty">As inscrições abrem brevemente.</div>';
+  var M = C.membros || [];
+  if (M.length) {
+    $("membrosSec").hidden = false;
+    $("membros").innerHTML = M.map(function (m) { return '<div class="face rv" style="cursor:default">' + (m.foto ? '<img src="' + esc(m.foto) + '" alt="' + esc(m.nome) + '" loading="lazy">' : '<span class="mono">' + esc((m.nome || "?").charAt(0)) + "</span>") + "<b>" + esc(m.nome) + "</b><small>" + esc([m.cargo, m.organizacao].filter(Boolean).join(" · ")) + "</small></div>"; }).join("");
+  }
+  G.ready();
+})();
+</script>
 </body>
 </html>
